@@ -1,0 +1,25 @@
+---
+title: "Dictionary"
+output: html_notebook
+---
+
+#Read or look up "stuff" in the dictionary
+
+Det er en xml-fil, så vi burde kunne læse den - bortset fra at den er meget stor...
+
+```{r}
+library(xml2)
+library(here)
+
+```
+
+Vi prøver alligevel
+
+```{r}
+dictionary <- read_xml(here("data/holbergordbog_v1.xml"), encoding = "utf8")
+dictionary
+
+
+
+```
+

@@ -1,0 +1,78 @@
+---
+title: "Learn to use JSONL"
+output: html_notebook
+author: pmd
+---
+
+```{r}
+library(tidyverse)
+library(jsonlite)
+library(here)
+```
+
+Create some test JSON
+
+```{r}
+test_df <- tribble(
+  ~a, ~b, ~c,
+  1, "Per", "1968",
+  2, "Frida", "2004",
+  3, "Hans", "1939"
+)
+test_df
+```
+
+Store this as JSON
+
+```{r}
+toJSON(test_df, pretty=T)
+```
+
+```{r}
+write_json(test_df,pretty=TRUE, path = here("test-data/test.json"))
+```
+
+Read this data
+
+```{r}
+fromJSON(here("test-data/test.json")) %>% tibble()
+```
+
+Now, whatabout line based JSON?
+
+Create a JSONL file
+
+```{r}
+write_file(
+'{"a": 1, "b": "Per", "c": "1968"}
+{"a": 2, "b": "Frida", "c": "2004"}
+{"a": 3, "b": "Hans", "c": "1939"}
+', path = here("test-data/test.txt"))
+```
+
+Read that JSONL file. To do that, apparently we need the ndjson library.
+
+```{r message=FALSE, warning=FALSE}
+library(ndjson)
+```
+
+```{r}
+ndjson::stream_in(here("test-data/test.txt")) %>% tibble()
+```
+
+Okay, just test with sparse data
+
+```{r}
+write_file(
+'{"a": 1, "b": "Per", "c": "1968"}
+{"a": 2, "c": "2004"}
+{"a": 3, "b": "Hans", "c": "1939"}
+', path = here("test-data/test-sparse.txt"))
+```
+
+
+```{r}
+ndjson::stream_in(here("test-data/test-sparse.txt")) %>% tibble()
+```
+
+YES!

@@ -1,0 +1,89 @@
+---
+title: "Hvem er til stede uden replikker?"
+output: html_notebook
+author: baj
+---
+
+# Bestemmelse af hvem der ikke siger noget men er tilstede 
+
+Dette gøres ud fra regi-bemærkninger 
+
+# Read all plays
+Den her blok er lige nu lidt lang, men skal helst erstattes med en one-liner på et tidspunkt!
+
+```{r}
+tei_file_list <- list.files(here("/data/holberg-komedier-nc/"), pattern = "*.page")
+length(tei_file_list)
+
+json_file_list <- list.files(here("/data/holberg-komedier-nc/json/"))
+length(json_file_list)
+
+all_plays <- read_play(str_c("/data/holberg-komedier-nc/",tei_file_list[1]), 
+                       str_c("/data/holberg-komedier-nc/json/",json_file_list[1]))
+
+for(i in 2:length(tei_file_list)) {
+  tmp <- read_play(str_c("/data/holberg-komedier-nc/",tei_file_list[i]),
+                   str_c("/data/holberg-komedier-nc/json/",json_file_list[i]))
+  all_plays <- bind_rows(all_plays, tmp)
+}
+
+all_plays
+```
+
+# Find alle regi-bemærkninger. 
+De findes i <stage> og <speaker_stage>.
+
+```{r}
+# <stage> by <scene>
+stage_instructions_by_scene <- all_plays %>%
+  select(title, act, act_number, scene, scene_number, index, stage) %>% filter(!is.na(stage))
+stage_instructions_by_scene
+
+# <speaker-stage> by <scene>
+speaker_stage_instructions_by_scene <- all_plays %>%
+  select(title, act, act_number, scene, scene_number, index, speaker_stage) %>% filter(!is.na(speaker_stage))
+speaker_stage_instructions_by_scene
+
+# <stage> and <speaker-stage> by <scene>
+instruction_by_scene <- bind_rows(stage_instructions_by_scene, speaker_stage_instructions_by_scene)
+instruction_by_scene
+
+#instructions sorted by title, act number, scene number, index 
+instruction_by_scene <- arrange(instruction_by_scene, title, act_number, scene_number, index)
+instruction_by_scene
+
+```
+
+
+# Find alle speakers
+Det skulle vi måske have gjort et andet sted, så vi nu bare kan hente dem.
+
+```{r}
+all_speakers <- all_plays %>% 
+  count(speaker)
+all_speakers
+
+# unite_speakers <- unite(all_speakers, sep = " ")
+```
+
+# Search for speakers in instructions
+
+```{r}
+tmp <- instruction_by_scene %>% select(ends_with("stage"))
+tmp
+                                       
+# str_detect(tmp[1], "Troels", negate = FALS
+
+detect(tmp, "Troels")
+
+
+```
+WORK IN PREOGRESS
+
+Først benyt dem vi véd er med i et givet stykke ud fra speakers 
+
+Dernæst brug en bruttoliste over hvem der ville kunne være tilstede 
+
+Denne bruttoliste kan måske baseres på "ordbogen" (se nedenfor) 
+
+Den kan måske gives fra forskerne 
