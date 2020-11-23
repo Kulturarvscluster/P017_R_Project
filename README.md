@@ -9,7 +9,7 @@ https://docs.google.com/document/d/1YeikoaHe36B4ajvxBHqMdovM7XVoSFLXBb1biJjotLs/
 * The data is not yet in the data directory.
 
 ## Read a Play
-The "read_a_Play.rmd" notebook explains how to transform a play from TEI to JSONL and how to read it.
+The "notebooks/read_plays.rmd" notebook explains how to transform a play from TEI to JSONL and how to read it into R.
 
 ## Find Characters
 The "find_speakers.rmd" notebook finds characters; both speakers and characters in <stage> tags and in speach. 
@@ -27,3 +27,13 @@ The "dramatiske_overgange.rmd" notebook finds the first and last spoken words in
 * play_first_sentence.csv: første sætning i hver scene.
 * play_last_sentence.csv: sidste sætning i hver scene.
 
+## Required R packages
+
+The following R package are assumed as being installed in most of the scripts and notebooks
+
+ * tidyverse
+ * ndjson
+ * fs
+ * xslt
+ 
+They can all be installed with `install.packages("<package name>")

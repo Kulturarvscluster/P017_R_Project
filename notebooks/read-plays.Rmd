@@ -1,0 +1,75 @@
+---
+title: "How to read plays into R"
+output: html_notebook
+author: pmd
+---
+
+The plays are in a TEI format, for which no standard exists in the R-verse. Therefore we transform these TEI files into JSONL, the JSON based line format. Each line is a valid piece of JSON. This format is easy to read into R.
+
+We have written a small utility function, that as its argument takes a path to a folder containing TEI .page files, and converts all .page files into the JSONL format.
+
+These JSONL files can then be read ibto R using another utility function.
+
+This process is illustrated in this notebook.
+
+Before we start, we need to load the needed R packages
+
+```{r, message=FALSE}
+library(tidyverse)
+library(ndjson)
+library(here)
+library(fs)
+library(xslt)
+```
+
+We also need to load the functions created for this project. This is done by `source`-ing them.
+
+```{r}
+source(here("src", "p017-functions.R"))
+```
+
+# Transform a folder of TEI files
+
+We have placed two test files for this example in the `test-data` folder in this projects root directory.
+
+```{r}
+dir_ls(here("test-data/"))
+```
+
+So, to transform those two files, we use the function `convert_TEI_to_JSONL` like this
+
+```{r}
+convert_TEI_to_JSONL(here("test-data/"))
+```
+
+If we ow look in the same folder, we see that we have gotten two .jsonl files
+
+```{r}
+dir_ls(here("test-data/"))
+```
+
+# Read the plays into R
+
+Now, with the TEI files transformed into JSONL, it's easy to read them into R. 
+
+```{r}
+plays <- read_plays_jsonl(here("test-data"))
+```
+
+```{r}
+plays
+```
+Let's try to count how many rows each play has in the data. As stage remarks also result in individual rows, the count cannot be interpreted as the number of lines in the play.
+
+```{r}
+plays %>% 
+  count(title)
+```
+
+We could also count how many row each scene and act we have for each play
+
+```{r}
+plays %>% 
+  count(title, act_number)
+```
+
