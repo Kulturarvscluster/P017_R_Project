@@ -8,6 +8,16 @@ author: baj
 
 Dette gøres ud fra regi-bemærkninger 
 
+```{r}
+library(tidyverse)
+library(ndjson)
+library(here)
+
+source(here("src/read_play_function.R"))
+
+```
+
+
 # Read all plays
 Den her blok er lige nu lidt lang, men skal helst erstattes med en one-liner på et tidspunkt!
 
@@ -17,6 +27,9 @@ length(tei_file_list)
 
 json_file_list <- list.files(here("/data/holberg-komedier-nc/json/"))
 length(json_file_list)
+
+one_play <- read_play(str_c("/data/holberg-komedier-nc/",tei_file_list[1]), 
+                       str_c("/data/holberg-komedier-nc/json/",json_file_list[1]))
 
 all_plays <- read_play(str_c("/data/holberg-komedier-nc/",tei_file_list[1]), 
                        str_c("/data/holberg-komedier-nc/json/",json_file_list[1]))
@@ -34,19 +47,29 @@ all_plays
 De findes i <stage> og <speaker_stage>.
 
 ```{r}
+# One play - maybe this should be a function
+stage_one <- one_play %>%
+  select(act, act_number, scene, scene_number, index, stage) %>% filter(!is.na(stage))
+speaker_stage_one <- one_play %>%
+    select(act, act_number, scene, scene_number, index, speaker_stage) %>% filter(!is.na(speaker_stage))
+instruction_one <- bind_rows(stage_one, speaker_stage_one)
+instruction_one_by_scene <- arrange(instruction_one, act_number, scene_number, index)
+instruction_one_by_scene
+
+# All Plays
 # <stage> by <scene>
 stage_instructions_by_scene <- all_plays %>%
   select(title, act, act_number, scene, scene_number, index, stage) %>% filter(!is.na(stage))
-stage_instructions_by_scene
+# stage_instructions_by_scene
 
 # <speaker-stage> by <scene>
 speaker_stage_instructions_by_scene <- all_plays %>%
   select(title, act, act_number, scene, scene_number, index, speaker_stage) %>% filter(!is.na(speaker_stage))
-speaker_stage_instructions_by_scene
+# speaker_stage_instructions_by_scene
 
 # <stage> and <speaker-stage> by <scene>
 instruction_by_scene <- bind_rows(stage_instructions_by_scene, speaker_stage_instructions_by_scene)
-instruction_by_scene
+# instruction_by_scene
 
 #instructions sorted by title, act number, scene number, index 
 instruction_by_scene <- arrange(instruction_by_scene, title, act_number, scene_number, index)
@@ -59,26 +82,52 @@ instruction_by_scene
 Det skulle vi måske have gjort et andet sted, så vi nu bare kan hente dem.
 
 ```{r}
-all_speakers <- all_plays %>% 
+all_speakers_one <- one_play %>% 
   count(speaker)
+all_speakers_one
+
+all_speakers <- all_plays %>% 
+  count(title, speaker)
 all_speakers
 
 # unite_speakers <- unite(all_speakers, sep = " ")
 ```
 
 # Search for speakers in instructions
+We will try using
+* join
+* fuzzyjoin
+* purrr
+
+Vi skal nok gøre det for hvert stykke for sig...
 
 ```{r}
-tmp <- instruction_by_scene %>% select(ends_with("stage"))
+library(tidytext)
+# tokenize stage (and call tokens speaker)
+tmp <- instruction_one_by_scene %>%
+  unnest_tokens(speaker, stage) #%>%
+#  unnest_tokens(speaker_stage_word, speaker_stage)
 tmp
-                                       
-# str_detect(tmp[1], "Troels", negate = FALS
 
-detect(tmp, "Troels")
+tmp %>% count(act_number, scene_number, speaker)
+# semi-join: keep the rows in x that have a match in y
+tmp2 <- tmp %>% 
+  semi_join(all_speakers_one)
+#all_speakers %>% semi_join(top_dest)
+#> Joining, by = "dest"
+
+
+
+#instruction_by_scene %>% select(ends_with("stage"))
+tmp2
+                                       
+# str_detect(tmp[1], "Troels", negate = FALSE)
+#detect(tmp, "Troels")
 
 
 ```
-WORK IN PREOGRESS
+
+WORK IN PROGRESS
 
 Først benyt dem vi véd er med i et givet stykke ud fra speakers 
 
