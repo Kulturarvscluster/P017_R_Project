@@ -50,5 +50,63 @@ val <- (barselstuen_raw %>%
 barselstuen_raw %>% select(scene_number, speaker) %>% group_by(act_number,scene_number) %>% distinct() %>% summarise( speakers =paste(collect_list(speaker))) 
 ```
 
+# Looking at the data
 
+```{r}
+barselstuen_raw
+```
 
+```{r}
+barselstuen_raw %>% 
+  count(speaker) %>% 
+  arrange(desc(n))
+```
+
+```{r}
+barselstuen_raw %>% 
+  count(scene) %>% 
+  arrange(desc(n))
+```
+
+Hvilken scene har flest skuespillere? Først sammentælles scene og rolle. Dernæst tælles så udelukkende scene:
+
+```{r}
+barselstuen_raw %>% 
+  count(scene, speaker) %>% 
+  count(scene) %>% 
+  arrange(desc(n))
+```
+
+Whau, 18! Lad os se nærmere på scene 5
+
+```{r}
+barselstuen_raw %>% 
+  filter(scene == "Scene 5")
+```
+
+Okay, hvor mange er så med i denne scene (og hvor mange gange siger de hver i sær noget)?
+
+```{r paged.print=FALSE}
+barselstuen_raw %>% 
+  filter(scene == "Scene 5") %>% 
+  count(speaker)
+```
+
+# Første replik i hver scene
+
+```{r}
+barselstuen_raw %>%
+  #Group by så vi håndterer hver scene for sig
+ group_by(act_number, scene_number) %>%
+  #Filtrer alle linier som ikke er replikker fra
+ filter(!is.na(spoke)) %>%
+  # Sorter i hver gruppe, så linierne kommer i rækkefølge
+ arrange(index, .by_group = TRUE) %>%
+  # Lav et ny index i hver gruppe, startende med den første.
+  # På den måde ved jeg at den første i hver gruppe er nr 1.
+ mutate(group_row_num = row_number()) %>%
+  # Kun behold den første i hver gruppe
+ filter(group_row_num == 1) %>%
+  # Fjern gruppe index for det er ikke relevant længere
+ select(- group_row_num )
+```
