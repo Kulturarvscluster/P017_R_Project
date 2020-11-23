@@ -102,6 +102,45 @@ We will try using
 Vi skal nok gøre det for hvert stykke for sig...
 
 ```{r}
+(plays %>%
+  filter(title == " Barselsstuen") %>%
+  count(speaker) %>%
+  mutate(speaker = str_to_lower(speaker)) %>%
+  select(speaker) -> speakers_in_Barselstuen)
+```
+```{r}
+library(tidytext)
+```
+
+```{r}
+speakers_in_Barselstuen %>%
+  filter(speaker == "claus")
+```
+
+
+```{r}
+plays %>%
+  filter(title == " Barselsstuen") %>%
+  unnest_tokens(word, stage) %>%
+  filter(!is.na(word)) %>%
+  select(act, scene, index, word)
+```
+
+
+```{r}
+plays %>%
+  filter(title == " Barselsstuen") %>%
+  unnest_tokens(word, stage) %>%
+  filter(!is.na(word)) %>%
+  select(act, scene, index, word) %>%
+  semi_join(speakers_in_Barselstuen, by = c("word" = "speaker"))
+```
+Ovenstående må betyde at vi har 110 steder, hvor speaker er nævnt i en regi-bemærkning.
+
+
+
+
+```{r}
 library(tidytext)
 # tokenize stage (and call tokens speaker)
 tmp <- instruction_one_by_scene %>%
