@@ -1,0 +1,96 @@
+---
+title: "Netværksgraf"
+output: html_notebook
+author: baj
+---
+
+# Netværk
+Opdel alle på titel, akt og scene.
+Vi vil gerne nå frem til en grafisk fremstilling af netværk.
+
+5. Find karakterer med replikker, der taler med hinanden – hele stykket.
+   a. Graduer efter, hvor mange ord, de siger til hinanden.
+   b. Talende karakter: det skal visuelt fremgå, dvs hvem der taler mest.
+6. Find karakterer, der taler med hinanden – opdelt i akt og scene.
+   a. Graduer efter, hvor mange ord, de siger til hinanden.
+
+Jf Frank Fischer – “taler med hinanden” defineres som karakterer, der taler i en scene. Moretti – definerer ift karakterer, der taler efter hinanden. Vi starter med Fischer.
+
+Before we start, we need to load the needed R packages
+
+```{r, message=FALSE}
+library(tidyverse)
+library(ndjson)
+library(here)
+library(fs)
+library(xslt)
+library(tidytext)
+library(ggraph)
+library(igraph)
+```
+
+We also need to load the functions created for this project. This is done by `source`-ing them.
+
+```{r}
+source(here("src", "p017-functions.R"))
+```
+
+
+# Vi starter med et eksempel...
+
+```{r}
+## A simple example with a couple of actors
+## The typical case is that these tables are read in from files....
+actors <- data.frame(name=c("Alice", "Bob", "Cecil", "David",
+                            "Esmeralda"),
+                     age=c(48,33,45,34,21),
+                     gender=c("F","M","F","M","F"))
+relations <- data.frame(from=c("Bob", "Cecil", "Cecil", "David",
+                               "David", "Esmeralda"),
+                        to=c("Alice", "Bob", "Alice", "Alice", "Bob", "Alice"),
+                        same.dept=c(FALSE,FALSE,TRUE,FALSE,FALSE,TRUE),
+                        friendship=c(4,5,5,2,1,1), advice=c(4,5,5,4,2,3))
+g <- graph_from_data_frame(relations, directed=TRUE, vertices=actors)
+print(g, e=TRUE, v=TRUE)
+
+
+ggraph(g, layout = 'randomly') + 
+    geom_edge_link(aes(start_cap = label_rect(node1.name),
+                       end_cap = label_rect(node2.name))) + 
+      geom_node_text(aes(label = name))
+
+```
+
+# Read plays
+
+(Look at read-plays.Rmd for help)
+
+```{r}
+here()
+convert_TEI_to_JSONL(here("test-data/"))
+plays <- read_plays_jsonl(here("test-data"))
+```
+
+# Find speakers
+We look at one play at a time.
+
+```{r}
+(plays %>%
+  filter(title == " Barselsstuen") %>%
+  filter(!is.na(speaker)) %>%
+  count(speaker) %>%
+  select(speaker) -> speakers_in_Barselstuen)
+```
+
+# Find Edges
+
+```{r}
+plays %>%
+  filter(title == " Barselsstuen") %>% 
+  filter(!is.na(speaker)) %>%
+  select(act_number, scene_number, speaker) %>%
+  group_by(act_number, scene_number) %>%
+  summarise_all(paste, collapse = ',')
+```
+
+WORK IN PROGRESS
