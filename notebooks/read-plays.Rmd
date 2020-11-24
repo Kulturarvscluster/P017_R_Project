@@ -8,7 +8,7 @@ The plays are in a TEI format, for which no standard exists in the R-verse. Ther
 
 We have written a small utility function, that as its argument takes a path to a folder containing TEI .page files, and converts all .page files into the JSONL format.
 
-These JSONL files can then be read ibto R using another utility function.
+These JSONL files can then be read into R using another utility function.
 
 This process is illustrated in this notebook.
 
@@ -42,7 +42,7 @@ So, to transform those two files, we use the function `convert_TEI_to_JSONL` lik
 convert_TEI_to_JSONL(here("test-data/"))
 ```
 
-If we ow look in the same folder, we see that we have gotten two .jsonl files
+If we now look in the same folder, we see that we have gotten two .jsonl files
 
 ```{r}
 dir_ls(here("test-data/"))
