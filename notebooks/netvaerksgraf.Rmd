@@ -27,6 +27,7 @@ library(xslt)
 library(tidytext)
 library(ggraph)
 library(igraph)
+library(tidygraph)
 ```
 
 We also need to load the functions created for this project. This is done by `source`-ing them.
@@ -39,22 +40,52 @@ source(here("src", "p017-functions.R"))
 # Vi starter med et eksempel...
 
 ```{r}
+
+ring <- create_ring(10)
+ring %>% 
+
+iris_clust <- hclust(dist(iris[1:4]))
+iris_tree <- as_tbl_graph(iris_clust)
+iris_tree
+iris_tree %>% activate(edges)
+
+gr1 <- create_notable('bull') %>% 
+    mutate(name = letters[1:5])
+gr2 <- create_ring(5) %>% 
+    mutate(name = letters[4:8])
+gr1
+gr2
+
+# Plot
+gr1 %>% bind_graphs(gr2) %>% 
+    ggraph(layout = 'kk') + 
+    geom_edge_link() + 
+    geom_node_point(size = 8, colour = 'steelblue') +
+    geom_node_text(aes(label = name), colour = 'white', vjust = 0.4) + 
+    ggtitle('Binding graphs') + 
+    theme_graph()
+
+# Den her er en god introduktion
+# https://www.jessesadler.com/post/network-analysis-with-r/
+
+edge_list <- tibble(from = c(1, 2, 2, 3, 4), to = c(2, 3, 4, 2, 1))
+node_list <- tibble(id = 1:4)
+
+
+
+
 ## A simple example with a couple of actors
 ## The typical case is that these tables are read in from files....
 actors <- data.frame(name=c("Alice", "Bob", "Cecil", "David",
-                            "Esmeralda"),
-                     age=c(48,33,45,34,21),
-                     gender=c("F","M","F","M","F"))
-relations <- data.frame(from=c("Bob", "Cecil", "Cecil", "David",
-                               "David", "Esmeralda"),
-                        to=c("Alice", "Bob", "Alice", "Alice", "Bob", "Alice"),
-                        same.dept=c(FALSE,FALSE,TRUE,FALSE,FALSE,TRUE),
-                        friendship=c(4,5,5,2,1,1), advice=c(4,5,5,4,2,3))
+                            "Esmeralda"))
+relations <- data.frame(from=c("Bob", "Cecil", "Cecil", "David", "David", "Esmeralda"),
+                        to=c("Alice", "Bob", "Alice", "Alice", "Bob", "Alice"))
 g <- graph_from_data_frame(relations, directed=TRUE, vertices=actors)
 print(g, e=TRUE, v=TRUE)
 
+t <- tbl_graph(nodes = actors, edges = relations, directed = TRUE, node_key = "name")
 
-ggraph(g, layout = 'randomly') + 
+ggraph(t, layout = 'randomly') + 
     geom_edge_link(aes(start_cap = label_rect(node1.name),
                        end_cap = label_rect(node2.name))) + 
       geom_node_text(aes(label = name))
@@ -71,26 +102,59 @@ convert_TEI_to_JSONL(here("test-data/"))
 plays <- read_plays_jsonl(here("test-data"))
 ```
 
-# Find speakers
+# Find Nodes (speakers)
 We look at one play at a time.
 
 ```{r}
 (plays %>%
   filter(title == " Barselsstuen") %>%
-  filter(!is.na(speaker)) %>%
+  filter(!is.na(speaker)) %>% #todo filtrer den tomme streng fra også!
   count(speaker) %>%
-  select(speaker) -> speakers_in_Barselstuen)
+  select(speaker) %>% rowid_to_column("id") -> speakers_in_Barselstuen)
 ```
 
 # Find Edges
 
 ```{r}
-plays %>%
+# we would like an edge-list like this
+# edge_list <- tibble(from = c("Claus", "Corfitz", "Jeronimus"), 
+#                    to = c("Troels", "Troels", "Corfitz"))
+
+
+(plays %>%
   filter(title == " Barselsstuen") %>% 
   filter(!is.na(speaker)) %>%
   select(act_number, scene_number, speaker) %>%
-  group_by(act_number, scene_number) %>%
-  summarise_all(paste, collapse = ',')
+  group_by(act_number, scene_number)  %>%
+  distinct() -> distinct_speakers_Barselstuen)
+## We now have the distinct speakers in each scene in each act
+## I want an edge for each pair of speakers in each scene in each act
+## That is every combination of speakers within each group
+
+#create column 'speaker2' and make it equal to 'speaker' (duplicate).
+distinct_speakers_Barselstuen$speaker2 = distinct_speakers_Barselstuen$speaker 
+# All possible combinations (remember the data is still grouped by act-number and scene-number)
+(distinct_speakers_Barselstuen %>% 
+  expand(speaker, speaker2) %>%
+  ungroup() %>%
+  select(from = speaker, to = speaker2) %>%
+  distinct() -> edges_Barselstuen)
+
+```
+# Draw Graph
+
+```{r}
+# now we can draw a graph like this
+gr <- tbl_graph(nodes = speakers_in_Barselstuen, edges = edges_Barselstuen, directed = TRUE, node_key = "speaker")
+
+
+ggraph(gr, layout = 'randomly') + 
+    geom_edge_link(aes(start_cap = label_rect(node1.speaker),
+                       end_cap = label_rect(node2.speaker))) + 
+      geom_node_text(aes(label = speaker))
+
 ```
 
 WORK IN PROGRESS
+
+Nu kommer alt det spændende arbejde med at gøre grafen pæn :)
