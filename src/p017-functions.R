@@ -22,13 +22,14 @@ convert_TEI_to_JSONL <- function(folder) {
       write_file(path(path_ext_remove(filename), ext="jsonl")))
 }
 
+
+
 # This function read all JSONL files in a folder into
 # a tibble, adding a index numbering each scene within each play
 read_plays_jsonl <- function(folder) {
   dir_ls(folder, glob = "*.jsonl") %>% 
     map_dfr(
       ~ndjson::stream_in(.) %>%
-        tibble() %>%
-        mutate(index = row_number())
+        tibble()
     )
 }
