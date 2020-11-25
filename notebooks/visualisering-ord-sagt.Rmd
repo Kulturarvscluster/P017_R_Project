@@ -1,0 +1,213 @@
+---
+title: "Visualiser antal ord sagt"
+output: html_notebook
+author: pmd
+---
+
+```{r, message=FALSE}
+library(tidyverse)
+library(here)
+library(ndjson)
+library(xslt)
+library(fs)
+library(ggplot2)
+
+require(readr)  # for read_csv()
+require(purrr)  # for map(), reduce()
+
+source(here("src/p017-functions.R"))
+```
+
+# Indlæs data
+
+```{r}
+read_plays_jsonl(here("test-data")) -> plays
+```
+
+```{r}
+plays
+```
+
+```{r}
+glimpse(plays)
+```
+
+```{r}
+plays %>% 
+  count(title)
+```
+
+
+
+
+
+
+
+
+# Gør data klar til visualisering
+
+Til denne visualisering ønsker vi at håndtere hvert skuespil for sig.
+
+For hvert skuespil, lader vi scene være den tidsmæssige udvikling. Så vi tæller hvad her rolle siger for hver scene.
+
+Vi starter med Barselstuen
+
+```{r}
+plays %>% 
+  filter(str_detect(title, "Barselsstuen")) %>% 
+  select(index, speaker, spoke) %>% 
+  filter(!is.na(spoke)) %>% 
+  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
+  select(-spoke) %>% 
+  group_by(index, speaker) %>% 
+  summarise(words = sum(n_spoken_words))
+```
+
+
+
+
+Udtræk Barselsstuen som eksempel
+
+```{r}
+barselsstuen <- plays %>%
+  filter(title == " Barselsstuen")
+
+barselsstuen
+```
+
+
+
+
+
+
+
+# Visualiser
+
+```{r}
+barselsstuen %>% 
+  select(index, speaker, spoke) %>% 
+  filter(!is.na(spoke)) %>% 
+  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
+  select(-spoke) %>% 
+  group_by(index, speaker) %>% 
+  summarise(words = sum(n_spoken_words)) %>% 
+  ggplot(aes(fill = speaker, y = words, x = index)) +
+    geom_bar(position="stack", stat="identity") +
+    labs(
+      title = "Barselstuen af Ludvig Holberg",
+      subtitle = "Hvor meget siger hvem",
+      caption = "Kilde: DSL",
+      fill = "Rolle"
+    ) +
+  xlab("Akt og scene") +
+  ylab("Antal sagte ord")
+```
+
+## Sammenlæg forskellige stavemåde af samme rolle
+
+Lav en liste over alle speakers i Barselsstuen
+
+```{r, rows.print=70}
+barselsstuen %>%
+  select(speaker) %>%
+  distinct(speaker) %>%
+  arrange(speaker)
+```
+
+
+```{r}
+barselsstuen %>% 
+  select(index, speaker, spoke) %>% 
+  filter(!is.na(spoke)) %>% 
+  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
+  select(-spoke) %>% 
+  
+  # count all versions of Troels as one
+  mutate(speaker = if_else(speaker %in% c(
+    "Troels",
+    "Trols"
+    ), "Troels", speaker)) %>%
+  
+  # count all versions of Barselskvinden as one
+  mutate(speaker = if_else(speaker %in% c(
+      "Barselskonen",
+      "Barselskvinden",
+      "Barselsqvinde"
+    ), "Barselskvinden", speaker)) %>%
+  
+  group_by(index, speaker) %>% 
+  summarise(words = sum(n_spoken_words)) -> plays_vis
+```
+
+
+```{r}
+plays_vis %>% 
+  ggplot(aes(fill = speaker, y = words, x = index)) +
+    geom_bar(position="stack", stat="identity") +
+    labs(
+      title = "Barselstuen af Ludvig Holberg",
+      subtitle = "Hvor meget siger hvem",
+      caption = "Kilde: DSL",
+      fill = "Rolle"
+    ) +
+  xlab("Akt og scene") +
+  ylab("Antal sagte ord")
+
+```
+
+Lad os se på roller, som kun siger en lille smule
+
+```{r}
+barselsstuen %>%
+  count(speaker) %>%
+  arrange(n)
+```
+
+Okay, hvis vi så vælger at lægge alle roller sammen, som har mindre end 20 replikker, gør vi således
+
+```{r}
+barselsstuen %>%
+  select(index, speaker, spoke) %>% 
+  filter(!is.na(spoke)) %>% 
+  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
+  select(-spoke) %>% 
+  
+  # count all versions of Troels as one
+  mutate(speaker = if_else(speaker %in% c(
+    "Troels",
+    "Trols"
+    ), "Troels", speaker)) %>%
+  
+  # count all versions of Barselskvinden as one
+  mutate(speaker = if_else(speaker %in% c(
+      "Barselskonen",
+      "Barselskvinden",
+      "Barselsqvinde"
+    ), "Barselskvinden", speaker)) %>%
+  
+  group_by(index, speaker) %>% 
+  summarise(words = sum(n_spoken_words)) %>%
+  
+  # count all speakers with fewer than 10 lines as one
+  mutate(speaker = if_else(words < 20, " Andre småroller", speaker)) %>%
+  ungroup() %>%
+  group_by(index, speaker) %>% 
+  summarise(wordss = sum(words)) -> plays_vis
+
+```
+
+```{r}
+plays_vis %>% 
+  ggplot(aes(fill = speaker, y = wordss, x = index)) +
+    geom_bar(position="stack", stat="identity") +
+    labs(
+      title = "Barselstuen af Ludvig Holberg",
+      subtitle = "Hvor meget siger hvem",
+      caption = "Kilde: DSL",
+      fill = "Rolle"
+    ) +
+  xlab("Akt og scene") +
+  ylab("Antal sagte ord")
+
+```
+
