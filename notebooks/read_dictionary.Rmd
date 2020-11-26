@@ -1,25 +1,56 @@
 ---
-title: "Dictionary"
+title: "Holbergordbogen"
 output: html_notebook
+author: pmd
 ---
 
-#Read or look up "stuff" in the dictionary
 
-Det er en xml-fil, så vi burde kunne læse den - bortset fra at den er meget stor...
+# Undersøgelse af Holbergordbogen
 
-```{r}
-library(xml2)
-library(here)
-
-```
-
-Vi prøver alligevel
+Der er ca. 30.000 linier med liniestruktureret XML. Det kan vi hacke
 
 ```{r}
-dictionary <- read_xml(here("data/holbergordbog_v1.xml"), encoding = "utf8")
-dictionary
-
-
-
+lines <- read_lines(here("data/holbergordbog_v1.xml"))
+length(lines)
+# [1] 31122
 ```
 
+```{r}
+ordbog <- tibble(line = lines)
+```
+
+Jeg snyder her med `rowwise()`, men det ændrer jeg senere...
+
+```{r}
+ordbog  %>% 
+   rowwise() %>% 
+   mutate(opslag = str_match(line, "første=\"([a-zA-Z0-9 ]+)\"")[[2]])  %>% 
+   select(opslag, everything()) -> ordbog
+```
+
+```{r}
+ordbog
+# # A tibble: 31,122 x 2
+# # Rowwise: 
+#    opslag     line                                                              
+#    <chr>      <chr>                                                             
+#  1 <NA>       "<?xml version=\"1.0\" encoding=\"UTF-8\"?><DOC>"                 
+#  2 a          "<Artikel EntryID=\"66000080\" OriginalID=\"81\" bind=\"1\" først…
+#  3 a          "<Artikel EntryID=\"66000081\" OriginalID=\"82\" bind=\"1\" først…
+#  4 a          "<Artikel EntryID=\"66000082\" OriginalID=\"83\" bind=\"1\" først…
+#  5 A          "<Artikel EntryID=\"66000079\" OriginalID=\"80\" bind=\"1\" først…
+#  6 aa         "<Artikel EntryID=\"66000002\" OriginalID=\"3\" bind=\"1\" første…
+#  7 Aa         "<Artikel EntryID=\"66000001\" OriginalID=\"2\" bind=\"1\" første…
+#  8 aabe       "<Artikel EntryID=\"66000003\" OriginalID=\"4\" bind=\"1\" første…
+#  9 aaben      "<Artikel EntryID=\"66000004\" OriginalID=\"5\" bind=\"1\" første…
+# 10 aabenbaned "<Artikel EntryID=\"66000005\" OriginalID=\"6\" bind=\"1\" første…
+# # … with 31,112 more rows
+```
+
+```{r}
+ordbog %>% 
+  filter(str_detect(opslag, "Troels")) %>% 
+  pull(line)
+```
+
+Ppå den måde, kan man grave de interessante informationer ud af filen.
