@@ -1,18 +1,15 @@
 ---
-title: "How to read plays into R"
+title: "Hvordan læses stykkerne ind i R?"
 output: html_notebook
 author: pmd
 ---
+Stykkerne er i TEI format. Dette format har ikke en standard indlæsningsmetod til R. Derfor transformerer vi TEI filerne over i et format der bedre passer til R. Vi har her valgt JSONL, men kunne have valgt andre formater. I JSONL formatet er hver linie i sig selv en stump valid JSON, mens filen som et hele ikke er valid JSON. Dette gør, at hver linie kan læses uafhængigt af hele filen.
 
-The plays are in a TEI format, for which no standard exists in the R-verse. Therefore we transform these TEI files into JSONL, the JSON based line format. Each line is a valid piece of JSON. This format is easy to read into R.
+For at gøre dette nemt, har vi skrevet to små R funktioner. En der transformerer alle TEI filer i en mappe og en der indlæser alle JSONL filer i en mappe til R. TEI filer er identificeret ved at deres filnanv ender med ".page".
 
-We have written a small utility function, that as its argument takes a path to a folder containing TEI .page files, and converts all .page files into the JSONL format.
+Denne notebook illustrerer brugen af disse to funktioner.
 
-These JSONL files can then be read ibto R using another utility function.
-
-This process is illustrated in this notebook.
-
-Before we start, we need to load the needed R packages
+Før vi starter skal vi indlæse de nødvendige udvidelsespakker til R.
 
 ```{r, message=FALSE}
 library(tidyverse)
@@ -22,57 +19,43 @@ library(fs)
 library(xslt)
 ```
 
-We also need to load the functions created for this project. This is done by `source`-ing them.
+De to hjælpefunktioner er defineret i `src/p017-functions.R`, som vi indlæser på følgende vis
 
 ```{r}
 source(here("src", "p017-functions.R"))
 ```
 
-# Transform a folder of TEI files
+# Transformation af TEI filer
 
-We have placed two test files for this example in the `test-data` folder in this projects root directory.
+Vi har placeret to testfiler i mappen `test-data`
 
 ```{r}
 dir_ls(here("test-data/"))
 ```
 
-So, to transform those two files, we use the function `convert_TEI_to_JSONL` like this
+For at transformere disse to filer, gør vi følgende
 
 ```{r}
 convert_TEI_to_JSONL(here("test-data/"))
 ```
 
-If we ow look in the same folder, we see that we have gotten two .jsonl files
+Hvis vi nu igen ser i mappen `test-data`, kan vi se at der er kommet to nye filer
 
 ```{r}
 dir_ls(here("test-data/"))
 ```
 
-```{r}
-dir_info(here("test-data")) %>% select(path, modification_time) %>%
-  mutate(filename = basename(path)) %>% select(-path)
-```
+# Indlæsning af JSONL filer til R
 
-# Read the plays into R
-
-Now, with the TEI files transformed into JSONL, it's easy to read them into R. 
+Vi kan nu indlæse de to nye JSONL filer på følgende vis
 
 ```{r}
 read_plays_jsonl(here("test-data")) -> plays
 ```
 
-
-Let's try to count how many rows each play has in the data. As stage remarks also result in individual rows, the count cannot be interpreted as the number of lines per play.
+Lad os kort se på fx hvor mange rækker, vi har i hvert af de to skuespil.
 
 ```{r}
 plays %>% 
   count(title)
 ```
-
-We could also count how many row each scene and act we have for each play
-
-```{r}
-plays %>% 
-  count(title, act_number)
-```
-
