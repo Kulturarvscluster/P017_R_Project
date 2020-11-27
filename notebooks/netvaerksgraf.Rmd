@@ -41,39 +41,6 @@ source(here("src", "p017-functions.R"))
 
 ```{r}
 
-ring <- create_ring(10)
-ring %>% 
-
-iris_clust <- hclust(dist(iris[1:4]))
-iris_tree <- as_tbl_graph(iris_clust)
-iris_tree
-iris_tree %>% activate(edges)
-
-gr1 <- create_notable('bull') %>% 
-    mutate(name = letters[1:5])
-gr2 <- create_ring(5) %>% 
-    mutate(name = letters[4:8])
-gr1
-gr2
-
-# Plot
-gr1 %>% bind_graphs(gr2) %>% 
-    ggraph(layout = 'kk') + 
-    geom_edge_link() + 
-    geom_node_point(size = 8, colour = 'steelblue') +
-    geom_node_text(aes(label = name), colour = 'white', vjust = 0.4) + 
-    ggtitle('Binding graphs') + 
-    theme_graph()
-
-# Den her er en god introduktion
-# https://www.jessesadler.com/post/network-analysis-with-r/
-
-edge_list <- tibble(from = c(1, 2, 2, 3, 4), to = c(2, 3, 4, 2, 1))
-node_list <- tibble(id = 1:4)
-
-
-
-
 ## A simple example with a couple of actors
 ## The typical case is that these tables are read in from files....
 actors <- data.frame(name=c("Alice", "Bob", "Cecil", "David",
@@ -108,34 +75,37 @@ We look at one play at a time.
 ```{r}
 (plays %>%
   filter(title == " Barselsstuen") %>%
-  filter(!is.na(speaker)) %>% #todo filtrer den tomme streng fra også!
-  count(speaker) %>%
-  select(speaker) %>% rowid_to_column("id") -> speakers_in_Barselstuen)
+  filter(!is.na(speaker)) %>%
+   filter(!(speaker == "")) %>%
+  select(speaker, act_number, scene_number) %>% 
+     group_by(act_number, scene_number)  %>%
+   distinct() -> distinct_speakers_Barselstuen)
+## We now have the distinct speakers in each scene in each act grouped by act and scene
+
+(speakers_in_Barselstuen %>%
+    select(speaker) %>%
+     distinct() %>% 
+   rowid_to_column("id") -> nodes_Barselstuen)
+## All distinct speakers in play
 ```
 
 # Find Edges
-
+5. Find karakterer med replikker, der taler med hinanden – hele stykket.
 ```{r}
 # we would like an edge-list like this
 # edge_list <- tibble(from = c("Claus", "Corfitz", "Jeronimus"), 
 #                    to = c("Troels", "Troels", "Corfitz"))
 
-
-(plays %>%
-  filter(title == " Barselsstuen") %>% 
-  filter(!is.na(speaker)) %>%
-  select(act_number, scene_number, speaker) %>%
-  group_by(act_number, scene_number)  %>%
-  distinct() -> distinct_speakers_Barselstuen)
-## We now have the distinct speakers in each scene in each act
-## I want an edge for each pair of speakers in each scene in each act
+## I.e. an edge for each pair of speakers in each scene in each act
 ## That is every combination of speakers within each group
 
 #create column 'speaker2' and make it equal to 'speaker' (duplicate).
 distinct_speakers_Barselstuen$speaker2 = distinct_speakers_Barselstuen$speaker 
 # All possible combinations (remember the data is still grouped by act-number and scene-number)
 (distinct_speakers_Barselstuen %>% 
-  expand(speaker, speaker2) %>%
+  expand(speaker, speaker2) -> who_speaks_to_whom)
+
+(who_speaks_to_whom  %>%
   ungroup() %>%
   select(from = speaker, to = speaker2) %>%
   distinct() -> edges_Barselstuen)
@@ -145,16 +115,88 @@ distinct_speakers_Barselstuen$speaker2 = distinct_speakers_Barselstuen$speaker
 
 ```{r}
 # now we can draw a graph like this
-gr <- tbl_graph(nodes = speakers_in_Barselstuen, edges = edges_Barselstuen, directed = TRUE, node_key = "speaker")
+gr <- tbl_graph(nodes = nodes_Barselstuen, edges = edges_Barselstuen, directed = TRUE, node_key = "speaker")
 
 
-ggraph(gr, layout = 'randomly') + 
+ggraph(gr, layout = 'kk') + 
     geom_edge_link(aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker))) + 
-      geom_node_text(aes(label = speaker))
+      geom_node_text(aes(label = speaker)) + 
+    labs(caption = "Netværksgraf Barselstuen")
+
+```
+WORK IN PROGRESS
+
+# TODO a. Graduer efter, hvor mange ord, de siger til hinanden.
+# TODO b. Talende karakter: det skal visuelt fremgå, dvs hvem der taler mest.
+# TODO Nu kommer alt det spændende arbejde med at gøre grafen pæn :)
+
+Vi kan også prøve at lave grafer for hver scene eller hver akt i stykket...
+# 6. Find karakterer, der taler med hinanden – opdelt i akt og scene.
+
+```{r}
+## Første Akt
+speakers_in_Barselstuen %>%
+  filter(act_number == 1) %>%
+  select(speaker) %>%
+     distinct() %>% 
+   rowid_to_column("id") -> nodes_act1
+
+who_speaks_to_whom %>%
+  filter(act_number == 1) %>%
+  ungroup() %>%
+  select(from = speaker, to = speaker2) %>%
+  distinct() -> edges_act1
+
+gr <- tbl_graph(nodes = nodes_act1, edges = edges_act1, directed = TRUE, node_key = "speaker")
+
+ggraph(gr) + 
+    geom_edge_link(aes(start_cap = label_rect(node1.speaker),
+                       end_cap = label_rect(node2.speaker))) + 
+      geom_node_text(aes(label = speaker)) + 
+    labs(caption = "Netværksgraf Barselstuen Første Akt")
+
+## Andet Akt
+speakers_in_Barselstuen %>%
+  filter(act_number == 2) %>%
+  select(speaker) %>%
+     distinct() %>% 
+   rowid_to_column("id") -> nodes_act2
+
+who_speaks_to_whom %>%
+  filter(act_number == 2) %>%
+  ungroup() %>%
+  select(from = speaker, to = speaker2) %>%
+  distinct() -> edges_act2
+
+gr <- tbl_graph(nodes = nodes_act2, edges = edges_act2, directed = TRUE, node_key = "speaker")
+
+ggraph(gr) + 
+    geom_edge_link(aes(start_cap = label_rect(node1.speaker),
+                       end_cap = label_rect(node2.speaker))) + 
+      geom_node_text(aes(label = speaker)) + 
+    labs(caption = "Netværksgraf Barselstuen Andet Akt")
+
+## Tredje Akt
+speakers_in_Barselstuen %>%
+  filter(act_number == 3) %>%
+  select(speaker) %>%
+     distinct() %>% 
+   rowid_to_column("id") -> nodes_act3
+
+who_speaks_to_whom %>%
+  filter(act_number == 3) %>%
+  ungroup() %>%
+  select(from = speaker, to = speaker2) %>%
+  distinct() -> edges_act3
+
+gr <- tbl_graph(nodes = nodes_act3, edges = edges_act3, directed = TRUE, node_key = "speaker")
+
+ggraph(gr) + 
+    geom_edge_link(aes(start_cap = label_rect(node1.speaker),
+                       end_cap = label_rect(node2.speaker))) + 
+      geom_node_text(aes(label = speaker)) + 
+    labs(caption = "Netværksgraf Barselstuen Tredje Akt")
 
 ```
 
-WORK IN PROGRESS
-
-Nu kommer alt det spændende arbejde med at gøre grafen pæn :)
