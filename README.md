@@ -1,4 +1,4 @@
-# Det sejeste P017 R project
+# P017 R project
 This R project is part of the P017 DEICproject LUDVIG.
 
 The project answers questions formulated in this document:
