@@ -18,7 +18,13 @@ Jf Frank Fischer – “taler med hinanden” defineres som karakterer, der tale
 
 Before we start, we need to load the needed R packages
 
+HUSK første gang
+install.packages("tidytext")
+
+
 ```{r, message=FALSE}
+library(here)
+library(xml2)
 library(tidyverse)
 library(ndjson)
 library(here)
@@ -65,7 +71,7 @@ ggraph(t, layout = 'randomly') +
 
 ```{r}
 here()
-convert_TEI_to_JSONL(here("test-data/"))
+convert_TEI_to_JSONL(here("test-data"))
 plays <- read_plays_jsonl(here("test-data"))
 ```
 
@@ -82,7 +88,8 @@ We look at one play at a time.
    distinct() -> distinct_speakers_Barselstuen)
 ## We now have the distinct speakers in each scene in each act grouped by act and scene
 
-(speakers_in_Barselstuen %>%
+(distinct_speakers_Barselstuen %>%
+    ungroup() %>%
     select(speaker) %>%
      distinct() %>% 
    rowid_to_column("id") -> nodes_Barselstuen)
@@ -136,7 +143,7 @@ Vi kan også prøve at lave grafer for hver scene eller hver akt i stykket...
 
 ```{r}
 ## Første Akt
-speakers_in_Barselstuen %>%
+distinct_speakers_Barselstuen %>%
   filter(act_number == 1) %>%
   select(speaker) %>%
      distinct() %>% 
@@ -157,7 +164,7 @@ ggraph(gr) +
     labs(caption = "Netværksgraf Barselstuen Første Akt")
 
 ## Andet Akt
-speakers_in_Barselstuen %>%
+distinct_speakers_Barselstuen %>%
   filter(act_number == 2) %>%
   select(speaker) %>%
      distinct() %>% 
@@ -178,7 +185,7 @@ ggraph(gr) +
     labs(caption = "Netværksgraf Barselstuen Andet Akt")
 
 ## Tredje Akt
-speakers_in_Barselstuen %>%
+distinct_speakers_Barselstuen %>%
   filter(act_number == 3) %>%
   select(speaker) %>%
      distinct() %>% 
