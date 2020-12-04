@@ -27,8 +27,8 @@ Vi laver en tabel med navnet plays.
 
 ```{r}
 here()
-convert_TEI_to_JSONL(here("test"))
-read_plays_jsonl(here("test")) -> plays
+convert_TEI_to_JSONL(here("test-data"))
+read_plays_jsonl(here("test-data")) -> plays
 ```
 
 For at gøre det nemmere for os selv, starter vi med kun at se på ét skuespil (fx Barselsstuen). Vi filtrerer et skuespil ud efter titel.
