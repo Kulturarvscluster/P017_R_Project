@@ -71,7 +71,7 @@ ggraph(t, layout = 'randomly') +
 
 ```{r}
 here()
-convert_TEI_to_JSONL(here("test-data"))
+#convert_TEI_to_JSONL(here("test-data"))
 plays <- read_plays_jsonl(here("test-data"))
 ```
 
@@ -79,6 +79,7 @@ plays <- read_plays_jsonl(here("test-data"))
 We look at one play at a time.
 
 ```{r}
+## Distinct speakers in each scene in each act grouped by act and scene
 (plays %>%
   filter(title == " Barselsstuen") %>%
   filter(!is.na(speaker)) %>%
@@ -86,14 +87,30 @@ We look at one play at a time.
   select(speaker, act_number, scene_number) %>% 
      group_by(act_number, scene_number)  %>%
    distinct() -> distinct_speakers_Barselstuen)
-## We now have the distinct speakers in each scene in each act grouped by act and scene
 
+## Sammenlæg forskellige stavemåde af samme rolle
+(distinct_speakers_Barselstuen %>%
+  # count all versions of Troels as one
+  mutate(
+    speaker = if_else(speaker %in% c("Troels", "Trols"), "Troels", speaker)) %>%
+  # count all versions of Barselskvinden as one
+  mutate(
+    speaker = if_else(speaker %in% c("Barselskonen", "Barselskvinden", "Barselsqvinde"), "Barselskvinden", speaker)) %>% 
+  # Count all versions of kællingen as one
+  mutate(
+    speaker = if_else(speaker %in% c("Kælling", "Kællingen"), "Kællingen", speaker)) %>% 
+  # Count all versions of Pigen as one
+  mutate(
+    speaker = if_else(speaker %in% c("En pige", "Pigen"), "Pigen", speaker)) %>%
+  distinct(speaker) -> distinct_speakers_Barselstuen)
+
+## All distinct speakers in play are the nodes
 (distinct_speakers_Barselstuen %>%
     ungroup() %>%
     select(speaker) %>%
      distinct() %>% 
-   rowid_to_column("id") -> nodes_Barselstuen)
-## All distinct speakers in play
+   rowid_to_column("id") -> nodes_Barselstuen) # add id column
+
 ```
 
 # Find Edges
@@ -132,9 +149,18 @@ ggraph(gr, layout = 'kk') +
     labs(caption = "Netværksgraf Barselstuen")
 
 ```
+
+# Graduer efter, hvor mange ord, de siger til hinanden.
+Vi kan låne lidt fra "visualisering-ord-sagt.Rmd"
+
+```{r}
+plays %>%
+  filter(title == " Barselsstuen") %>%
+  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
+  select(n_spoken_words, speaker, act_number, scene_number)
+```
 WORK IN PROGRESS
 
-# TODO a. Graduer efter, hvor mange ord, de siger til hinanden.
 # TODO b. Talende karakter: det skal visuelt fremgå, dvs hvem der taler mest.
 # TODO Nu kommer alt det spændende arbejde med at gøre grafen pæn :)
 
@@ -178,7 +204,8 @@ who_speaks_to_whom %>%
 
 gr <- tbl_graph(nodes = nodes_act2, edges = edges_act2, directed = TRUE, node_key = "speaker")
 
-ggraph(gr) + 
+ggraph(gr) +     ungroup() %>%
+
     geom_edge_link(aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker))) + 
       geom_node_text(aes(label = speaker)) + 
