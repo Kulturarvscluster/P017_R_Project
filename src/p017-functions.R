@@ -19,7 +19,7 @@ convert_TEI_to_JSONL <- function(folder) {
       read_xml() %>%
       xml_xslt(stripSeqXSL) %>%
       xml_xslt(tei2jsonlXSL) %>%
-      write_file(path(path_ext_remove(filename), ext="jsonl")))
+      write_file(fs::path(fs::path_ext_remove(filename), ext="jsonl")))
 }
 
 
