@@ -3,6 +3,7 @@ title: "Holbergordbogen"
 output: html_notebook
 author: pmd
 ---
+
 ```{r}
 library(tidyverse)
 library(here)
@@ -30,11 +31,22 @@ ordbog <- tibble(line = lines)
 Jeg snyder her med `rowwise()`, men det ændrer jeg senere...
 
 ```{r}
-ordbog  %>% 
+tibble(line = lines)  %>% 
    rowwise() %>% 
-   mutate(opslag = str_match(line, "første=\"([a-zøæåA-ZØÆÅ0-9 ]+)\"")[[2]])  %>% 
+   mutate(opslag = str_match(line, "første=\"(\\w+?)\"")[[2]])  %>% 
    select(opslag, everything()) -> ordbog
+
+ordbog %>%
+    head(3)
+
 ```
+
+```{r}
+s <- "'foo1' 'bar1' 'bax2'"
+s
+str_match(s,"'[a-z1-9 ]+'")
+```
+
 
 ```{r}
 ordbog
@@ -79,3 +91,8 @@ ordbog %>%
 ```
 
 Problemet med manglende resultater for de danske bogstaver, skyldes at `opslag` kolonnen ikke inkluderede disse bogstaver i sit søgeudtryk. Dette er der nu rettet op på.
+
+```{r}
+ordbog %>% 
+  filter(str_detect(opslag, "Grønland"))
+```
