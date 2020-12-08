@@ -55,10 +55,32 @@ read_plays_jsonl(here("test-data")) -> plays
 ```
 
 Lad os kort se på fx hvor mange rækker, vi har i hvert af de to skuespil.
+Rækker er her ikke så meningsgivende, da det både kan være replikker og regibemærkninger.
+Lad os derfor også prøve at finde antal replikker og antal regibemærkninger!
 
 ```{r}
+# Tæl antal rækker
 plays %>% 
-  count(title)
+  count(title, name = "# rækker")
+
+# Tæl antal replikker
+plays %>%
+  filter(!is.na(spoke)) %>% #filtrer replikker markeret NA ud
+  filter(!(spoke == "")) %>% #filtrer tomme replikker ud
+  count(title, name = "# replikker")
+
+# Tæl antal regibemærkninger
+# bemærk de findes på to niveauer, så i første omgang tæller vi dem hver for sig
+# Tæl antal <stage>
+plays %>%
+  filter(!is.na(stage)) %>% #filtrer stage markeret NA ud
+  filter(!(stage == "")) %>% #filtrer tomme stage ud
+  count(title, name = "# stage")
+# Tæl antal <speaker_stage>
+plays %>%
+  filter(!is.na(speaker_stage)) %>% #filtrer speaker_stage markeret NA ud
+  filter(!(speaker_stage == "")) %>% #filtrer tomme speaker_stage ud
+  count(title, name = "# speaker_stage")
 ```
 # Indlæsning af en enkelt JSONL fil til R
 
@@ -69,5 +91,32 @@ Der har været noget bøvl med titler på stykkerne, som sjældent er hvad vi fo
 read_play_jsonl(here("test-data", "Den_Vaegelsindede_1731_mod_nc.jsonl")) -> play
 play #se den tbl, der nu er last ind i play
 
+```
+
+Og så tager vi lige den med antal replikker igen!
+
+
+```{r}
+# Tæl antal rækker
+play %>% count(filename, name = "# rækker")
+
+# Tæl antal replikker
+play %>%
+  filter(!is.na(spoke)) %>% #filtrer replikker markeret NA ud
+  filter(!(spoke == "")) %>% #filtrer tomme replikker ud
+  count(filename, name = "# replikker")
+
+# Tæl antal regibemærkninger
+# bemærk de findes på to niveauer, så i første omgang tæller vi dem hver for sig
+# Tæl antal <stage>
+play %>%
+  filter(!is.na(stage)) %>% #filtrer stage markeret NA ud
+  filter(!(stage == "")) %>% #filtrer tomme stage ud
+  count(filename, name = "# stage")
+# Tæl antal <speaker_stage>
+play %>%
+  filter(!is.na(speaker_stage)) %>% #filtrer speaker_stage markeret NA ud
+  filter(!(speaker_stage == "")) %>% #filtrer tomme speaker_stage ud
+  count(filename, name = "# speaker_stage")
 ```
 
