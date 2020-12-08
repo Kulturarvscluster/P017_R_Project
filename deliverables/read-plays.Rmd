@@ -28,21 +28,22 @@ source(here("src", "p017-functions.R"))
 # Transformation af TEI filer
 
 Vi har placeret to testfiler i mappen `test-data`
+Nu prøver jeg også lige at køre det på hele 'data/holberg-komedier-nc'
 
 ```{r}
-dir_ls(here("test-data/"))
+dir_ls(here("test-data"))
 ```
 
 For at transformere disse to filer, gør vi følgende
 
 ```{r}
-convert_TEI_to_JSONL(here("test-data/"))
+convert_TEI_to_JSONL(here("test-data"))
 ```
 
 Hvis vi nu igen ser i mappen `test-data`, kan vi se at der er kommet to nye filer
 
 ```{r}
-dir_ls(here("test-data/"))
+dir_ls(here("test-data"))
 ```
 
 # Indlæsning af JSONL filer til R
@@ -59,3 +60,14 @@ Lad os kort se på fx hvor mange rækker, vi har i hvert af de to skuespil.
 plays %>% 
   count(title)
 ```
+# Indlæsning af en enkelt JSONL fil til R
+
+Der har været noget bøvl med titler på stykkerne, som sjældent er hvad vi forventer, hvis de altså overhovedet er der, derfor har vi indført en funktion, som indlæser et enkelt stykke fra JSONL filen.
+
+```{r}
+#Funtionen her henter det skuespil, der er i den navngavne JSONL fil
+read_play_jsonl(here("test-data", "Den_Vaegelsindede_1731_mod_nc.jsonl")) -> play
+play #se den tbl, der nu er last ind i play
+
+```
+
