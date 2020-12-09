@@ -98,13 +98,13 @@ Og så tager vi lige den med antal replikker igen!
 
 ```{r}
 # Tæl antal rækker
-play %>% count(filename, name = "# rækker")
+play %>% count(name = "# rækker")
 
 # Tæl antal replikker
 play %>%
   filter(!is.na(spoke)) %>% #filtrer replikker markeret NA ud
   filter(!(spoke == "")) %>% #filtrer tomme replikker ud
-  count(filename, name = "# replikker")
+  count(name = "# replikker")
 
 # Tæl antal regibemærkninger
 # bemærk de findes på to niveauer, så i første omgang tæller vi dem hver for sig
@@ -112,11 +112,11 @@ play %>%
 play %>%
   filter(!is.na(stage)) %>% #filtrer stage markeret NA ud
   filter(!(stage == "")) %>% #filtrer tomme stage ud
-  count(filename, name = "# stage")
+  count(name = "# stage")
 # Tæl antal <speaker_stage>
 play %>%
   filter(!is.na(speaker_stage)) %>% #filtrer speaker_stage markeret NA ud
   filter(!(speaker_stage == "")) %>% #filtrer tomme speaker_stage ud
-  count(filename, name = "# speaker_stage")
+  count(name = "# speaker_stage")
 ```
 
