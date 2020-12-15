@@ -40,43 +40,47 @@ plays
 
 # Find speakers
 We look at one play at a time.
-This should be a function.
 
+Play is now the play in question. This way, you can just change that and rerun all the sections below, without having to change them.
 ```{r}
 (plays %>%
-  filter(title == " Barselsstuen") %>%
+  filter(title == " Barselsstuen") -> play)
+```
+
+Find all designated speakers
+```{r}
+(play %>%
+  filter(!is.na(speaker)) %>% 
   count(speaker) %>%
   mutate(speaker = str_to_lower(speaker)) %>%
-  select(speaker) -> speakers_in_Barselstuen)
+  select(speaker) -> speakers)
 ```
 
 # Find alle regi-bemærkninger. 
 De findes i <stage> og <speaker_stage>.
 
 ```{r}
-(plays %>%
-  filter(title == " Barselsstuen") %>% 
+(play %>% 
   unnest_tokens(word, stage) %>% #tokenize stage
   filter(!is.na(word)) %>%
-  select(act, scene, index, word) -> stage_tokens_in_Barselstuen)
+  select(act, scene, index, word) -> stage_tokens)
 
-(plays %>%
-  filter(title == " Barselsstuen") %>% 
+(play %>% 
   unnest_tokens(word, speaker_stage) %>% #tokenize speaker stage
   filter(!is.na(word)) %>%
-  select(act, scene, index, word) -> speaker_stage_tokens_in_Barselstuen)
+  select(act, scene, index, word) -> speaker_stage_tokens)
 ```
 
 # Search for speakers in instructions
 ```{r}
-(stage_tokens_in_Barselstuen %>%
-  semi_join(speakers_in_Barselstuen, by = c("word" = "speaker")) -> speakers_in_stage_Barselstuen)
+(stage_tokens %>%
+  semi_join(speakers, by = c("word" = "speaker")) -> speakers_in_stage)
 
-(speaker_stage_tokens_in_Barselstuen %>%
-  semi_join(speakers_in_Barselstuen, by = c("word" = "speaker")) -> speakers_in_speaker_stage_Barselstuen)
+(speaker_stage_tokens %>%
+  semi_join(speakers, by = c("word" = "speaker")) -> speakers_in_speaker_stage)
 
-(speakers_in_stage_Barselstuen %>%
-    full_join(speakers_in_speaker_stage_Barselstuen) -> all_speakers_in_stage_Barselstuen)
+(speakers_in_stage %>%
+    full_join(speakers_in_speaker_stage) -> all_speakers_in_stage)
 
 ```
 Ovenstående må betyde at vi har 112 steder, hvor en speaker er nævnt i en regi-bemærkning.
@@ -85,19 +89,19 @@ Altså ud fra den liste af speakers, som vi véd er med stykket.
 # Remove the speakers, that are actually speaking?!
 Maybe we should have filtered them out earlier, but here goes
 ```{r}
+         
 ## Distinct speakers in each scene in each act   
-(plays %>%
-  filter(title == " Barselsstuen") %>% 
+(play %>% 
   filter(!is.na(speaker)) %>%
   select(act, scene, speaker) %>%
   mutate(speaker = str_to_lower(speaker)) %>%
-  group_by(act, scene)  %>%
-  distinct() -> distinct_speakers_Barselstuen)
+  distinct() -> distinct_speakers)
+all_speakers_in_stage
 
 ## Filter out speakers from words grouped by act and scene!
-all_speakers_in_stage_Barselstuen %>%
-  group_by(act, scene) %>%
-  anti_join(distinct_speakers_Barselstuen, by = c("word" = "speaker"))
+all_speakers_in_stage %>%
+  anti_join(distinct_speakers, by=c("act"="act", "scene"="scene", "word"="speaker")) %>% 
+  distinct()
 
 ```
 
@@ -105,9 +109,9 @@ Hov, er der slet ikke nogen tilbage nu?
 
 ```{r}
 # Sanity check
-all_speakers_in_stage_Barselstuen %>%
+all_speakers_in_stage %>%
   group_by(act, scene) %>%
-  semi_join(distinct_speakers_Barselstuen, by = c("word" = "speaker"))
+  semi_join(distinct_speakers, by = c("word" = "speaker"))
 
 ```
 
@@ -125,48 +129,46 @@ Same result?!
 Find known example!
 Barselstuen, akt 2, scene 2: 
 ```{r}
-(plays %>%
-  filter(title == " Barselsstuen") %>%
+(play
   count(speaker) %>%
   mutate(speaker = str_to_lower(speaker)) %>%
-  select(speaker) -> speakers_in_Barselstuen)
+  select(speaker) -> speakers)
 
-(plays %>%
-  filter(title == " Barselsstuen", act_number == 2, scene_number == 2) %>%
+(play %>%
+  filter(act_number == 2, scene_number == 2) %>%
   count(speaker) %>%
   mutate(speaker = str_to_lower(speaker)) %>%
-  select(speaker) -> speakers_in_Barselstuen_a2s2)
+  select(speaker) -> speakers_a2s2)
 
-(plays %>%
-  filter(title == " Barselsstuen", act_number == 2, scene_number == 2) %>% 
+(play %>%
+  filter(act_number == 2, scene_number == 2) %>% 
   unnest_tokens(word, stage) %>% #tokenize stage
   filter(!is.na(word)) %>%
-  select(act, scene, index, word) -> stage_tokens_in_Barselstuen_a2s2)
+  select(act, scene, index, word) -> stage_tokens_a2s2)
 
-(plays %>%
-  filter(title == " Barselsstuen", act_number == 2, scene_number == 2) %>% 
+(play %>%
+  filter(act_number == 2, scene_number == 2) %>% 
   unnest_tokens(word, speaker_stage) %>% #tokenize speaker stage
   filter(!is.na(word)) %>%
-  select(act, scene, index, word) -> speaker_stage_tokens_in_Barselstuen_a2s2)
+  select(act, scene, index, word) -> speaker_stage_tokens_a2s2)
 
 ## Distinct speakers in each scene in each act   
-(plays %>%
-  filter(title == " Barselsstuen") %>% 
+(play %>%
   filter(!is.na(speaker)) %>%
   select(act, scene, speaker) %>%
   mutate(speaker = str_to_lower(speaker)) %>%
   group_by(act, scene)  %>%
-  distinct() -> distinct_speakers_Barselstuen)
+  distinct() -> distinct_speakers)
 
 ## Filter out speakers from all words
-(stage_tokens_in_Barselstuen_a2s2 %>%
+(stage_tokens_a2s2 %>%
   group_by(act, scene) %>%
-  semi_join(speakers_in_Barselstuen, by = c("word" = "speaker")) -> speakers_in_words)
+  semi_join(speakers, by = c("word" = "speaker")) -> speakers_in_words)
 
 ## Then filter out speakers who speak grouped by act and scene!
 speakers_in_words %>%
   group_by(act, scene) %>%
-  anti_join(speakers_in_Barselstuen_a2s2, by = c("word" = "speaker"))
+  anti_join(speakers_a2s2, by = c("word" = "speaker"))
 
 ```
 Now, this was as expected. We found corfitz! Now we should make this work for the full play somehow!
