@@ -35,7 +35,6 @@ source(here("src", "present_without_speech.R"))
 ```{r}
 convert_TEI_to_JSONL(here("data", "holberg-komedier-nc"))
 plays <- read_plays_jsonl(here("data", "holberg-komedier-nc"))
-plays
 ```
 
 # Find speakers
@@ -60,11 +59,24 @@ Find all designated speakers
 De findes i <stage> og <speaker_stage>.
 
 ```{r}
-(play %>% 
-  unnest_tokens(word, stage) %>% #tokenize stage
-  filter(!is.na(word)) %>%
-  select(act, scene, index, word) -> stage_tokens)
 
+# These are the people who are directly mentioned in the stage tokens
+(play %>% 
+  filter(!is.na(stage)) %>%
+  filter(!startsWith(stage, "("))  %>% 
+  unnest_tokens(word, stage, drop=FALSE, token="regex", pattern = ", *") %>% #tokenize stage
+  select(act, scene, index, word) %>% 
+  distinct() -> explicit_stage_tokens)
+  
+# These are the the actors who are implicitly mentioned in stage tokens
+(play %>% 
+  filter(!is.na(stage)) %>%
+  filter(startsWith(stage, "("))  %>% 
+  unnest_tokens(word, stage) %>% #tokenize stage
+  select(act, scene, index, word) %>% 
+  distinct() -> implicit_stage_tokens)
+  
+# These are the the actors who are implicitly mentioned in speaker stage tokens
 (play %>% 
   unnest_tokens(word, speaker_stage) %>% #tokenize speaker stage
   filter(!is.na(word)) %>%
@@ -73,17 +85,22 @@ De findes i <stage> og <speaker_stage>.
 
 # Search for speakers in instructions
 ```{r}
-(stage_tokens %>%
-  semi_join(speakers, by = c("word" = "speaker")) -> speakers_in_stage)
+(explicit_stage_tokens %>%
+  semi_join(speakers, by = c("word" = "speaker")) -> explicit_speakers_in_stage)
+
+(implicit_stage_tokens %>%
+  semi_join(speakers, by = c("word" = "speaker")) -> implicit_speakers_in_stage)
 
 (speaker_stage_tokens %>%
   semi_join(speakers, by = c("word" = "speaker")) -> speakers_in_speaker_stage)
 
-(speakers_in_stage %>%
+
+(explicit_speakers_in_stage %>%
+    full_join(implicit_speakers_in_stage) %>% 
     full_join(speakers_in_speaker_stage) -> all_speakers_in_stage)
 
 ```
-Ovenstående må betyde at vi har 112 steder, hvor en speaker er nævnt i en regi-bemærkning.
+Ovenstående må betyde at vi har 101 steder, hvor en speaker er nævnt i en regi-bemærkning.
 Altså ud fra den liste af speakers, som vi véd er med stykket. 
 
 # Remove the speakers, that are actually speaking?!
@@ -96,7 +113,6 @@ Maybe we should have filtered them out earlier, but here goes
   select(act, scene, speaker) %>%
   mutate(speaker = str_to_lower(speaker)) %>%
   distinct() -> distinct_speakers)
-all_speakers_in_stage
 
 ## Filter out speakers from words grouped by act and scene!
 all_speakers_in_stage %>%
