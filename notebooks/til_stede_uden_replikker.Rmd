@@ -24,27 +24,26 @@ We also need to load the functions created for this project. This is done by `so
 
 ```{r}
 source(here("src", "p017-functions.R"))
-source(here("src", "present_without_speech.R"))
 ```
 
-
-# Read plays
+# Read play
 
 (Look at read-plays.Rmd for help)
+In this example I use "Barselstuen_mod_nc.page"
+You can choose any play, you would like to.
+Create a "test-data" folder in your project directory, and copy the play here.
+Edit the file below to the jsonl file for the play you want.
 
 ```{r}
-convert_TEI_to_JSONL(here("data", "holberg-komedier-nc"))
-plays <- read_plays_jsonl(here("data", "holberg-komedier-nc"))
+# convert all page files in the specified folder to jsonl
+convert_TEI_to_JSONL(here("test-data")) 
+# read the specified play from the jsonl file
+play <- read_play_jsonl(here("test-data", "Barselstuen_mod_nc.jsonl"))
+play # show the table for the play
 ```
+Play is now the play in question. This way, you can just change that and rerun all the sections below, without having to change them.
 
 # Find speakers
-We look at one play at a time.
-
-Play is now the play in question. This way, you can just change that and rerun all the sections below, without having to change them.
-```{r}
-(plays %>%
-  filter(title == " Barselsstuen") -> play)
-```
 
 Find all designated speakers
 ```{r}
@@ -103,8 +102,7 @@ De findes i <stage> og <speaker_stage>.
 Ovenstående må betyde at vi har 101 steder, hvor en speaker er nævnt i en regi-bemærkning.
 Altså ud fra den liste af speakers, som vi véd er med stykket. 
 
-# Remove the speakers, that are actually speaking?!
-Maybe we should have filtered them out earlier, but here goes
+# Remove the characters, that are actually speaking?!
 ```{r}
          
 ## Distinct speakers in each scene in each act   
@@ -120,81 +118,22 @@ all_speakers_in_stage %>%
   distinct()
 
 ```
+Så er der 18 steder med personer omtalt i regibemærkninger, men ikke som speaker i den scene.
+Skal vi lige checke om det nu kan passe?
+Anden akt, Scene 1 har <speaker>En pige <stage>(med en tallerken)</stage></speaker>.
+Vores algoritme kan ikke se at "pigen" i <stage> bemærkningen er den samme som "En pige" i <speaker>...
+vi har testet den på Barselstuen, for der ved vi, at vi skal finde Corfitz under sengen i akt 2, scene 2, så den er god nok.
 
-Hov, er der slet ikke nogen tilbage nu?
-
-```{r}
-# Sanity check
-all_speakers_in_stage %>%
-  group_by(act, scene) %>%
-  semi_join(distinct_speakers, by = c("word" = "speaker"))
-
-```
-
-Hvis det skal bruges i grafen, skal vi lave det hele til en funktion.
+Hvis det skal bruges i grafen, skal vi nok lave det hele til en funktion.
 
 Så kan vi også prøve funktionen på et andet skuespil, og måske få et andet resultat?!
 
 # Test Function
 
-```{r}
-present_without_speech(" Husspøgelse")
-```
-
-Same result?!
-Find known example!
-Barselstuen, akt 2, scene 2: 
-```{r}
-(play
-  count(speaker) %>%
-  mutate(speaker = str_to_lower(speaker)) %>%
-  select(speaker) -> speakers)
-
-(play %>%
-  filter(act_number == 2, scene_number == 2) %>%
-  count(speaker) %>%
-  mutate(speaker = str_to_lower(speaker)) %>%
-  select(speaker) -> speakers_a2s2)
-
-(play %>%
-  filter(act_number == 2, scene_number == 2) %>% 
-  unnest_tokens(word, stage) %>% #tokenize stage
-  filter(!is.na(word)) %>%
-  select(act, scene, index, word) -> stage_tokens_a2s2)
-
-(play %>%
-  filter(act_number == 2, scene_number == 2) %>% 
-  unnest_tokens(word, speaker_stage) %>% #tokenize speaker stage
-  filter(!is.na(word)) %>%
-  select(act, scene, index, word) -> speaker_stage_tokens_a2s2)
-
-## Distinct speakers in each scene in each act   
-(play %>%
-  filter(!is.na(speaker)) %>%
-  select(act, scene, speaker) %>%
-  mutate(speaker = str_to_lower(speaker)) %>%
-  group_by(act, scene)  %>%
-  distinct() -> distinct_speakers)
-
-## Filter out speakers from all words
-(stage_tokens_a2s2 %>%
-  group_by(act, scene) %>%
-  semi_join(speakers, by = c("word" = "speaker")) -> speakers_in_words)
-
-## Then filter out speakers who speak grouped by act and scene!
-speakers_in_words %>%
-  group_by(act, scene) %>%
-  anti_join(speakers_a2s2, by = c("word" = "speaker"))
-
-```
-Now, this was as expected. We found corfitz! Now we should make this work for the full play somehow!
-
-
 WORK IN PROGRESS
-
 
 Dernæst brug en bruttoliste over hvem der ville kunne være tilstede 
 
 Denne bruttoliste kan måske baseres på "ordbogen"
 
-Den kan måske gives fra forskerne 
+Den kan måske gives fra forskerne...
