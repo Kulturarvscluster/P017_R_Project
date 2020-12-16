@@ -39,6 +39,8 @@ read_play_jsonl <- function(file) {
     map_dfr(
       ~ndjson::stream_in(.) %>%
         tibble() %>%
-        add_column(filename = file, .before = 0)
+        add_column(filename = substr(file, 
+                                     start = unlist(lapply(str_locate_all(file, '/'), max))+1, 
+                                     stop = str_length(file)), .before = 0)
     )
 }
