@@ -7,29 +7,29 @@
     <xsl:output method="text" encoding="UTF-8" indent="no" omit-xml-declaration="yes"/>
     <xsl:strip-space elements="*"/>
 
-<!--    Output will have these columns
-act, scene, stage, speaker, speaker_stage, spoke, index
+    <!--    Output will have these columns
+    act, scene, stage, speaker, speaker_stage, spoke, index
 
-act and scene are hopefully easily understood
+    act and scene are hopefully easily understood
 
-stage is actual stage instructions, likely names of roles that should appear on stage
+    stage is actual stage instructions, likely names of roles that should appear on stage
 
-speaker is the role speaking. spoke is what he said. These will always appear together or not at all
+    speaker is the role speaking. spoke is what he said. These will always appear together or not at all
 
-speaker_stage is extra instructions to the speaker
+    speaker_stage is extra instructions to the speaker
 
-index is counter (inside the scene, it resets with each new scene)
+    index is counter (inside the scene, it resets with each new scene)
 
-Only act, scene and index will always appear.
--->
-
-
+    Only act, scene and index will always appear.
+    -->
 
 
     <xsl:template name="lg">
         <!--Preserve linebreaks in lg blocks        -->
         <xsl:for-each select="../tei:l">
-            <xsl:if test="@rend='indent'"><xsl:text>\t</xsl:text></xsl:if>
+            <xsl:if test="@rend='indent'">
+                <xsl:text>\t</xsl:text>
+            </xsl:if>
             <xsl:value-of select="normalize-space(.)"/>
             <xsl:text>\n</xsl:text>
         </xsl:for-each>
@@ -38,7 +38,7 @@ Only act, scene and index will always appear.
 
     <xsl:template name="act_counter">
         <xsl:number level="single"
-                    count="/tei:TEI/tei:text/tei:body/tei:div" />
+                    count="/tei:TEI/tei:text/tei:body/tei:div"/>
     </xsl:template>
 
 
@@ -54,24 +54,31 @@ Only act, scene and index will always appear.
                         tei:sp/tei:speaker/tei:stage |
                         tei:sp/tei:p |
                         tei:sp/tei:lg |
-                        tei:sp/tei:p/tei:stage" />
+                        tei:sp/tei:p/tei:stage"/>
     </xsl:template>
 
     <xsl:variable name="docTitle">
-        <xsl:for-each select="/tei:TEI/tei:text/tei:front/tei:titlePage/tei:docTitle/tei:titlePart|/tei:TEI/tei:text/tei:front/tei:titlePage/tei:titlePart">
+        <xsl:for-each
+                select="/tei:TEI/tei:text/tei:front/tei:titlePage/tei:docTitle/tei:titlePart|/tei:TEI/tei:text/tei:front/tei:titlePage/tei:titlePart">
             <xsl:value-of select="normalize-space(text())"/>
-            <xsl:if test="position() != last()"><xsl:text> </xsl:text></xsl:if>
+            <xsl:if test="position() != last()">
+                <xsl:text> </xsl:text>
+            </xsl:if>
         </xsl:for-each>
     </xsl:variable>
 
     <xsl:variable name="firstTitle">
-        <xsl:for-each select="/tei:TEI/tei:text/tei:front/tei:titlePage/tei:docTitle/tei:titlePart[1]|/tei:TEI/tei:text/tei:front/tei:titlePage/tei:titlePart[1]">
+        <xsl:for-each
+                select="/tei:TEI/tei:text/tei:front/tei:titlePage/tei:docTitle/tei:titlePart[1]|/tei:TEI/tei:text/tei:front/tei:titlePage/tei:titlePart[1]">
             <xsl:value-of select="normalize-space(text())"/>
-            <xsl:if test="position() != last()"><xsl:text> </xsl:text></xsl:if>
+            <xsl:if test="position() != last()">
+                <xsl:text> </xsl:text>
+            </xsl:if>
         </xsl:for-each>
     </xsl:variable>
 
-    <xsl:variable name="year" select="normalize-space(translate(/tei:TEI/tei:text/tei:front/tei:titlePage/tei:byline/text(),'&#xA;',''))"/>
+    <xsl:variable name="year"
+                  select="normalize-space(translate(/tei:TEI/tei:text/tei:front/tei:titlePage/tei:byline/text(),'&#xA;',''))"/>
 
 
     <xsl:template match="tei:publicationStmt"/>
@@ -79,17 +86,115 @@ Only act, scene and index will always appear.
     <!-- In the year filed, we need to remove newlines, done with translate(),
          and the also to remove instances of munltiple spaces, done using normalize-space()
     -->
-    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:stage">{"type": 1, "docTitle": "<xsl:value-of select="$docTitle"/>", "year": "<xsl:value-of select="$year"/>", "title": "<xsl:value-of select="$firstTitle"/>", "act": "<xsl:value-of select="../../@n"/>", "act_number": <xsl:call-template name="act_counter"/>, "scene": "<xsl:value-of select="../@n"/>", "scene_number": <xsl:call-template name="scene_counter"/>, "stage": "<xsl:value-of select="normalize-space(.)"/>", "index": <xsl:call-template name="scene_index"/> }<xsl:text>&#xa;</xsl:text></xsl:template>
+    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:stage">
+        <xsl:variable name="line">
+            {"type": 1,
+            "docTitle": "<xsl:value-of select="$docTitle"/>",
+            "year": "<xsl:value-of select="$year"/>",
+            "title": "<xsl:value-of select="$firstTitle"/>",
+            "act": "<xsl:value-of select="../../@n"/>",
+            "act_number": <xsl:call-template name="act_counter"/>,
+            "scene": "<xsl:value-of select="../@n"/>",
+            "scene_number": <xsl:call-template name="scene_counter"/>,
+            "stage": "<xsl:value-of select="normalize-space(.)"/>",
+            "index": <xsl:call-template name="scene_index"/>
+            }
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
+    </xsl:template>
 
-    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:sp/tei:stage">{"type": 2, "docTitle": "<xsl:value-of select="$docTitle"/>", "year": "<xsl:value-of select="$year"/>", "title": "<xsl:value-of select="$firstTitle"/>", "act": "<xsl:value-of select="../../../@n"/>", "act_number": <xsl:call-template name="act_counter"/>, "scene": "<xsl:value-of select="../../@n"/>", "scene_number": <xsl:call-template name="scene_counter"/>,  "speaker": "<xsl:value-of select="normalize-space(../tei:speaker/text())"/>", "stage": "<xsl:value-of select="normalize-space(.)"/>", "index": <xsl:call-template name="scene_index"/> }<xsl:text>&#xa;</xsl:text></xsl:template>
+    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:sp/tei:stage">
+        <xsl:variable name="line">
+            {"type": 2,
+            "docTitle": "<xsl:value-of select="$docTitle"/>",
+            "year": "<xsl:value-of select="$year"/>",
+            "title": "<xsl:value-of select="$firstTitle"/>",
+            "act": "<xsl:value-of select="../../../@n"/>",
+            "act_number": <xsl:call-template name="act_counter"/>,
+            "scene": "<xsl:value-of select="../../@n"/>",
+            "scene_number": <xsl:call-template name="scene_counter"/>,
+            "speaker": "<xsl:value-of select="normalize-space(../tei:speaker/text())"/>",
+            "stage": "<xsl:value-of select="normalize-space(.)"/>",
+            "index": <xsl:call-template name="scene_index"/>
+            }
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
+    </xsl:template>
 
-    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:sp/tei:speaker/tei:stage">{"type": 3, "docTitle": "<xsl:value-of select="$docTitle"/>", "year": "<xsl:value-of select="$year"/>", "title": "<xsl:value-of select="$firstTitle"/>", "act": "<xsl:value-of select="../../../../@n"/>", "act_number": <xsl:call-template name="act_counter"/>, "scene": "<xsl:value-of select="../../../@n"/>", "scene_number": <xsl:call-template name="scene_counter"/>, "speaker_stage": "<xsl:value-of select="normalize-space(.)"/>", "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>", "index": <xsl:call-template name="scene_index"/> }<xsl:text>&#xa;</xsl:text></xsl:template>
+    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:sp/tei:speaker/tei:stage">
+        <xsl:variable name="line">
+            {"type": 3,
+            "docTitle": "<xsl:value-of select="$docTitle"/>",
+            "year": "<xsl:value-of select="$year"/>",
+            "title": "<xsl:value-of select="$firstTitle"/>",
+            "act": " <xsl:value-of select="../../../../@n"/>",
+            "act_number": <xsl:call-template name="act_counter"/>,
+            "scene": "<xsl:value-of select="../../../@n"/>",
+            "scene_number": <xsl:call-template name="scene_counter"/>,
+            "speaker_stage": "<xsl:value-of select="normalize-space(.)"/>",
+            "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>",
+            "index": <xsl:call-template name="scene_index"/>
+            }
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
+    </xsl:template>
 
-    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:sp/tei:p/text()[count(preceding-sibling::*)=0]">{"type": 4, "docTitle": "<xsl:value-of select="$docTitle"/>", "year": "<xsl:value-of select="$year"/>", "title": "<xsl:value-of select="$firstTitle"/>", "act": "<xsl:value-of select="../../../../@n"/>", "act_number": <xsl:call-template name="act_counter"/>, "scene": "<xsl:value-of select="../../../@n"/>", "scene_number": <xsl:call-template name="scene_counter"/>, "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>", "spoke": "<xsl:value-of select="normalize-space(.)"/>", "index": <xsl:call-template name="scene_index"/> }<xsl:text>&#xa;</xsl:text></xsl:template>
+    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:sp/tei:p/text()[count(preceding-sibling::*)=0]">
+        <xsl:variable name="line">
+            {"type": 4,
+            "docTitle": "<xsl:value-of select="$docTitle"/>",
+            "year": "<xsl:value-of select="$year"/>",
+            "title": "<xsl:value-of select="$firstTitle"/>",
+            "act": "<xsl:value-of select="../../../../@n"/>",
+            "act_number": <xsl:call-template name="act_counter"/>,
+            "scene": "<xsl:value-of select="../../../@n"/>",
+            "scene_number": <xsl:call-template name="scene_counter"/>,
+            "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>",
+            "spoke": "<xsl:value-of select="normalize-space(.)"/>",
+            "index": <xsl:call-template name="scene_index"/>
+            }
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
+    </xsl:template>
 
-    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:sp/tei:lg/tei:l[count(preceding-sibling::*)=0]">{"type": 5, "docTitle": "<xsl:value-of select="$docTitle"/>", "year": "<xsl:value-of select="$year"/>", "title": "<xsl:value-of select="$firstTitle"/>", "act": "<xsl:value-of select="../../../../@n"/>", "act_number": <xsl:call-template name="act_counter"/>, "scene": "<xsl:value-of select="../../../@n"/>", "scene_number": <xsl:call-template name="scene_counter"/>, "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>", "spoke": "<xsl:call-template name="lg"/>", "index": <xsl:call-template name="scene_index"/> }<xsl:text>&#xa;</xsl:text></xsl:template>
+    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:sp/tei:lg/tei:l[count(preceding-sibling::*)=0]">
+        <xsl:variable name="line">
+            {"type": 5,
+            "docTitle": "<xsl:value-of select="$docTitle"/>",
+            "year": "<xsl:value-of select="$year"/>",
+            "title": "<xsl:value-of select="$firstTitle"/>",
+            "act": "<xsl:value-of select="../../../../@n"/>",
+            "act_number": <xsl:call-template name="act_counter"/>,
+            "scene": "<xsl:value-of select="../../../@n"/>",
+            "scene_number": <xsl:call-template name="scene_counter"/>,
+            "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>",
+            "spoke": "<xsl:call-template name="lg"/>",
+            "index": <xsl:call-template name="scene_index"/>
+            }
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
+    </xsl:template>
 
-    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:sp/tei:p/tei:stage">{"type": 6, "docTitle": "<xsl:value-of select="$docTitle"/>", "year": "<xsl:value-of select="$year"/>", "title": "<xsl:value-of select="$firstTitle"/>", "act": "<xsl:value-of select="../../../../@n"/>", "act_number": <xsl:call-template name="act_counter"/>, "scene": "<xsl:value-of select="../../../@n"/>", "scene_number": <xsl:call-template name="scene_counter"/>, "speaker_stage": "<xsl:value-of select="normalize-space(.)"/>", "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>", <xsl:if test="position() != last()">"spoke": "<xsl:value-of select="normalize-space(following-sibling::text())"/>",</xsl:if> "index": <xsl:call-template name="scene_index"/> }<xsl:text>&#xa;</xsl:text></xsl:template>
+    <xsl:template match="/tei:TEI/tei:text/tei:body/tei:div/tei:div/tei:sp/tei:p/tei:stage">
+        <xsl:variable name="line">
+            {"type": 6,
+            "docTitle": "<xsl:value-of select="$docTitle"/>",
+            "year": "<xsl:value-of select="$year"/>",
+            "title": "<xsl:value-of select="$firstTitle"/>",
+            "act": "<xsl:value-of select="../../../../@n"/>",
+            "act_number": <xsl:call-template name="act_counter"/>,
+            "scene": "<xsl:value-of select="../../../@n"/>",
+            "scene_number": <xsl:call-template name="scene_counter"/>,
+            "speaker_stage": "<xsl:value-of select="normalize-space(.)"/>",
+            "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>",
+            <xsl:if test="position() != last()">
+                "spoke": "<xsl:value-of select="normalize-space(following-sibling::text())"/>",
+            </xsl:if>
+            "index": <xsl:call-template name="scene_index"/>
+            }
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
+    </xsl:template>
 
     <!--    There is a built-in template rule to allow recursive processing to continue in the absence of a successful pattern match by an explicit template rule in the stylesheet. This template rule applies to both element nodes and the root node. The following shows the equivalent of the built-in template rule:-->
     <xsl:template match="*|/">
