@@ -8,19 +8,28 @@
     <xsl:strip-space elements="*"/>
 
     <!--    Output will have these columns
-    act, scene, stage, speaker, speaker_stage, spoke, index
+    type, docTitle, year, title, act, act_number, scene, scene_number, index, speaker_stage, speaker, spoke, stage
+
+    type is the type of expression. For debug purposes currently, do not use
+
+    year is year
+
+    docTitle is the full title
+    title is the first part of the title
 
     act and scene are hopefully easily understood
-
-    stage is actual stage instructions, likely names of roles that should appear on stage
-
-    speaker is the role speaking. spoke is what he said. These will always appear together or not at all
-
-    speaker_stage is extra instructions to the speaker
+    act_number and scene_number are the numeric versions of act and scene
 
     index is counter (inside the scene, it resets with each new scene)
 
-    Only act, scene and index will always appear.
+    speaker_stage is extra instructions to the speaker. If present, speaker will also be present
+
+    speaker is the role speaking.
+
+    spoke is what he said. If present, speaker will also be present
+
+    stage is actual stage instructions, likely names of roles that should appear on stage
+
     -->
 
 
@@ -96,8 +105,13 @@
             "act_number": <xsl:call-template name="act_counter"/>,
             "scene": "<xsl:value-of select="../@n"/>",
             "scene_number": <xsl:call-template name="scene_counter"/>,
-            "stage": "<xsl:value-of select="normalize-space(.)"/>",
-            "index": <xsl:call-template name="scene_index"/>
+            "index": <xsl:call-template name="scene_index"/>,
+
+            "speaker_stage": null,
+            "speaker": null,
+            "spoke": null,
+
+            "stage": "<xsl:value-of select="normalize-space(.)"/>"
             }
         </xsl:variable>
         <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
@@ -113,9 +127,13 @@
             "act_number": <xsl:call-template name="act_counter"/>,
             "scene": "<xsl:value-of select="../../@n"/>",
             "scene_number": <xsl:call-template name="scene_counter"/>,
+            "index": <xsl:call-template name="scene_index"/>,
+
+            "speaker_stage": null,
             "speaker": "<xsl:value-of select="normalize-space(../tei:speaker/text())"/>",
-            "stage": "<xsl:value-of select="normalize-space(.)"/>",
-            "index": <xsl:call-template name="scene_index"/>
+            "spoke": null,
+
+            "stage": "<xsl:value-of select="normalize-space(.)"/>"
             }
         </xsl:variable>
         <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
@@ -131,9 +149,14 @@
             "act_number": <xsl:call-template name="act_counter"/>,
             "scene": "<xsl:value-of select="../../../@n"/>",
             "scene_number": <xsl:call-template name="scene_counter"/>,
+            "index": <xsl:call-template name="scene_index"/>,
+
+
             "speaker_stage": "<xsl:value-of select="normalize-space(.)"/>",
             "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>",
-            "index": <xsl:call-template name="scene_index"/>
+            "spoke": null,
+
+            "stage": null
             }
         </xsl:variable>
         <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
@@ -149,9 +172,13 @@
             "act_number": <xsl:call-template name="act_counter"/>,
             "scene": "<xsl:value-of select="../../../@n"/>",
             "scene_number": <xsl:call-template name="scene_counter"/>,
+            "index": <xsl:call-template name="scene_index"/>,
+
+            "speaker_stage": null,
             "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>",
             "spoke": "<xsl:value-of select="normalize-space(.)"/>",
-            "index": <xsl:call-template name="scene_index"/>
+
+            "stage": null
             }
         </xsl:variable>
         <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
@@ -167,9 +194,13 @@
             "act_number": <xsl:call-template name="act_counter"/>,
             "scene": "<xsl:value-of select="../../../@n"/>",
             "scene_number": <xsl:call-template name="scene_counter"/>,
+            "index": <xsl:call-template name="scene_index"/>,
+
+            "speaker_stage": null,
             "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>",
             "spoke": "<xsl:call-template name="lg"/>",
-            "index": <xsl:call-template name="scene_index"/>
+
+            "stage": null
             }
         </xsl:variable>
         <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
@@ -185,12 +216,20 @@
             "act_number": <xsl:call-template name="act_counter"/>,
             "scene": "<xsl:value-of select="../../../@n"/>",
             "scene_number": <xsl:call-template name="scene_counter"/>,
+            "index": <xsl:call-template name="scene_index"/>,
+
             "speaker_stage": "<xsl:value-of select="normalize-space(.)"/>",
             "speaker": "<xsl:value-of select="normalize-space(../../tei:speaker/text())"/>",
-            <xsl:if test="position() != last()">
-                "spoke": "<xsl:value-of select="normalize-space(following-sibling::text())"/>",
-            </xsl:if>
-            "index": <xsl:call-template name="scene_index"/>
+            <xsl:choose>
+                <xsl:when test="position() != last()">
+                    "spoke": "<xsl:value-of select="normalize-space(following-sibling::text())"/>",
+                </xsl:when>
+                <xsl:otherwise>
+                    "spoke": null,
+                </xsl:otherwise>
+            </xsl:choose>
+
+            "stage": null
             }
         </xsl:variable>
         <xsl:value-of select="normalize-space($line)"/><xsl:text>&#xa;</xsl:text>
