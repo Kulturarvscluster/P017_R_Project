@@ -16,6 +16,8 @@
 
     <xsl:template match="tei:hi"><xsl:copy-of select="text()"/></xsl:template>
 
+    <xsl:template match="tei:lb"><xsl:copy-of select="text()"/></xsl:template>
+
 
 
     <!--    There is a built-in template rule to allow recursive processing to continue in the absence of a successful pattern match by an explicit template rule in the stylesheet. This template rule applies to both element nodes and the root node. The following shows the equivalent of the built-in template rule:-->
