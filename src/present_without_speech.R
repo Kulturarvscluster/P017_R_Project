@@ -4,24 +4,18 @@
 # This function calculates characters that are present, but silent, in 
 # each scene in each act in a given play
 present_without_speech <- function(play) {
-  # Read plays
-  convert_TEI_to_JSONL(here("test-data"))
-  plays <- read_plays_jsonl(here("test-data"))
   # Find speakers
-  plays %>%
-    filter(title == play) %>%
+  play %>%
     count(speaker) %>%
     mutate(speaker = str_to_lower(speaker)) %>%
     select(speaker) -> speakers_in_play
   # Find alle regi-bemærkninger. 
-  plays %>%
-      filter(title == play) %>% 
+  play %>%
       unnest_tokens(word, stage) %>% #tokenize stage
       filter(!is.na(word)) %>%
       select(act, scene, index, word) -> stage_tokens_in_play
   
-  plays %>%
-      filter(title == play) %>% 
+  play %>%
       unnest_tokens(word, speaker_stage) %>% #tokenize speaker stage
       filter(!is.na(word)) %>%
       select(act, scene, index, word) -> speaker_stage_tokens_in_play
@@ -36,8 +30,7 @@ present_without_speech <- function(play) {
       full_join(speakers_in_speaker_stage_play) -> all_speakers_in_stage_play
   # Remove the speakers, that are actually speaking?!
   ## Distinct speakers in each scene in each act   
-  plays %>%
-      filter(title == play) %>% 
+  play %>%
       filter(!is.na(speaker)) %>%
       select(act, scene, speaker) %>%
       mutate(speaker = str_to_lower(speaker)) %>%
