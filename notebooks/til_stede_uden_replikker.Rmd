@@ -122,13 +122,18 @@ Så er der 18 steder med personer omtalt i regibemærkninger, men ikke som speak
 Skal vi lige checke om det nu kan passe?
 Anden akt, Scene 1 har <speaker>En pige <stage>(med en tallerken)</stage></speaker>.
 Vores algoritme kan ikke se at "pigen" i <stage> bemærkningen er den samme som "En pige" i <speaker>...
-vi har testet den på Barselstuen, for der ved vi, at vi skal finde Corfitz under sengen i akt 2, scene 2, så den er god nok.
+vi har testet den på Barselstuen, for der ved vi, at vi skal finde Corfitz under sengen i akt 2, scene 2, så den er god nok. Det er dog nok nødvendigt at gå den igennem manuelt for at rette til, som for eksempel med "pigen".
 
 Hvis det skal bruges i grafen, skal vi nok lave det hele til en funktion.
 
 Så kan vi også prøve funktionen på et andet skuespil, og måske få et andet resultat?!
 
 # Test Function
+```{r}
+present_without_speech(play)
+```
+
+
 
 WORK IN PROGRESS
 
