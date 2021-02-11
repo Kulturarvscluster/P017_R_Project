@@ -28,22 +28,24 @@ source(here("src", "p017-functions.R"))
 # Transformation af TEI filer
 
 Vi har placeret to testfiler i mappen `test-data`
-Nu prøver jeg også lige at køre det på hele 'data/holberg-komedier-nc'
+Det virker også at køre det på hele 'data/holberg-komedier-nc', altså mappen med alle komedie-filerne.
+Du kan sætte det directory du ønsker ind i 'my-dir' variablen.
 
 ```{r}
-dir_ls(here("test-data"))
+my_dir <-"test-data"
+dir_ls(here(my_dir))
 ```
 
 For at transformere disse to filer, gør vi følgende
 
 ```{r}
-convert_TEI_to_JSONL(here("test-data"))
+convert_TEI_to_JSONL(here(my_dir))
 ```
 
-Hvis vi nu igen ser i mappen `test-data`, kan vi se at der er kommet to nye filer
+Hvis vi nu igen ser i mappen `data/holberg-komedier-nc`, kan vi se at der er kommet to nye filer
 
 ```{r}
-dir_ls(here("test-data"))
+dir_ls(here(my_dir))
 ```
 
 # Indlæsning af JSONL filer til R
@@ -51,23 +53,28 @@ dir_ls(here("test-data"))
 Vi kan nu indlæse de to nye JSONL filer på følgende vis
 
 ```{r}
-read_plays_jsonl(here("test-data")) -> plays
+read_plays_jsonl(here(my_dir)) -> plays
+
 ```
 
-Lad os kort se på fx hvor mange rækker, vi har i hvert af de to skuespil.
+Lad os kort se på fx hvor mange rækker, vi har i hvert af de indlæste skuespil.
 Rækker er her ikke så meningsgivende, da det både kan være replikker og regibemærkninger.
 Lad os derfor også prøve at finde antal replikker og antal regibemærkninger!
 
 ```{r}
 # Tæl antal rækker
+# Hvis vi bruger titel til at identificere de forskellige komedier, 
+# vil vi komme til at slå de to udgaver af "Den vægelsindede" sammen,
+# og de to udgaver af "Mester Gert Westphaler". 
+# Det undgår vi ved at bruge fuld titel (docTitle) eller ved også at bruge årstal (year).
 plays %>% 
-  count(title, name = "# rækker")
+  count(docTitle, name = "# rækker")
 
 # Tæl antal replikker
 plays %>%
   filter(!is.na(spoke)) %>% #filtrer replikker markeret NA ud
   filter(!(spoke == "")) %>% #filtrer tomme replikker ud
-  count(title, name = "# replikker")
+  count(docTitle, name = "# replikker")
 
 # Tæl antal regibemærkninger
 # bemærk de findes på to niveauer, så i første omgang tæller vi dem hver for sig
@@ -75,20 +82,21 @@ plays %>%
 plays %>%
   filter(!is.na(stage)) %>% #filtrer stage markeret NA ud
   filter(!(stage == "")) %>% #filtrer tomme stage ud
-  count(title, name = "# stage")
+  count(docTitle, name = "# stage")
 # Tæl antal <speaker_stage>
 plays %>%
   filter(!is.na(speaker_stage)) %>% #filtrer speaker_stage markeret NA ud
   filter(!(speaker_stage == "")) %>% #filtrer tomme speaker_stage ud
-  count(title, name = "# speaker_stage")
+  count(docTitle, name = "# speaker_stage")
 ```
 # Indlæsning af en enkelt JSONL fil til R
 
 Der har været noget bøvl med titler på stykkerne, som sjældent er hvad vi forventer, hvis de altså overhovedet er der, derfor har vi indført en funktion, som indlæser et enkelt stykke fra JSONL filen.
+Titlerne skulle fungere nu, men det er stadig rart med en funktion, som indlæser et enkelt stykke.
 
 ```{r}
 #Funtionen her henter det skuespil, der er i den navngavne JSONL fil
-read_play_jsonl(here("test-data", "Den_Vaegelsindede_1731_mod_nc.jsonl")) -> play
+read_play_jsonl(here(my_dir, "Den_Vaegelsindede_1731_mod_nc.jsonl")) -> play
 play #se den tbl, der nu er last ind i play
 
 ```
