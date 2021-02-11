@@ -1,0 +1,47 @@
+---
+title: "Netværksgraf 2"
+author: "Bolette A. Jurik"
+date: "10/2/2021"
+output: html_notebook
+---
+
+This version uses the functions in "graph_functions.R".
+
+First we load the libraries and source the functions.
+```{r, message=FALSE}
+library(here)
+library(xml2)
+library(tidyverse)
+library(ndjson)
+library(here)
+library(fs)
+library(xslt)
+library(tidytext)
+library(ggraph)
+library(igraph)
+library(tidygraph)
+
+source(here("src", "p017-functions.R"))
+source(here("src", "graph_functions.R"))
+```
+Now we are ready to build the graph using the functions.
+First we find the speakers.
+```{r}
+(read_play_jsonl(here("test-data", "Mascarade_mod_nc.jsonl")) -> play)
+(find_speakers(play) -> distinct_speakers)
+```
+Så er der det maed at sammenlægge forskellige stavemåde af samme rolle.
+Det er forskelligt for hver skuespil. Det kan vi i princippet også lave funtioner for, så jeg har lavet et eksempel:
+```{r}
+(join_speakers_mascarade(distinct_speakers) -> distinct_speakers)
+```
+All distinct speakers in play are the nodes.
+```{r}
+  (speakers2nodes(distinct_speakers) -> nodes)
+```
+# Find Black Edges
+5. Find karakterer med replikker, der taler med hinanden – hele stykket.
+```{r}
+(find_edges(distinct_speakers) -> edges)
+```
+
