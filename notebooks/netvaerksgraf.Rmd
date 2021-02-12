@@ -79,9 +79,12 @@ plays <- read_plays_jsonl(here("test-data"))
 We look at one play at a time.
 
 ```{r}
+my_dir <-"test-data"
+read_play_jsonl(here(my_dir, "Barselstuen_mod_nc.jsonl")) -> play
+play #se den tbl, der nu er last ind i play
+
 ## Distinct speakers in each scene in each act grouped by act and scene
-(plays %>%
-  filter(title == " Barselsstuen") %>%
+(play %>%
   filter(!is.na(speaker)) %>%
    filter(!(speaker == "")) %>%
   select(speaker, act_number, scene_number) %>% 
@@ -154,8 +157,7 @@ ggraph(gr, layout = 'kk') +
 Vi kan låne lidt fra "visualisering-ord-sagt.Rmd"
 
 ```{r}
-plays %>%
-  filter(title == " Barselsstuen") %>%
+play %>%
   mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
   select(n_spoken_words, speaker, act_number, scene_number)
 ```
@@ -163,6 +165,9 @@ WORK IN PROGRESS
 
 # TODO b. Talende karakter: det skal visuelt fremgå, dvs hvem der taler mest.
 # TODO Nu kommer alt det spændende arbejde med at gøre grafen pæn :)
+# TODO Til stede, men taler ikke, skal være kanter med en anden farve.
+
+
 
 Vi kan også prøve at lave grafer for hver scene eller hver akt i stykket...
 # 6. Find karakterer, der taler med hinanden – opdelt i akt og scene.
