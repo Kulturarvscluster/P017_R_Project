@@ -80,7 +80,7 @@ We look at one play at a time.
 
 ```{r}
 my_dir <-"test-data"
-read_play_jsonl(here(my_dir, "Barselstuen_mod_nc.jsonl")) -> play
+read_play_jsonl(here(my_dir, "Hexerie_mod.jsonl")) -> play
 play #se den tbl, der nu er last ind i play
 
 ## Distinct speakers in each scene in each act grouped by act and scene
@@ -105,6 +105,9 @@ play #se den tbl, der nu er last ind i play
   # Count all versions of Pigen as one
   mutate(
     speaker = if_else(speaker %in% c("En pige", "Pigen"), "Pigen", speaker)) %>%
+    # count all versions of Drengen as one
+  mutate(
+    speaker = if_else(speaker %in% c("Dreng", "Drengen", "En dreng"), "Drengen", speaker)) %>%
   distinct(speaker) -> distinct_speakers_Barselstuen)
 
 ## All distinct speakers in play are the nodes
