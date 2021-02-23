@@ -80,7 +80,8 @@ We look at one play at a time.
 
 ```{r}
 my_dir <-"test-data"
-read_play_jsonl(here(my_dir, "Hexerie_mod.jsonl")) -> play
+my_play <- "Hexerie_mod_nc.jsonl"
+read_play_jsonl(here(my_dir, my_play)) -> play
 play #se den tbl, der nu er last ind i play
 
 ## Distinct speakers in each scene in each act grouped by act and scene
@@ -89,10 +90,10 @@ play #se den tbl, der nu er last ind i play
    filter(!(speaker == "")) %>%
   select(speaker, act_number, scene_number) %>% 
      group_by(act_number, scene_number)  %>%
-   distinct() -> distinct_speakers_Barselstuen)
+   distinct() -> distinct_speakers_play)
 
 ## Sammenlæg forskellige stavemåde af samme rolle
-(distinct_speakers_Barselstuen %>%
+(distinct_speakers_play %>%
   # count all versions of Troels as one
   mutate(
     speaker = if_else(speaker %in% c("Troels", "Trols"), "Troels", speaker)) %>%
@@ -108,14 +109,14 @@ play #se den tbl, der nu er last ind i play
     # count all versions of Drengen as one
   mutate(
     speaker = if_else(speaker %in% c("Dreng", "Drengen", "En dreng"), "Drengen", speaker)) %>%
-  distinct(speaker) -> distinct_speakers_Barselstuen)
+  distinct(speaker) -> distinct_speakers_play)
 
 ## All distinct speakers in play are the nodes
-(distinct_speakers_Barselstuen %>%
+(distinct_speakers_play %>%
     ungroup() %>%
     select(speaker) %>%
      distinct() %>% 
-   rowid_to_column("id") -> nodes_Barselstuen) # add id column
+   rowid_to_column("id") -> nodes_play) # add id column
 
 ```
 
@@ -130,29 +131,29 @@ play #se den tbl, der nu er last ind i play
 ## That is every combination of speakers within each group
 
 #create column 'speaker2' and make it equal to 'speaker' (duplicate).
-distinct_speakers_Barselstuen$speaker2 = distinct_speakers_Barselstuen$speaker 
+distinct_speakers_play$speaker2 = distinct_speakers_play$speaker 
 # All possible combinations (remember the data is still grouped by act-number and scene-number)
-(distinct_speakers_Barselstuen %>% 
+(distinct_speakers_play %>% 
   expand(speaker, speaker2) -> who_speaks_to_whom)
 
 (who_speaks_to_whom  %>%
   ungroup() %>%
   select(from = speaker, to = speaker2) %>%
-  distinct() -> edges_Barselstuen)
+  distinct() -> edges_play)
 
 ```
 # Draw Graph
 
 ```{r}
 # now we can draw a graph like this
-gr <- tbl_graph(nodes = nodes_Barselstuen, edges = edges_Barselstuen, directed = TRUE, node_key = "speaker")
+gr <- tbl_graph(nodes = nodes_play, edges = edges_play, directed = TRUE, node_key = "speaker")
 
 
 ggraph(gr, layout = 'kk') + 
     geom_edge_link(aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker))) + 
       geom_node_text(aes(label = speaker)) + 
-    labs(caption = "Netværksgraf Barselstuen")
+    labs(caption = paste("Netværksgraf", my_play))
 
 ```
 
@@ -177,7 +178,7 @@ Vi kan også prøve at lave grafer for hver scene eller hver akt i stykket...
 
 ```{r}
 ## Første Akt
-distinct_speakers_Barselstuen %>%
+distinct_speakers_play %>%
   filter(act_number == 1) %>%
   select(speaker) %>%
      distinct() %>% 
@@ -198,7 +199,7 @@ ggraph(gr) +
     labs(caption = "Netværksgraf Barselstuen Første Akt")
 
 ## Andet Akt
-distinct_speakers_Barselstuen %>%
+distinct_speakers_play %>%
   filter(act_number == 2) %>%
   select(speaker) %>%
      distinct() %>% 
@@ -220,7 +221,7 @@ ggraph(gr) +     ungroup() %>%
     labs(caption = "Netværksgraf Barselstuen Andet Akt")
 
 ## Tredje Akt
-distinct_speakers_Barselstuen %>%
+distinct_speakers_play %>%
   filter(act_number == 3) %>%
   select(speaker) %>%
      distinct() %>% 
