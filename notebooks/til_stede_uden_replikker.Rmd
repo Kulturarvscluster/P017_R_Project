@@ -24,6 +24,7 @@ We also need to load the functions created for this project. This is done by `so
 
 ```{r}
 source(here("src", "p017-functions.R"))
+source(here("src", "present_without_speech.R"))
 ```
 
 # Read play
@@ -132,6 +133,10 @@ Så kan vi også prøve funktionen på et andet skuespil, og måske få et andet
 ```{r}
 present_without_speech(play)
 ```
+
+Ok, funktionen ser ud til at virke, så prøver vi at putte det ind i netværksgrafen.
+
+Vi skal nu lave kanter i hver scene til dem, der taler.
 
 
 
