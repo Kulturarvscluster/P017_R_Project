@@ -25,8 +25,8 @@ join_speakers_mascarade <- function(speakers) {
     # Count all versions of kællingen as one
     mutate(
       speaker = if_else(speaker %in% c("Kælling", "Kællingen"), "Kællingen", speaker))
-    
-    
+  
+  
 }
 
 # This function turns distinct speakers into nodes with an id
@@ -42,13 +42,13 @@ speakers2nodes <- function(speakers) {
 # The input data must be grouped by act-number and scene-number
 find_edges <- function(distinct_speakers) {
   #create column 'speaker2' and make it equal to 'speaker' (duplicate).
-  distinct_speakers$speaker2 = distinct_speakers_$speaker 
+  distinct_speakers$speaker2 = distinct_speakers$speaker 
   # All possible combinations (remember the data is still grouped by act-number and scene-number)
   distinct_speakers %>% 
-      expand(speaker, speaker2) -> who_speaks_to_whom
+    expand(speaker, speaker2) -> who_speaks_to_whom
   
   who_speaks_to_whom  %>%
-      ungroup() %>%
-      select(from = speaker, to = speaker2) %>%
-      distinct() -> edges_Barselstuen
-}
+    ungroup() %>%
+    select(from = speaker, to = speaker2) %>%
+    distinct() -> edges_Barselstuen
+} %>% 

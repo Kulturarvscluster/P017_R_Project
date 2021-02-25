@@ -36,10 +36,11 @@ Create a "test-data" folder in your project directory, and copy the play here.
 Edit the file below to the jsonl file for the play you want.
 
 ```{r}
+my_file <- "Mascarade_mod_nc.jsonl"
 # convert all page files in the specified folder to jsonl
 convert_TEI_to_JSONL(here("test-data")) 
 # read the specified play from the jsonl file
-play <- read_play_jsonl(here("test-data", "Barselstuen_mod_nc.jsonl"))
+play <- read_play_jsonl(here("test-data", my_file))
 play # show the table for the play
 ```
 Play is now the play in question. This way, you can just change that and rerun all the sections below, without having to change them.
@@ -131,6 +132,7 @@ Så kan vi også prøve funktionen på et andet skuespil, og måske få et andet
 
 # Test Function
 ```{r}
+play
 present_without_speech(play)
 ```
 
