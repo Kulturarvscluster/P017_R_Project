@@ -34,7 +34,7 @@ read_plays_jsonl(here("test-data")) -> plays
 For at gøre det nemmere for os selv, starter vi med kun at se på ét skuespil "my_play" (fx Barselsstuen). Vi filtrerer ikke længere efter titel. Vi indlæser direkte fra JSON-filen! Forhåbentlig er "my_file" det eneste sted vi skal ændre for at lave visualiseringen for et andet skuespil :)
 
 ```{r}
-my_file <- "test-data/De_u-synlige_mod_nc.jsonl"
+my_file <- "test-data/Den_11_Junii_mod.jsonl"
 my_play <- ndjson::stream_in(here(my_file)) %>% tibble()
 my_play
 ```
