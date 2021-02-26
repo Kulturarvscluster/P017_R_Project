@@ -121,11 +121,12 @@ my_play %>%
   select(-spoke) %>%
   
   # group the play in scene_index and speaker, ignoring the test
-  group_by(scene_index, speaker) %>% 
+  group_by(scene_index, act_number, scene_number, speaker) %>% 
 
   # Ensure that each speaker only appears once in each scene, i.e. sum the words spoken by each speaker
   # Lastly store the new data frame in a new reference for later use
-  summarise(words = sum(n_spoken_words), act_number, scene_number) -> my_summary
+  summarise(words = sum(n_spoken_words), act_number, scene_number) %>%
+  distinct() -> my_summary
 #print(barselsstuen_vis, n=60)
 my_summary
 ```
@@ -135,7 +136,7 @@ Nu er titlen på grafen fil-navnet, men den kan selvfølgelig ændres, hvis det 
 
 ```{r}
 my_summary %>% 
-  ggplot(aes(fill = speaker, y = words, x = scene_index, act_number, scene)) +
+  ggplot(aes(fill = speaker, y = words, x = scene_index)) +
     geom_bar(position="stack", stat="identity") +
     labs(
       title = my_file,
