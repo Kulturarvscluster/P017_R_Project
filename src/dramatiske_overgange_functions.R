@@ -24,10 +24,6 @@ first_sentence_func <- function(play) {
   return(first_sentence)
 }
 
-#Test first_sentence_func
-barselstuen_raw <- ndjson::stream_in(here("/test-data/barselstuen_mod.jsonl")) %>% tibble()
-first_sentence_func(barselstuen_raw)
-  
 # Find sidste sætning i hver scene.
 last_sentence_func <- function(play) {
   last_sentence <- play %>%
@@ -48,7 +44,4 @@ last_sentence_func <- function(play) {
   return(last_sentence)
 }
 
-#Test last_sentence_func
-barselstuen_raw <- ndjson::stream_in(here("/test-data/barselstuen_mod.jsonl")) %>% tibble()
-last_sentence_func(barselstuen_raw)
 

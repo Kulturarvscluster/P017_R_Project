@@ -22,60 +22,20 @@ library(tidyverse)
 library(ndjson)
 library(here)
 
-barselstuen_raw <- ndjson::stream_in(here("/test-data/barselstuen_mod.jsonl")) %>% tibble()
+source(here("src", "p017-functions.R"))
 
-```
+my_dir <-"test-data"
+my_play <- "Hexerie_mod_nc.jsonl"
+read_play_jsonl(here(my_dir, my_play)) -> play
+play #se den tbl, der nu er last ind i play
 
-# Looking at the data
-
-```{r}
-barselstuen_raw
 ```
 
 ##Find første sætning i hver scene.
-index is counter (inside the scene, it resets with each new scene)
-
-
-```{r}
-barselstuen_raw %>% 
-  filter(index == "1")
-
-```
-
-Det er ikke helt godt, for det er ofte en <stage> eller en <speaker-stage>, der er det første i hver scene.
-Første akt, Scene 2 starter sådan her:
-<div xml:id="act1sc2" n="Scene 2">
-               <head>Scene 2</head>
-               <stage>Claus, Troels</stage>
-               <sp>
-                  <speaker>Claus</speaker>
-                  <p><seg type="komm" target="E7r-9"/>Ak, kære Troels, veksl mig <seg type="komm" target="E7r-9b"/>en toskilling for to eneste skillinger!</p>
-               </sp>
-
-Mon den har fået index 2?
-
-```{r}
-barselstuen_raw %>% 
-  filter(act == "Første akt") %>%
-  filter(scene == "Scene 2") %>%
-  filter(index == "2")
-
-```
-
-Jeps, der var den.
-Vi kan prøve at hoppe den linje over, men hvordan gør vi det?
-
-```{r}
-barselstuen_spoke1 <- barselstuen_raw %>% filter(index == "1", !is.na(spoke))
-barselstuen_spoke1
-
-```
-
-Det ser faktisk ud til at der kun er et sted hvor der faktisk er tale med index 1...
 Hjælp fra Asger:
 
 ```{r}
-first_sentence <- barselstuen_raw %>%
+first_sentence <- play %>%
   #Group by så vi håndterer hver scene for sig
  group_by(act_number, scene_number) %>%
   #Filtrer alle linier som ikke er replikker fra
@@ -95,9 +55,9 @@ first_sentence
 
 Det virker. 
 Vi skal lige huske at gemme resultatet:
-
+OBS: husk at ændre filnavn!
 ```{r}
-write.csv(first_sentence, file = here("data/output/barselstuen_first_sentence.csv"))
+write.csv(first_sentence, file = here("test-data/first_sentence.csv"))
 ```
 
 
@@ -106,7 +66,7 @@ Hjælp fra Asger:
 
 
 ```{r}
-last_sentence <- barselstuen_raw %>%
+last_sentence <- play %>%
   #Group by så vi håndterer hver scene for sig
  group_by(act_number, scene_number) %>%
   #Filtrer alle linier som ikke er replikker fra
@@ -121,7 +81,7 @@ last_sentence <- barselstuen_raw %>%
   # Fjern gruppe index for det er ikke relevant længere
  select(- group_row_num )
 
-write.csv(last_sentence, file = here("data/output/barselstuen_last_sentence.csv"))
+write.csv(last_sentence, file = here("test-data/last_sentence.csv"))
 ```
 
 
