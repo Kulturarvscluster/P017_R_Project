@@ -34,7 +34,7 @@ read_plays_jsonl(here("test-data")) -> plays
 For at gøre det nemmere for os selv, starter vi med kun at se på ét skuespil "my_play" (fx Barselsstuen). Vi filtrerer ikke længere efter titel. Vi indlæser direkte fra JSON-filen! Forhåbentlig er "my_file" det eneste sted vi skal ændre for at lave visualiseringen for et andet skuespil :)
 
 ```{r}
-my_file <- "test-data/De_u-synlige_mod_nc.jsonl"
+my_file <- "test-data/Den_11_Junii_mod_nc.jsonl" 
 my_play <- ndjson::stream_in(here(my_file)) %>% tibble()
 my_play
 ```
@@ -95,12 +95,6 @@ For at visualisere hvem der siger hvor meget i de enkelte scener, skal vi erstat
   mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
   select(n_spoken_words, everything()) -> tmp)
 ```
-baj: Hov, vent lidt, Første Akt, Scene 1 har 74 linjer. Kan det passe? Første Akt, Scene 5 har fx kun 15... Prøv lige at tælle spoken words for Første Akt, Scene 1:
-```{r}
-tmp %>% filter(act_number == 1, scene_number == 1)
-```
-
-
 
 Vi er nu ved at være klar til at visualisere, hvem der siger hvor meget i fx Barselsstuen. Vi mangler bare at kombinere ovenstående kode
 
@@ -137,7 +131,8 @@ Nu er titlen på grafen fil-navnet, men den kan selvfølgelig ændres, hvis det 
 ```{r}
 my_summary %>% 
   ggplot(aes(fill = speaker, y = words, x = scene_index)) +
-    geom_bar(position="stack", stat="identity") +
+    geom_bar(stat="identity") +
+    theme(legend.position="bottom") +
     labs(
       title = my_file,
       subtitle = "Hvor meget siger hvem",
@@ -203,7 +198,8 @@ my_summary %>%
     speaker = if_else(speaker %in% c("Kælling", "Kællingen"), "Kællingen", speaker)) %>% 
   
   ggplot(aes(fill = speaker, y = words, x = scene_index)) +
-    geom_bar(position="stack", stat="identity", width = 30) +
+    geom_bar(stat="identity", width = 50) +
+    theme(legend.position="bottom") +
     labs(
       title = my_file,
       subtitle = "Hvor meget siger hvem",
