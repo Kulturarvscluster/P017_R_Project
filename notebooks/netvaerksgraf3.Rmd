@@ -1,0 +1,112 @@
+---
+title: "Netværksgraf 3 med vægte"
+author: "Bolette A. Jurik"
+date: "2/3-2021"
+output: html_notebook
+---
+
+This version also uses the functions in "graph_functions.R".
+
+First we load the libraries and source the functions.
+```{r, message=FALSE}
+library(here)
+library(xml2)
+library(tidyverse)
+library(ndjson)
+library(here)
+library(fs)
+library(xslt)
+library(tidytext)
+library(ggraph)
+library(igraph)
+library(tidygraph)
+
+source(here("src", "p017-functions.R"))
+source(here("src", "graph_functions.R"))
+source(here("src", "present_without_speech.R"))
+```
+Now we are ready to build new graphs.
+Put the name of the file to use in "my_file".
+
+# Find speakers
+And weights i.e. "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næsten ligesom. I stedet for at tælle ord for hver speaker, tæller vi denne gang ord for hver scene...
+```{r}
+my_file <- "Mascarade_mod_nc.jsonl"
+(read_play_jsonl(here("test-data", my_file)) -> play)
+
+(find_speakers(play) -> distinct_speakers)
+
+#find weights
+(play %>% 
+  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
+  select(n_spoken_words, everything()) -> tmp)
+tmp %>%
+    filter(!is.na(speaker)) %>%
+    filter(!(speaker == "")) %>%
+    filter(!is.na(n_spoken_words)) %>%
+    select(n_spoken_words, speaker, act_number, scene_number) %>% 
+    group_by(act_number, scene_number)  %>%
+    summarise(words = sum(n_spoken_words), act_number, scene_number, speaker) %>%
+    distinct() -> scene_weights
+    scene_weights
+```
+Så er der det med at sammenlægge forskellige stavemåde af samme rolle. Det springer vi lige over i denne illustration.
+
+# Find Nodes
+```{r}
+(speakers2nodes(distinct_speakers) -> nodes_play)
+```
+
+# Find Black Edges
+## And Weights
+```{r}
+(find_edges(distinct_speakers) -> edges_play)
+
+# combine edges with weights
+# trouble when finding the edges using the function,
+# we discarded act and scene
+# lets try finding them here instead
+
+#create column 'speaker2' and make it equal to 'speaker' (duplicate).
+  distinct_speakers$speaker2 = distinct_speakers$speaker 
+  # All possible combinations (remember the data is still grouped by act-number and scene-number)
+  distinct_speakers %>% 
+    expand(speaker, speaker2) -> who_speaks_to_whom
+  
+  (who_speaks_to_whom  %>%
+      ungroup() %>%
+      select(from = speaker, to = speaker2) %>%
+      distinct() -> edges_play)
+
+(who_speaks_to_whom %>% right_join(scene_weights) -> who_speaks_to_whom_with_weights)
+  
+(who_speaks_to_whom_with_weights  %>%
+  summarise(from = speaker, to = speaker2, weight = sum(words)) %>%
+  ungroup() %>%
+  select(from, to, weight) %>%
+  group_by(from, to) %>%
+  summarise(from , to , ord_sagt = sum(weight)) %>%
+    distinct() -> edges_weights)
+```
+# Draw first graph
+We can now draw a graph with weighted edges like this.
+```{r}
+gr1 <- tbl_graph(nodes = nodes_play, edges = edges_weights, directed = TRUE, node_key = "speaker")
+
+ggraph(gr1, layout = 'kk') + 
+    geom_edge_link(aes(start_cap = label_rect(node1.speaker),
+                       end_cap = label_rect(node2.speaker),
+                       width = ord_sagt),
+                   alpha = .25) + 
+    geom_node_text(aes(label = speaker)) + 
+    labs(caption = paste("Netværksgraf", my_file))
+```
+Ok, det virker!
+Men jeg tror jeg har talt forkert igen, for der er nok ikke nogen, der siger 80000 ord...
+
+Så vil vi prøve at tilføje stumme karakterer med stiplede kanter.
+
+# Find the characters that are present but do not speak
+```{r}
+(present_without_speech(play) -> present_but_silent)
+```
