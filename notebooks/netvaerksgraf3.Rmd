@@ -29,17 +29,35 @@ Now we are ready to build new graphs.
 Put the name of the file to use in "my_file".
 
 # Find speakers
-And weights i.e. "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næsten ligesom. I stedet for at tælle ord for hver speaker, tæller vi denne gang ord for hver scene...
+
 ```{r}
-my_file <- "Mascarade_mod_nc.jsonl"
+variants <- read_excel(here("Rolleliste.xlsx")) %>% 
+    unnest_tokens(variant, Alias) %>% 
+    mutate(
+      Karakter = tolower(Karakter),
+      variant = tolower(variant)
+    )
+```
+
+
+And weights i.e. "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næsten ligesom. I stedet for at tælle ord for hver speaker, tæller vi denne gang ord for hver scene...
+
+```{r}
+my_file <- "Barselstuen_mod.jsonl"
+
 (read_play_jsonl(here("test-data", my_file)) -> play)
 
 (find_speakers(play) -> distinct_speakers)
 
 #find weights
-(play %>% 
+play %>% 
+  mutate(speaker = tolower(speaker)) %>% 
+  left_join(variants, by = c("speaker"="variant")) %>% 
+  mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>%
+  select(-Karakter, -Filnavn) %>% 
   mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
-  select(n_spoken_words, everything()) -> tmp)
+  select(n_spoken_words, everything()) -> tmp
+
 tmp %>%
     filter(!is.na(speaker)) %>%
     filter(!(speaker == "")) %>%
