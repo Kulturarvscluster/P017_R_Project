@@ -20,16 +20,14 @@ library(tidytext)
 library(ggraph)
 library(igraph)
 library(tidygraph)
+library(readxl)
 
 source(here("src", "p017-functions.R"))
 source(here("src", "graph_functions.R"))
 source(here("src", "present_without_speech.R"))
 ```
-Now we are ready to build new graphs.
-Put the name of the file to use in "my_file".
 
-# Find speakers
-
+Next we load the excel sheet
 ```{r}
 variants <- read_excel(here("Rolleliste.xlsx")) %>% 
     unnest_tokens(variant, Alias) %>% 
@@ -39,51 +37,48 @@ variants <- read_excel(here("Rolleliste.xlsx")) %>%
     )
 ```
 
+# Find Speakers and Weights
+Put the name of the file to use in "my_file".
 
-And weights i.e. "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næsten ligesom. I stedet for at tælle ord for hver speaker, tæller vi denne gang ord for hver scene...
+Vægtene er "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næsten ligesom. I stedet for at tælle ord for hver speaker, tæller vi denne gang ord for hver scene...
 
 ```{r}
-my_file <- "Barselstuen_mod.jsonl"
-
+# indlæs stykke
+my_file <- "Barselstuen_mod_nc.jsonl"
 (read_play_jsonl(here("test-data", my_file)) -> play)
 
-(find_speakers(play) -> distinct_speakers)
-
-#find weights
-play %>% 
+# "sammenlægge navnevarianter" (se "use-excel-for-name-variants.Rmd")
+(play %>% 
   mutate(speaker = tolower(speaker)) %>% 
   left_join(variants, by = c("speaker"="variant")) %>% 
   mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>%
-  select(-Karakter, -Filnavn) %>% 
+  select(-Karakter, -Filnavn) -> play)
+
+# find speakers using function
+(find_speakers(play) -> distinct_speakers)
+
+# og find vægte
+(play %>%
   mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
-  select(n_spoken_words, everything()) -> tmp
-
-tmp %>%
-    filter(!is.na(speaker)) %>%
-    filter(!(speaker == "")) %>%
-    filter(!is.na(n_spoken_words)) %>%
-    select(n_spoken_words, speaker, act_number, scene_number) %>% 
-    group_by(act_number, scene_number)  %>%
-    summarise(words = sum(n_spoken_words), act_number, scene_number, speaker) %>%
-    distinct() -> scene_weights
-    scene_weights
+  select(n_spoken_words, everything()) %>%
+  filter(!is.na(speaker)) %>%
+  filter(!(speaker == "")) %>%
+  filter(!is.na(n_spoken_words)) %>%
+  select(n_spoken_words, speaker, act_number, scene_number) %>% 
+  group_by(act_number, scene_number)  %>%
+  summarise(words = sum(n_spoken_words), act_number, scene_number, speaker) %>%
+  distinct() -> scene_weights)
 ```
-Så er der det med at sammenlægge forskellige stavemåde af samme rolle. Det springer vi lige over i denne illustration.
 
-# Find Nodes
+# Find Nodes and Edges and combine with weights 
 ```{r}
+# find nodes using function
 (speakers2nodes(distinct_speakers) -> nodes_play)
-```
 
-# Find Black Edges
-## And Weights
-```{r}
-(find_edges(distinct_speakers) -> edges_play)
-
-# combine edges with weights
-# trouble when finding the edges using the function,
-# we discarded act and scene
-# lets try finding them here instead
+# find edges and combine edges with weights
+# (trouble when finding the edges using the function,
+# we discarded act and scene;
+# lets try finding them here instead)
 
 #create column 'speaker2' and make it equal to 'speaker' (duplicate).
   distinct_speakers$speaker2 = distinct_speakers$speaker 
