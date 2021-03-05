@@ -27,7 +27,7 @@ source(here("src", "p017-functions.R"))
 Det antages at Excelarket ligger i projektroden. Projektroden er `r here()`.
 
 ```{r}
-variants <- read_excel(here("Rolleliste.xlsx"))
+variants <- read_excel(here("Rolleliste-ny.xlsx"))
 ```
 
 Excelarket består af en enkelt tabel med tre kolonner: 
@@ -47,7 +47,7 @@ For at kunne anvende dette i R, skal vi transforme denne tabel over varianter. U
 Samlet ser koden til at indlæse og transformere Excel således ud:
 
 ```{r}
-(variants <- read_excel(here("Rolleliste.xlsx")) %>% 
+(variants <- read_excel(here("Rolleliste-ny.xlsx")) %>% 
   unnest_tokens(variant, Alias) %>% 
    mutate(
      Karakter = tolower(Karakter),
@@ -165,5 +165,5 @@ Skal denne kode bruges i en analyse, gør man følgende:
   mutate(speaker = tolower(speaker)) %>% 
   left_join(variants, by = c("speaker"="variant")) %>% 
   mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>%
-  select(-Karakter, -variant, -Filnavn)
+  select(-Karakter, -Filnavn)
 ```
