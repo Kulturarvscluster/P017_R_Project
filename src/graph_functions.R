@@ -46,4 +46,9 @@ find_edges <- function(distinct_speakers) {
   # All possible combinations (remember the data is still grouped by act-number and scene-number)
   distinct_speakers %>% 
     expand(speaker, speaker2) -> who_speaks_to_whom
+  
+  (who_speaks_to_whom  %>%
+      ungroup() %>%
+      select(from = speaker, to = speaker2) %>%
+      distinct() -> edges_play)
 }
