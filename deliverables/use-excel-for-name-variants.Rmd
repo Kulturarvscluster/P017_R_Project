@@ -148,6 +148,12 @@ barselsstuen %>%
 
 Skal denne kode bruges i en analyse, gør man følgende:
 
+ ½. Husk at vi skal bruge et bibliotek
+```
+library(readxl)
+```
+ 
+
  1. indlæs Excelarket
 
 ```
