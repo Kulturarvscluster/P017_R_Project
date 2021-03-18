@@ -34,6 +34,7 @@ read_plays_jsonl <- function(folder) {
 
 # This function reads the JSONL file specified as input into
 # a tibble, adding an index numbering each scene within each play
+# and adds a filename coloumn
 read_play_jsonl <- function(file) {
   file %>% 
     map_dfr(
