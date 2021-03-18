@@ -1,5 +1,5 @@
 ---
-title: "Netværksgraf 3 med vægte"
+title: "Netværksgraf 3 med vægte og karakterer, som ikke taler, men er til stede"
 author: "Bolette A. Jurik"
 date: "2/3-2021"
 output: html_notebook
@@ -43,8 +43,7 @@ Put the name of the file to use in "my_file".
 Vægtene er "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næsten ligesom. I stedet for at tælle ord for hver speaker, tæller vi denne gang ord for hver scene...
 
 ```{r}
-# indlæs stykke
-my_file <- "Barselstuen_mod_nc.jsonl"
+my_file <- "GertWestphaler1724_mod_nc.jsonl"
 (read_play_jsonl(here("test-data", my_file)) -> play)
 
 # "sammenlægge navnevarianter" (se "use-excel-for-name-variants.Rmd")
@@ -150,9 +149,9 @@ Så vil vi prøve at tilføje stumme karakterer med stiplede kanter.
 # Draw second graph
 We can now combine the two sets of weighted edges and draw a graph like this.
 ```{r}
-edges_weights$ltype = "1"
-silent_edges_with_weights$ltype = "2"
-(edges_weights %>% bind_rows(silent_edges_with_weights) -> edges_combined)
+edges_weights$ltype = 'solid'
+silent_edges_with_weights$ltype = 'dashed'
+(silent_edges_with_weights %>% bind_rows(edges_weights) -> edges_combined)
 
 gr1 <- tbl_graph(nodes = nodes_play, edges = edges_combined, directed = TRUE, node_key = "speaker")
 
@@ -160,7 +159,7 @@ ggraph(gr1, layout = 'kk') +
     geom_edge_link(aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker),
                        width = ord_sagt,
-                       edge_linetype=ltype),
+                       edge_linetype = ltype),
                    alpha = .25) + 
     geom_node_text(aes(label = speaker)) + 
     labs(caption = paste("Netværksgraf", my_file))
