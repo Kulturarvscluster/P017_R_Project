@@ -1,0 +1,128 @@
+---
+title: "Visualisering af antal sagte ord 2"
+output: html_notebook
+author: baj
+---
+#Genbrug
+Vi starter med alt det samme som i "visualisering-ord-sag.Rmd".
+```{r, message=FALSE}
+library(tidyverse)
+library(here)
+library(ndjson)
+library(xslt)
+library(fs)
+library(ggplot2)
+library(readxl)
+
+require(readr)  # for read_csv()
+require(purrr)  # for map(), reduce()
+
+source(here("src/p017-functions.R"))
+```
+#Indlæs data
+```{r}
+here()
+convert_TEI_to_JSONL(here("test-data"))
+read_plays_jsonl(here("test-data")) -> plays
+```
+#Indlæs Excelarket
+```{r}
+variants <- read_excel(here("Rolleliste.xlsx")) %>% 
+    unnest_tokens(variant, Alias) %>% 
+    mutate(
+      Karakter = tolower(Karakter),
+      variant = tolower(variant)
+    )
+variants
+```
+
+## Indlæs stykkerne med fil-navne!
+```{r}
+# Alle stykker som json filer
+json_file_list <- list.files(here("test-data"), pattern = "*.jsonl")
+length(json_file_list)
+head(json_file_list)
+
+plays <- read_play_jsonl(here("test-data",json_file_list[1]))
+
+for(i in 2:length(json_file_list)) {
+  print(json_file_list[i])
+  plays <- bind_rows(plays, read_play_jsonl(here("test-data",json_file_list[i])))
+}
+
+plays
+```
+#Sammenlæg navnevarianter
+Husk at bruge Filnavn til noget!
+```{r}
+plays %>% mutate(speaker = tolower(speaker)) %>% 
+  left_join(variants, by = c("filename"="Filnavn", "speaker"="variant")) %>% 
+  mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>%
+  distinct -> plays
+plays
+```
+Så langt, så godt.
+
+# Nu tæller vi total antal ord sagt pr karakter pr stykke. Dernæst omregnet til procent af totale ord i stykket.
+```{r}
+
+# count words in "spoke"
+(plays %>% 
+  # remove rows that are not dialogue and empty speakers
+  filter(!is.na(spoke), speaker != "") %>%
+  
+  # select only the columns, that we are interested in
+  select(speaker, title, year, spoke) %>% 
+  
+  # add the number of spoken words
+  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
+  # remove the spoken words
+  select(-spoke) %>%
+  
+  # group by title and speaker
+  group_by(title, year, speaker) %>% 
+
+  # Sum the words spoken by each speaker in each play
+  # Lastly store the new data frame in a new reference for later use
+  summarise(words = sum(n_spoken_words), title, year) %>%
+    distinct() -> my_summary
+)
+   # Calculate %
+(my_summary %>%
+    ungroup(speaker) %>%
+    summarise(words_play = sum(words)) -> totals)
+   
+(my_summary %>%
+  full_join(totals) %>%
+  summarise(freq = words / words_play, speaker, title, year, words, words_play) ->
+    new_summary
+    )
+  # Sort by freq
+(new_summary %>%
+  arrange(desc(freq)))
+
+```
+Now "new_summary" holds all the information that we need. We sorted it to see who speaks the most. Next we choose a character to visualise...
+In this example I choose "Jeronimus".
+
+# Visualisering 
+```{r}
+my_character <- "jeronimus"
+
+new_summary %>% 
+  filter(speaker == my_character) %>%
+  arrange(year) %>%
+  ggplot(aes(fill = title, y = freq, x = title)) +
+    geom_bar(stat="identity") +
+    theme(legend.position="bottom") +
+    labs(
+      title = "Procent talte ord over år og komedier",
+      subtitle = toupper(my_character),
+      caption = "Kilde: DSL"
+    ) +
+  xlab("year") +
+  ylab("Procent sagte ord") +
+  facet_wrap(~year, ncol=nrow(new_summary), switch="x") +
+  theme(axis.text.x=element_blank())
+
+```
