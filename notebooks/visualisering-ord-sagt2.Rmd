@@ -13,6 +13,7 @@ library(xslt)
 library(fs)
 library(ggplot2)
 library(readxl)
+library(tidytext)
 
 require(readr)  # for read_csv()
 require(purrr)  # for map(), reduce()
@@ -107,22 +108,35 @@ In this example I choose "Jeronimus".
 
 # Visualisering 
 ```{r}
-my_character <- "jeronimus"
-
-new_summary %>% 
-  filter(speaker == my_character) %>%
+character_plot <- function(character_name) {
+  new_summary %>% 
+  filter(speaker == character_name) %>%
   arrange(year) %>%
   ggplot(aes(fill = title, y = freq, x = title)) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
       title = "Procent talte ord over år og komedier",
-      subtitle = toupper(my_character),
+      subtitle = toupper(character_name),
       caption = "Kilde: DSL"
     ) +
   xlab("year") +
   ylab("Procent sagte ord") +
   facet_wrap(~year, ncol=nrow(new_summary), switch="x") +
   theme(axis.text.x=element_blank())
+}
 
 ```
+
+
+```{r}
+character_plot ("henrik")
+ggsave("henrik_over_tid.pdf", width=18, height=9)
+```
+```{r}
+character_plot("pernille")
+ggsave("pernille_over_tid.pdf", width=16, height=9)
+
+```
+
+
