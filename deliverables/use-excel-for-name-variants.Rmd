@@ -27,7 +27,7 @@ source(here("src", "p017-functions.R"))
 Det antages at Excelarket ligger i projektroden. Projektroden er `r here()`.
 
 ```{r}
-variants <- read_excel(here("Rolleliste-ny.xlsx"))
+variants <- read_excel(here("Rolleliste.xlsx"))
 ```
 
 Excelarket består af en enkelt tabel med tre kolonner: 
@@ -47,8 +47,8 @@ For at kunne anvende dette i R, skal vi transforme denne tabel over varianter. U
 Samlet ser koden til at indlæse og transformere Excel således ud:
 
 ```{r}
-(variants <- read_excel(here("Rolleliste-ny.xlsx")) %>% 
-  unnest_tokens(variant, Alias) %>% 
+(variants <- read_excel(here("Rolleliste.xlsx")) %>% 
+  unnest_tokens(variant, Alias, token = "regex", pattern = ", ") %>% 
    mutate(
      Karakter = tolower(Karakter),
      variant = tolower(variant)))
@@ -59,31 +59,33 @@ Samlet ser koden til at indlæse og transformere Excel således ud:
 For nu at illustrere hvordan denne liste over navnevarianter kan bruges, indlæses et par skuespil.
 
 ```{r}
-read_plays_jsonl(here("test-data")) -> plays
+read_play_jsonl(here("test-data", "Mascarade_mod.jsonl")) -> play1
+read_play_jsonl(here("test-data", "GertWestphaler1724_mod.jsonl")) -> play2
+read_play_jsonl(here("test-data", "Barselstuen_mod.jsonl")) -> play3
+
 ```
 
-# Look at plays
+For dette eksempels skyld, nøjes vi med at se på 3 stykker.
+
+Hvem siger mest i disse stykker?
 
 ```{r}
-plays %>% 
-  count(title)
-```
-For dette eksempels skyld, nøjes vi med at se på Barselsstuen.
+play1 %>% 
+  count(speaker) %>% 
+  arrange(desc(n))
 
-```{r}
-(plays %>% filter(title == " Barselsstuen") -> barselsstuen)
-```
-Hvem siger mest i dette stykke?
+play2 %>% 
+  count(speaker) %>% 
+  arrange(desc(n))
 
-```{r}
-barselsstuen %>% 
+play3 %>% 
   count(speaker) %>% 
   arrange(desc(n))
 ```
 Nu ved vi at der findes forskellige variationer af "barselsskvinden", men hvor mange
 
 ```{r}
-barselsstuen %>% 
+play3 %>% 
   filter(str_starts(tolower(speaker), "bar")) %>% count(speaker)
 ```
 
@@ -100,7 +102,7 @@ Så vi forventer ikke en perfekt oprydning.
 I ren R koder, ser sammentællingen således ud
 
 ```{r}
-barselsstuen %>% 
+play3 %>% 
   mutate(
     speaker = if_else(
       speaker %in% c(
@@ -118,7 +120,7 @@ barselsstuen %>%
 Nu vil vi i stedet benytte informationerne i Excelarket, som vi har læst ind her over. Vi sammenfletter så `variants` tabellen med selve stykket således:
 
 ```{r}
-barselsstuen %>%
+play3 %>%
   mutate(speaker = tolower(speaker)) %>% 
   left_join(variants, by = c("speaker"="variant")) %>% 
   filter(str_starts(tolower(Karakter), "bar") | str_starts(speaker, "bar")) %>% 
@@ -134,15 +136,43 @@ mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker))
 Samlet bliver dette til
 
 ```{r}
-barselsstuen %>%
+play3 %>%
   mutate(speaker = tolower(speaker)) %>% 
-  left_join(variants, by = c("speaker"="variant")) %>% 
+  left_join(variants, by = c("filename"="Filnavn","speaker"="variant")) %>% 
   mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>% 
-  select(-Karakter, -Filnavn) %>% 
+  filter(!is.na(speaker), !(speaker=="")) %>%
+  distinct %>% 
   count(speaker) %>% 
   arrange(desc(n))
 ```
-"barselskonen" og er nu erstattet af "barselskvinden".
+"barselskonen" og er nu erstattet af "barselskvinden", men ikke "barselsqvinde".
+
+# Flere eksempler
+
+```{r}
+play1 %>%
+  mutate(speaker = tolower(speaker)) %>% 
+  left_join(variants, by = c("filename"="Filnavn","speaker"="variant")) %>% 
+  mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>% 
+  filter(!is.na(speaker), !(speaker=="")) %>%
+  distinct %>% 
+  count(speaker) %>% 
+  arrange(desc(n))
+```
+"play1" i eksemplet er maskerade, hvor "Leander på knæ" gerne skulle blive til "leander".
+
+
+```{r}
+play2 %>%
+  mutate(speaker = tolower(speaker)) %>% 
+  left_join(variants, by = c("filename"="Filnavn","speaker"="variant")) %>% 
+  mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>% 
+  filter(!is.na(speaker), !(speaker=="")) %>%
+  distinct %>% 
+  count(speaker) %>% 
+  arrange(desc(n))
+```
+"play2" i eksemplet er GertWestphaler1724. Her er der gået noget galt med "mester gert" og "mester gert westphaler". Der er fordi vi har glemt filnavnet, så den konverterer både for GertWestphaler1723 og GertWestphaler1724. Det fikser jeg også lige.
 
 # Anvendelse
 
@@ -158,7 +188,7 @@ library(readxl)
 
 ```
   variants <- read_excel(here("Rolleliste.xlsx")) %>% 
-    unnest_tokens(variant, Alias) %>% 
+  unnest_tokens(variant, Alias, token = "regex", pattern = ", ") %>% 
     mutate(
       Karakter = tolower(Karakter),
       variant = tolower(variant)
@@ -169,7 +199,8 @@ library(readxl)
 
 ```
   mutate(speaker = tolower(speaker)) %>% 
-  left_join(variants, by = c("speaker"="variant")) %>% 
+  left_join(variants, by = c("filename"="Filnavn", "speaker"="variant")) %>% 
   mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>%
-  select(-Karakter, -Filnavn)
+  filter(!is.na(speaker), !(speaker=="")) %>%
+  distinct
 ```
