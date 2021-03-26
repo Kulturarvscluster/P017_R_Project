@@ -29,12 +29,12 @@ source(here("src", "present_without_speech.R"))
 
 Next we load the excel sheet
 ```{r}
-variants <- read_excel(here("Rolleliste.xlsx")) %>% 
-    unnest_tokens(variant, Alias) %>% 
+(variants <- read_excel(here("Rolleliste.xlsx")) %>% 
+  unnest_tokens(variant, Alias, token = "regex", pattern = ", ") %>% 
     mutate(
       Karakter = tolower(Karakter),
       variant = tolower(variant)
-    )
+    ))
 ```
 
 # Find Speakers and Weights
@@ -43,15 +43,20 @@ Put the name of the file to use in "my_file".
 Vægtene er "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næsten ligesom. I stedet for at tælle ord for hver speaker, tæller vi denne gang ord for hver scene...
 
 ```{r}
-my_file <- "GertWestphaler1724_mod_nc.jsonl"
+convert_TEI_to_JSONL(here("test-data"))
+
+# my_file <- "GertWestphaler1724_mod.jsonl"
+my_file <- "Mascarade_mod.jsonl"
 (read_play_jsonl(here("test-data", my_file)) -> play)
 
 # "sammenlægge navnevarianter" (se "use-excel-for-name-variants.Rmd")
+# Husk at bruge Filnavn
 (play %>% 
   mutate(speaker = tolower(speaker)) %>% 
-  left_join(variants, by = c("speaker"="variant")) %>% 
+  left_join(variants, by = c("filename"="Filnavn", "speaker"="variant")) %>% 
   mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>%
-  select(-Karakter, -Filnavn) -> play)
+      filter(!is.na(speaker), !(speaker=="")) %>%
+distinct -> play)
 
 # find speakers using function
 (find_speakers(play) -> distinct_speakers)
