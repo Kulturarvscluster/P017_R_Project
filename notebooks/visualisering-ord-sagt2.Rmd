@@ -29,7 +29,6 @@ here()
 convert_TEI_to_JSONL(here("test-data"))
 ```
 
-
 ```{r}
 read_plays_jsonl(here("test-data")) %>% select(filename, everything()) -> plays
 ```
@@ -37,7 +36,6 @@ read_plays_jsonl(here("test-data")) %>% select(filename, everything()) -> plays
 ```{r}
 plays
 ```
-
 
 # Indlæs Excelarket
 
@@ -71,11 +69,9 @@ plays
 
 \#Sammenlæg navnevarianter Husk at bruge Filnavn til noget!
 
-
 ```{r}
 glimpse(plays)
 ```
-
 
 ```{r}
 plays %>% 
@@ -167,7 +163,7 @@ ggsave("pernille_over_tid.pdf", width=16, height=9)
 
 # Sammenligning af karakterer
 
-Basalt set skal vi have implementeret en funktion á la `character_comparison_plot(<list of character names>, <list of character names>)`. 
+Basalt set skal vi have implementeret en funktion á la `character_comparison_plot(<list of character names>, <list of character names>)`.
 
 Først skal jeg dog lige forstå denne kode, som er taget fra her over
 
@@ -207,7 +203,8 @@ summary %>%
 
 ```{r}
   summary %>% 
-  filter(speaker %in% c("henrik","pernille","leonora")) %>%
+  #filter(speaker %in% c("henrik","pernille","troels")) %>%
+filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
   arrange(year) %>%
   ggplot(aes(fill = speaker, y = freq, x = title)) +
     geom_bar(stat="identity") +
@@ -219,9 +216,10 @@ summary %>%
     ) +
   xlab("year") +
   ylab("Procent sagte ord") +
-  facet_wrap(~year, ncol=nrow(new_summary), switch="x") +
+  facet_wrap(~year, ncol=nrow(summary), switch="x") +
   theme(axis.text.x=element_blank())
 ```
+
 # Sammenligning af grupper af karakterer
 
 ```{r}
@@ -230,10 +228,10 @@ group_2 <- c("pernille", "leonora", "magdelone")
 
 summary %>% 
   filter(speaker %in% c(group_1, group_2)) %>% 
-  mutate(group = if_else(speaker %in% group_1, "Henrik, Jeronimus og Leander","Pernille, Leonora og Magdelone")) %>% 
+  mutate(gruppe = if_else(speaker %in% group_1, "Henrik, Jeronimus og Leander","Pernille, Leonora og Magdelone")) %>% 
   #filter(speaker %in% c("henrik","pernille","leonora")) %>%
   arrange(year) %>%
-  ggplot(aes(fill = group, y = freq, x = title)) +
+  ggplot(aes(fill = gruppe, y = freq*100, x = title)) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
@@ -241,9 +239,9 @@ summary %>%
       #subtitle = toupper("TEST"),
       caption = "Kilde: DSL"
     ) +
-  xlab("year") +
+  xlab("Årstal") +
   ylab("Procent sagte ord") +
-  facet_wrap(~year, ncol=nrow(new_summary), switch="x") +
+  labs(fill='Maskepar') +
+  facet_wrap(~year, ncol=nrow(summary), switch="x") +
   theme(axis.text.x=element_blank())
 ```
-
