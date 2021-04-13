@@ -62,7 +62,7 @@ distinct -> play)
 (find_speakers(play) -> distinct_speakers)
 
 # og find vægte
-(play %>%
+play %>%
   mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
   select(n_spoken_words, everything()) %>%
   filter(!is.na(speaker)) %>%
@@ -71,13 +71,17 @@ distinct -> play)
   select(n_spoken_words, speaker, act_number, scene_number) %>% 
   group_by(act_number, scene_number)  %>%
   summarise(words = sum(n_spoken_words), act_number, scene_number, speaker) %>%
-  distinct() -> scene_weights)
+  distinct() -> scene_weights
 ```
 
 # Find Nodes and Edges and combine with weights 
+
+Ok. Det jeg gerne vil i linje ca. 78 til 113 er at finde vægte til kanter. Der er en kant mellem 2 personer, hvis de begge to har haft en replik i samme scene. vægten på den kant er antallet af ord sagt i den scene. Hvis to personer har talt sammen i flere scener, lægger vi antallet af ord sagt i hver af scenerne sammen, og det er så vægten på kanten. Jeg havde en fejl med antallet af kanter, men den tror jeg, jeg har fikset nu. Så er næste spørgsmål om jeg så har regnet vægtene rigtigt - og om det ikke kan skrives lidt mere læseligt 
+
+
 ```{r}
 # find nodes using function
-(speakers2nodes(distinct_speakers) -> nodes_play)
+speakers2nodes(distinct_speakers) -> nodes_play
 
 # find edges and combine edges with weights
 # (trouble when finding the edges using the function,
@@ -85,43 +89,64 @@ distinct -> play)
 # lets try finding them here instead)
 
 #create column 'speaker2' and make it equal to 'speaker' (duplicate).
-  distinct_speakers$speaker2 = distinct_speakers$speaker 
-  # All possible combinations (remember the data is still grouped by act-number and scene-number)
-  distinct_speakers %>% 
-    expand(speaker, speaker2) -> who_speaks_to_whom
+distinct_speakers$speaker2 = distinct_speakers$speaker 
   
-  (who_speaks_to_whom  %>%
+# All possible combinations (remember the data is still grouped by act-number and scene-number)
+distinct_speakers %>% 
+    expand(speaker, speaker2) %>% 
+    filter(speaker != speaker2) -> who_speaks_to_whom
+  
+who_speaks_to_whom  %>%
       ungroup() %>%
       select(from = speaker, to = speaker2) %>%
-      distinct() -> edges_play)
+      distinct() -> edges_play
 
-  # Kombiner med vægte
-(who_speaks_to_whom %>% right_join(scene_weights) -> who_speaks_to_whom_with_weights)
+
+
+# Kombiner med vægte
+who_speaks_to_whom %>% right_join(scene_weights) -> who_speaks_to_whom_with_weights
   
-  # Lige et lille eksperiment: Hvor meget siger/hører barselskvinden?
-  (who_speaks_to_whom_with_weights %>%
+# Lige et lille eksperiment: Hvor meget siger/hører barselskvinden?
+(who_speaks_to_whom_with_weights %>%
       filter(speaker=="barselskvinden"))
   
-  # Opsumér vægte
-  # Vi deler med 2, for ellers kommer vi til at tælle dobbelt
+# Opsumér vægte
 (who_speaks_to_whom_with_weights  %>%
-  summarise(from = speaker, to = speaker2, weight = sum(words)/2) %>%
-  ungroup() %>%
-  select(from, to, weight) %>%
-  group_by(from, to) %>%
-    distinct() %>%
-  summarise(from , to , ord_sagt = sum(weight))-> edges_weights)
+    ungroup() %>% 
+    rename(from=speaker, to=speaker2) %>% 
+    select(from,to,words) %>% 
+    filter(!is.na(to)) %>% 
+  
+    group_by(from,to) %>% 
+    arrange(from,to,words) %>% 
+    mutate(weight=sum(words)) %>% 
+    ungroup() %>% 
+    select(from,to,weight) %>% 
+    distinct() -> edges_weights)
+#ungroup,rename,select,filter are just data wrangling
+# We group by from,to.
+# Arrange is just for display purposes
+# Mutate weight=sum(words) sums in each group
+# We can then ungroup
+# select removes unnessesary columns
+# distinct ensures that each edge exists just once
+
+# TODO the edges_weight is twice as big as nessesary, as it contains both A -> B and B -> A despite these being the same value.
+# The graphing below is not directed so it does not use B -> A
 ```
 Bemærk tallen virker høje, men der bliver sagt ca. 50.000 ord i det her stykke ( det er barselstuen, jeg har brugt som eksempel), og nogle af karaktererne er til stede i de fleste scener, så det er ikke forkert at vi får vægte op mod 30.000. 
 # Draw first graph
 We can now draw a graph with weighted edges like this.
 ```{r}
-gr1 <- tbl_graph(nodes = nodes_play, edges = edges_weights, directed = TRUE, node_key = "speaker")
+nodes_play
+edges_weights
+gr1 <- tbl_graph(nodes = nodes_play, edges = edges_weights, directed = FALSE, node_key = "speaker")
 
-(ggraph(gr1, layout = 'kk') + 
+(ggraph(gr1, layout = 'igraph', algorithm='kk') + 
     geom_edge_link(aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker),
-                       width = ord_sagt),
+                       width = weight
+                       ),
                    alpha = .25) + 
     geom_node_text(aes(label = speaker)) + 
     labs(caption = paste("Netværksgraf", my_file)))
