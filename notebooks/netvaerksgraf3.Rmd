@@ -179,22 +179,23 @@ Så vil vi prøve at tilføje stumme karakterer med stiplede kanter.
 # Draw second graph
 We can now combine the two sets of weighted edges and draw a graph like this.
 ```{r}
-edges_weights$type = "speaking"
+edges_weights$type = "red"
 
-silent_edges_with_weights$type = "silent"
+silent_edges_with_weights$type = "green"
 
 (silent_edges_with_weights %>% bind_rows(edges_weights) -> edges_combined) 
 
 gr1 <- tbl_graph(nodes = nodes_play, edges = edges_combined, directed = TRUE, node_key = "speaker")
 
 ggraph(gr1, layout = 'kk') + 
-    geom_edge_link(aes(start_cap = label_rect(node1.speaker),
+    geom_edge_link(colour="green",
+                   aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker),
-                       width = ord_sagt,
-                       colour = type),
+                       width = ord_sagt),
                    alpha = .25) + 
-    geom_node_text(aes(label = speaker)) + 
+    geom_node_text(aes(label = speaker)) +  
     labs(caption = paste("Netværksgraf", my_file))
+
 
 # Create a PNG file for the graph (`mypng.png`)
 # ggsave(here("test-data", "mygraph.png"))
