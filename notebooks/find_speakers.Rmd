@@ -20,7 +20,7 @@ library(tidyverse)
 library(ndjson)
 library(here)
 
-barselstuen_raw <- ndjson::stream_in(here("/test-data/barselstuen_mod.jsonl")) %>% tibble()
+barselstuen_raw <- ndjson::stream_in(here("/test-data/Barselstuen_mod_nc.jsonl")) %>% tibble()
 
 ```
 
@@ -61,7 +61,7 @@ speakers_by_scene
 write.csv(speakers_by_scene, file = here("data/output/barselstuen_speakers_by_scene.csv"))
 ```
 
-Der er godt nok mange! Og der er også nogle mærkværdigheder. Spørgsmålet er om de kommer fra TEI-filen eller fra oversætelsen?
+Der er godt nok mange! Og der er også nogle mærkværdigheder. Spørgsmålet er om de kommer fra TEI-filen eller fra oversættelsen?
 
 ##Find navne på alle karakterer, som kun nævnes i regibemærkninger.
 Tæl karakterer, som kun nævnes i regibemærkninger.
