@@ -36,9 +36,9 @@ Create a "test-data" folder in your project directory, and copy the play here.
 Edit the file below to the jsonl file for the play you want.
 
 ```{r}
-my_file <- "Mascarade_mod_nc.jsonl"
+my_file <- "Mascarade_mod.jsonl"
 # convert all page files in the specified folder to jsonl
-convert_TEI_to_JSONL(here("test-data")) 
+# convert_TEI_to_JSONL(here("test-data")) 
 # read the specified play from the jsonl file
 play <- read_play_jsonl(here("test-data", my_file))
 play # show the table for the play
@@ -132,7 +132,8 @@ Så kan vi også prøve funktionen på et andet skuespil, og måske få et andet
 
 # Test Function
 ```{r}
-play
+# genindlæs skuespil, for så virker det!
+play <- read_play_jsonl(here("test-data", my_file))
 present_without_speech(play)
 ```
 
