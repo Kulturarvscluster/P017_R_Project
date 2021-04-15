@@ -46,7 +46,9 @@ Vægtene er "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næste
 convert_TEI_to_JSONL(here("test-data"))
 
 # my_file <- "GertWestphaler1724_mod.jsonl"
-my_file <- "Mascarade_mod.jsonl"
+# my_file <- "Mascarade_mod.jsonl"
+my_file <- "Barselstuen_mod.jsonl"
+
 (read_play_jsonl(here("test-data", my_file)) -> play)
 
 # "sammenlægge navnevarianter" (se "use-excel-for-name-variants.Rmd")
