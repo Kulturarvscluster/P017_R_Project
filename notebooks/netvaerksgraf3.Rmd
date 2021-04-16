@@ -47,8 +47,8 @@ Vægtene er "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næste
 # convert_TEI_to_JSONL(here("test-data"))
 
 # my_file <- "GertWestphaler1724_mod.jsonl"
-# my_file <- "Mascarade_mod.jsonl"
-my_file <- "Barselstuen_mod.jsonl"
+my_file <- "Mascarade_mod.jsonl"
+# my_file <- "Barselstuen_mod.jsonl"
 
 (read_play_jsonl(here("test-data", my_file)) -> play)
 
@@ -84,7 +84,7 @@ Ok. Det jeg gerne vil i linje ca. 78 til 113 er at finde vægte til kanter. Der 
 
 ```{r}
 # find nodes using function
-speakers2nodes(distinct_speakers) -> nodes_play
+(speakers2nodes(distinct_speakers) -> nodes_play)
 
 # find edges and combine edges with weights
 # (trouble when finding the edges using the function,
@@ -146,7 +146,7 @@ nodes_play
 edges_weights
 gr1 <- tbl_graph(nodes = nodes_play, edges = edges_weights, directed = FALSE, node_key = "speaker")
 
-(ggraph(gr1, layout = 'igraph', algorithm='kk') + 
+(ggraph(gr1, layout = 'stress') + 
     geom_edge_link(aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker),
                        width = weight
@@ -195,10 +195,10 @@ silent_edges_with_weights$type = "sq"
 
 (silent_edges_with_weights %>% bind_rows(edges_weights) -> edges_combined) 
 
-gr1 <- tbl_graph(nodes = nodes_play, edges = edges_combined, directed = TRUE, node_key = "speaker")
+gr1 <- tbl_graph(nodes = nodes_play, edges = edges_combined, directed = FALSE, node_key = "speaker")
 
-ggraph(gr1, layout = 'auto') + 
-    geom_edge_link(aes(start_cap = label_rect(node1.speaker),
+ggraph(gr1, layout = 'stress') + 
+    geom_edge_fan(aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker),
                        width = weight,
                        colour = factor(type)),
