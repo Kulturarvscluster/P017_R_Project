@@ -9,7 +9,7 @@ present_without_speech <- function(play) {
     filter(!is.na(speaker)) %>% 
     count(speaker) %>%
     mutate(speaker = str_to_lower(speaker)) %>%
-    select(speaker) -> speakers_in_play
+    select(speaker) -> speakers
   # Find alle regi-bemærkninger. 
   # These are the people who are directly mentioned in the stage tokens
   (play %>% 
