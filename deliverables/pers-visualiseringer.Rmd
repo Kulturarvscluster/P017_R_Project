@@ -280,7 +280,7 @@ Først er vi nødt til at lave en ny faktor-erklæring for titel, da
 
 ```{r}
 summary %>%
-    filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>% 
+    ## filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>% 
     mutate(title_fct2 = str_c(title," ", year)) -> summary_with_yeartitle
 
 summary_with_yeartitle %>%
@@ -311,6 +311,29 @@ summary_fct2 %>%
     scale_y_continuous(limits = c(0,100), breaks = c(0,10,20,30,40,50,60,70,80,90,100)) +
     xlab("Skuespil") +
     ylab("Procent sagte ord") +
+    coord_flip()
+```
+
+```{r}
+group_1 <- c("henrik", "jeronimus", "leander")
+group_2 <- c("pernille", "leonora", "magdelone")
+
+summary_fct2 %>%
+    filter(speaker %in% c(group_1, group_2)) %>% 
+    mutate(gruppe = if_else(speaker %in% group_1, "Henrik, Jeronimus og Leander","Pernille, Leonora og Magdelone")) %>% 
+    ## filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
+    ggplot(aes(fill = gruppe, y = 100*freq, x = title_fct2)) +
+       geom_bar(stat="identity") +
+       theme(legend.position="bottom") +
+       labs(
+           title = "Fordeling af talte ord over år mellem få gennemgående\nkarakterer",
+           ## subtitle = toupper("TEST"),
+           caption = "Kilde: DSL"
+       ) +
+    scale_y_continuous(limits = c(0,100), breaks = c(0,10,20,30,40,50,60,70,80,90,100)) +
+    xlab("Skuespil") +
+    ylab("Procent sagte ord") +
+      labs(fill='Maskepar') +
     coord_flip()
 ```
 
