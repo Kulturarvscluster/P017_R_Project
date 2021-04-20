@@ -8,6 +8,8 @@ Før vi begynder, skal vi indlæse de udvidelsespakker til R, som vi vil benytte
 
 ```{r, message=FALSE}
 library(tidyverse)
+library(tidytext)
+library(readxl)
 library(here)
 library(ndjson)
 library(xslt)
@@ -27,15 +29,15 @@ Vi laver en tabel med navnet plays.
 
 ```{r}
 here()
-convert_TEI_to_JSONL(here("test-data"))
-read_plays_jsonl(here("test-data")) -> plays
+#convert_TEI_to_JSONL(here("test-data"))
+#read_plays_jsonl(here("test-data")) -> plays
 ```
 
 For at gøre det nemmere for os selv, starter vi med kun at se på ét skuespil "my_play" (fx Barselsstuen). Vi filtrerer ikke længere efter titel. Vi indlæser direkte fra JSON-filen! Forhåbentlig er "my_file" det eneste sted vi skal ændre for at lave visualiseringen for et andet skuespil :)
 
 ```{r}
-my_file <- "test-data/Den_11_Junii_mod_nc.jsonl" 
-my_play <- ndjson::stream_in(here(my_file)) %>% tibble()
+my_file <- "GertWestphaler1724_mod.jsonl" 
+my_play <- read_play_jsonl(here("test-data", my_file))
 my_play
 ```
 
@@ -178,7 +180,7 @@ Vi vil også benytte funktionen `%in%`, som tjekker for om det der står til ven
 12 %in% c(1, 2, 3, 12, 24)
 ```
 
-Men det to funktioner, kan vi nu skrive denne kode
+Med de to funktioner, kan vi nu skrive denne kode
 Husk at disse ændringer er lavet til "Barselstuen"
 
 ```{r}
@@ -212,9 +214,73 @@ my_summary %>%
   theme(axis.text.x=element_blank())
 
 ```
+# Tilføj generel sammenlægning af forskellige stavemåde af samme rolle ved hjælp af excelarket
+
+## Indlæs Excelarket
+
+```{r}
+variants <- read_excel(here("Rolleliste.xlsx")) %>% 
+     unnest_tokens(variant, Alias, token = "regex", pattern = ", ") %>% 
+    mutate(
+      Karakter = tolower(Karakter),
+      variant = tolower(variant)
+    )
+variants
+```
+
+## Anvend Excelarket
+
+```{r}
+(my_play %>% 
+  mutate(speaker = tolower(speaker)) %>% 
+  left_join(variants, by = c("filename"="Filnavn", "speaker"="variant")) %>% 
+  mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>%
+  distinct -> my_play)
+```
+## Gentag klargøring af data
+
+```{r}
+my_play %>% 
+  # add a scene index for the x-axis
+  rowwise() %>% 
+  mutate(scene_index = calc_scene_index(act_number, scene_number, act_length)) %>% 
+  # remove rows that are not dialogue
+  filter(act != "", scene != "", !is.na(spoke)) %>%
+  
+  # select only the columns, that we are interested in
+  select(scene_index, act_number, scene_number, speaker, spoke) %>% 
+  
+  # add the number of spoken words
+  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
+  # remove the spoken words
+  select(-spoke) %>%
+  
+  # group the play in scene_index and speaker, ignoring the test
+  group_by(scene_index, act_number, scene_number, speaker) %>% 
+
+  # Ensure that each speaker only appears once in each scene, i.e. sum the words spoken by each speaker
+  # Lastly store the new data frame in a new reference for later use
+  summarise(words = sum(n_spoken_words), act_number, scene_number) %>%
+  distinct() -> my_summary
+#print(barselsstuen_vis, n=60)
+my_summary
+```
+## Gentag visualisering
 
 
-
-
+```{r}
+my_summary %>% 
+  ggplot(aes(fill = speaker, y = words, x = scene_index)) +
+    geom_bar(stat="identity") +
+    theme(legend.position="bottom") +
+    labs(
+      title = my_file,
+      subtitle = "Hvor meget siger hvem",
+      caption = "Kilde: DSL",
+      fill = "Rolle"
+    ) +
+  xlab("Akt og scene") +
+  ylab("Antal sagte ord")
+```
 
 
