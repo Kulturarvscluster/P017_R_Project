@@ -457,6 +457,8 @@ summary %>%
 
 # Farvelægning
 
+Dette afsnit beror på at `summary_fct2` er beregner tidligere.
+
 ```{r}
 summary_fct2 %>% 
     ## filter(speaker %in% c("henrik","pernille","troels")) %>%
@@ -474,6 +476,33 @@ summary_fct2 %>%
     ylab("Procent sagte ord") +
     coord_flip()
 ```
+
+Nu vil vi så angive vores egne farver for Henrik, Jeronimus og Leander.
+
+```{r}
+summary_fct2 %>%
+    filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
+    ggplot(aes(fill = speaker, y = 100*freq, x = title_fct2)) +
+       geom_bar(stat="identity") +
+       theme(legend.position="bottom") +
+       labs(
+           title = "Fordeling af talte ord over år mellem få gennemgående\nkarakterer",
+           ## subtitle = toupper("TEST"),
+           caption = "Kilde: DSL"
+       ) +
+      scale_fill_manual(
+        values = c(
+          "henrik" = "purple",
+          "jeronimus" = "orange",
+          "leander"="steelblue"
+        )
+      ) +
+    scale_y_continuous(limits = c(0,100), breaks = c(0,50,100)) +
+    xlab("Skuespil") +
+    ylab("Procent sagte ord") +
+    coord_flip()
+```
+
 
 # Gemme en visualisering som liggende A4 PDF
 
