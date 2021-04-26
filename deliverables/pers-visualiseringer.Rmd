@@ -55,28 +55,6 @@ plays %>%
 
 # Visualisering
 
-```{r}
-character_plot <- function(character_name) {
-  new_summary %>% 
-  filter(speaker == character_name) %>%
-  arrange(year) %>%
-  ggplot(aes(fill = title, y = freq, x = title)) +
-    geom_bar(stat="identity") +
-    theme(legend.position="bottom") +
-    labs(
-      title = "Procent talte ord over år og komedier",
-      subtitle = toupper(character_name),
-      caption = "Kilde: DSL"
-    ) +
-  xlab("year") +
-  ylab("Procent sagte ord") +
-  facet_wrap(~year, ncol=nrow(new_summary), switch="x") +
-  theme(axis.text.x=element_blank())
-}
-
-```
-
-
 Basalt set skal vi have implementeret en funktion á la `character_comparison_plot(<list of character names>, <list of character names>)`.
 
 
