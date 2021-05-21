@@ -47,8 +47,42 @@ Vægtene er "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næste
 # convert_TEI_to_JSONL(here("test-data"))
 
 # my_file <- "GertWestphaler1724_mod.jsonl"
-my_file <- "Mascarade_mod.jsonl"
+# my_file <- "Mascarade_mod.jsonl"
 # my_file <- "Barselstuen_mod.jsonl"
+# my_file <- "Ulysses_mod.jsonl"
+# my_file <- "uden_hoved_og_hale_mod.jsonl"
+# my_file <- "Skibbrud_mod.jsonl"
+# my_file <- "Sganarel_mod.jsonl"
+# my_file <- "Republiqven_mod.jsonl"
+# my_file <- "Ranudo_mod.jsonl"
+# my_file <- "Plutus_mod.jsonl"
+# my_file <- "Philosophus_mod.jsonl"
+# my_file <- "Pernille_mod.jsonl"
+# todo den her virker ikke: my_file <- "Nytaarsprolog_mod.jsonl"
+# my_file <- "Melampe_mod.jsonl"
+# my_file <- "Ligbeg_mod.jsonl"
+# my_file <- "Kilde-Reysen_mod.jsonl"
+# my_file <- "Kandst_mod.jsonl" todo udfordring med 1. og 2. <w>rådsherreinde</w>
+# my_file <- "Juele-Stue_mod.jsonl"
+# todo den her virker heller ikke: my_file <- "JJ_Bet_1723_mod.jsonl"
+# my_file <- "Jeppe_mod.jsonl"
+# my_file <- "Jean_de_France_mod.jsonl"
+# my_file <- "Jacob_von_Tyboe_mod.jsonl"
+# my_file <- "Hexerie_mod.jsonl"
+# my_file <- "Henrick_og_Pernille_mod.jsonl"
+# my_file <- "GertWestphaler1723_mod.jsonl"
+# my_file <- "Erasmus_mod.jsonl"
+# my_file <- "Diderich_mod.jsonl"
+# my_file <- "Det_Arabiske_Pulver_mod.jsonl"
+# my_file <- "Den_Vaegelsindede_1731_mod.jsonl"
+# my_file <- "De_u-synlige_mod.jsonl"
+# my_file <- "Den_Vaegelsindede_1723_mod.jsonl"
+# my_file <- "Den_Stundesloese_mod.jsonl"
+# my_file <- "Den_Honnette_Ambition_mod.jsonl"
+# my_file <- "Den_11_Junii_mod.jsonl"
+# my_file <- "Brudgom_mod.jsonl"
+# my_file <- "Bondedreng_mod.jsonl"
+my_file <- "Abracadabra_mod.jsonl"
 
 (read_play_jsonl(here("test-data", my_file)) -> play)
 
@@ -65,7 +99,7 @@ distinct -> play)
 (find_speakers(play) -> distinct_speakers)
 
 # og find vægte
-play %>%
+(play %>%
   mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
   select(n_spoken_words, everything()) %>%
   filter(!is.na(speaker)) %>%
@@ -74,7 +108,7 @@ play %>%
   select(n_spoken_words, speaker, act_number, scene_number, act, scene) %>% 
   group_by(act_number, scene_number)  %>%
   summarise(words = sum(n_spoken_words), act_number, scene_number, act, scene, speaker) %>%
-  distinct() -> scene_weights
+  distinct() -> scene_weights)
 ```
 
 # Find Nodes and Edges and combine with weights 
@@ -131,11 +165,6 @@ distinct_speakers %>%
 # select removes unnessesary columns
 # distinct ensures that each edge exists just once    
 
-# Kan det nu passe?
-(who_speaks_to_whom_with_weights %>%
-  # filtrer på kun to roller
-  filter(speaker == "henrik", speaker2 == "pernille"))
-  
 
 ```
 
@@ -160,7 +189,8 @@ Så vil vi prøve at tilføje stumme karakterer med stiplede kanter.
 # Find the characters that are present but do not speak
 ```{r}
 # genindlæs skuespil, for så virker det!
-play <- read_play_jsonl(here("test-data", my_file))
+# play <- read_play_jsonl(here("test-data", my_file))
+
 (present_without_speech(play) -> present_but_silent)
 # Her skal vi også have sat vægte på
 # Det kan vi gøre ud fra act_number og scene_number igen
@@ -183,30 +213,33 @@ play <- read_play_jsonl(here("test-data", my_file))
 
   
 ```
-Det her virker for "GertWestphaler1724_mod.jsonl", men nok ikke alle!
-Det virker "nogen gange"?!?!
 
 # Draw second graph
 We can now combine the two sets of weighted edges and draw a graph like this.
 ```{r}
-edges_weights$type = "sp"
+edges_weights$type = "speaking"
 
-silent_edges_with_weights$type = "sq"
+silent_edges_with_weights$type = "silent"
 
 (silent_edges_with_weights %>% bind_rows(edges_weights) -> edges_combined) 
 
+nodes_play
+
 gr1 <- tbl_graph(nodes = nodes_play, edges = edges_combined, directed = FALSE, node_key = "speaker")
 
-ggraph(gr1, layout = 'stress') + 
+ggraph(gr1, layout = 'stress') + # prøv med forskellige layouts
+                                 # muligheder: 'stress' 'dh' 'drl' 'fr' 'gem' 'graphopt' 'kk' 'lgl' 
+                                 # 'mds''randomly' m.fl.
     geom_edge_fan(aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker),
                        width = weight,
                        colour = factor(type)),
                    alpha = .25) + 
-    geom_node_text(aes(label = speaker)) +  
+    geom_node_text(aes(label = speaker), check_overlap = TRUE, repel = TRUE) + # prøv med og uden 
+                                                                               # check_overlap = TRUE, repel = TRUE
     labs(caption = paste("Netværksgraf", my_file))
 
 # Create a PNG file for the graph (`mypng.png`)
-# ggsave(here("test-data", "mygraph.png"))
+ggsave(here("test-data/graphs", paste(my_file, ".stress.check_overlap.repel.png")))
 
 ```
