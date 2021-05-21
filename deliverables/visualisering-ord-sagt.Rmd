@@ -36,7 +36,8 @@ here()
 For at gøre det nemmere for os selv, starter vi med kun at se på ét skuespil "my_play" (fx Barselsstuen). Vi filtrerer ikke længere efter titel. Vi indlæser direkte fra JSON-filen! Forhåbentlig er "my_file" det eneste sted vi skal ændre for at lave visualiseringen for et andet skuespil :)
 
 ```{r}
-my_file <- "GertWestphaler1724_mod.jsonl" 
+#my_file <- "GertWestphaler1724_mod.jsonl" 
+my_file <- "Bondedreng_mod.jsonl" 
 my_play <- read_play_jsonl(here("test-data", my_file))
 my_play
 ```
@@ -271,7 +272,7 @@ my_summary
 ```{r}
 my_summary %>% 
   ggplot(aes(fill = speaker, y = words, x = scene_index)) +
-    geom_bar(stat="identity") +
+    geom_bar(stat="identity", width = 50) +
     theme(legend.position="bottom") +
     labs(
       title = my_file,
@@ -280,7 +281,9 @@ my_summary %>%
       fill = "Rolle"
     ) +
   xlab("Akt og scene") +
-  ylab("Antal sagte ord")
+  ylab("Antal sagte ord") + 
+  facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x")+
+  theme(axis.text.x=element_blank())
 ```
 
 
