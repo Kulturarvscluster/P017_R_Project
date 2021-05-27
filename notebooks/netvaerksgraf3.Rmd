@@ -46,7 +46,7 @@ Vægtene er "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næste
 # The next line is only necessary if you do not already have the jsonl files
 # convert_TEI_to_JSONL(here("test-data"))
 
-# my_file <- "GertWestphaler1724_mod.jsonl"
+my_file <- "GertWestphaler1724_mod.jsonl"
 # my_file <- "Mascarade_mod.jsonl"
 # my_file <- "Barselstuen_mod.jsonl"
 # my_file <- "Ulysses_mod.jsonl"
@@ -79,14 +79,14 @@ Vægtene er "spoken words" ligesom i "visualisering-ord-sagt.Rmd" - eller næste
 # my_file <- "Den_Vaegelsindede_1723_mod.jsonl"
 # my_file <- "Den_Stundesloese_mod.jsonl"
 # my_file <- "Den_Honnette_Ambition_mod.jsonl"
-my_file <- "Den_11_Junii_mod.jsonl"
+# my_file <- "Den_11_Junii_mod.jsonl"
 # my_file <- "Brudgom_mod.jsonl"
 # my_file <- "Bondedreng_mod.jsonl"
 # my_file <- "Abracadabra_mod.jsonl"
 
 (read_play_jsonl(here("test-data", my_file)) -> play)
 
-# "sammenlægge navnevarianter" (se "use-excel-for-name-variants.Rmd")
+# "sammenlæg navnevarianter" (se "use-excel-for-name-variants.Rmd")
 # Husk at bruge Filnavn
 (play %>% 
   mutate(speaker = tolower(speaker)) %>% 
@@ -99,16 +99,7 @@ distinct -> play)
 (find_speakers(play) -> distinct_speakers)
 
 # og find vægte
-(play %>%
-  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
-  select(n_spoken_words, everything()) %>%
-  filter(!is.na(speaker)) %>%
-  filter(!(speaker == "")) %>%
-  filter(!is.na(n_spoken_words)) %>%
-  select(n_spoken_words, speaker, act_number, scene_number, act, scene) %>% 
-  group_by(act_number, scene_number)  %>%
-  summarise(words = sum(n_spoken_words), act_number, scene_number, act, scene, speaker) %>%
-  distinct() -> scene_weights)
+(find_weights(play) -> scene_weights)
 ```
 
 # Find Nodes and Edges and combine with weights 
@@ -249,7 +240,7 @@ ggraph(gr1, layout = 'stress') + # prøv med forskellige layouts
     labs(caption = paste("Netværksgraf", my_file))
 
 # Create a PNG file for the graph (`mypng.png`)
-ggsave(here("graphs", paste(my_file, ".stress.check_overlap.png")))
+# ggsave(here("graphs", paste(my_file, ".stress.check_overlap.png")))
 
 
 ```
@@ -267,10 +258,10 @@ gr4 <- gr2 %>%
     activate(edges) %>% 
     reroute(from = to, to = from)
 gr4 %>% graph_join(gr3) %>% graph_join(gr2) %>%
-ggraph(layout = 'kk') + # prøv med forskellige layouts
+ggraph(layout = 'lgl') + # prøv med forskellige layouts
                                  # muligheder: 'stress' 'dh' 'drl' 'fr' 'gem' 'graphopt' 'kk' 'lgl' 
                                  # 'mds''randomly' m.fl.
-    scale_edge_colour_manual(values = c("speaking" = "blue", "silent" = "red")) + # bestem farver manuelt
+    scale_edge_colour_manual(values = c("speaking" = "black", "silent" = "red")) + # bestem farver manuelt
     
     geom_edge_fan(aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker),
@@ -284,7 +275,19 @@ ggraph(layout = 'kk') + # prøv med forskellige layouts
     labs(caption = paste("Netværksgraf", my_file))
 
 # Create a PNG file for the graph (`mypng.png`)
-ggsave(here("graphs", paste(my_file, ".kk.check_overlap.png")))
+# ggsave(here("graphs", paste(my_file, ".lgl.check_overlap.png")))
 
 
 ```
+# Test "create graph function"
+```{r}
+(create_graph(my_file))
+```
+Det ser ud til at den virker.
+Den returnerer godt nok null, men den gemmer netværksgrafen som pdf.
+
+# Run "create graph function" on all json files in "test-data"
+```{r}
+#TODO
+```
+
