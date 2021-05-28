@@ -171,6 +171,6 @@ create_graph <- function(my_file) {
     labs(caption = paste("Netværksgraf", my_file))
   
   # Create a PNG file for the graph (`mypng.png`)
-  ggsave(here("graphs", paste(my_file, ".function.lgl.check_overlap.png")))
+  ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".function.lgl.check_overlap.png")))
   
 }

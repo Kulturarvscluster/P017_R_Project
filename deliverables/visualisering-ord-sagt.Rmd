@@ -284,6 +284,9 @@ my_summary %>%
   ylab("Antal sagte ord") + 
   facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x")+
   theme(axis.text.x=element_blank())
+
+ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvor_meget_siger_hvem.pdf")), width=16, height=9)
+
 ```
 
 

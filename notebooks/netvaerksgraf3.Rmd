@@ -176,6 +176,9 @@ gr1 <- tbl_graph(nodes = nodes_play, edges = edges_weights, directed = FALSE, no
                    alpha = .25) + 
     geom_node_text(aes(label = speaker)) + 
     labs(caption = paste("Netværksgraf", my_file)))
+
+ggsave(here("graphs/netvaerksgraf3", paste(my_file, "no-arrows.stress.png")))
+
 ```
 # Find the characters that are present but do not speak
 
@@ -240,7 +243,7 @@ ggraph(gr1, layout = 'stress') + # prøv med forskellige layouts
     labs(caption = paste("Netværksgraf", my_file))
 
 # Create a PNG file for the graph (`mypng.png`)
-# ggsave(here("graphs", paste(my_file, ".stress.check_overlap.png")))
+# ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".stress.check_overlap.png")))
 
 
 ```
@@ -261,7 +264,7 @@ gr4 %>% graph_join(gr3) %>% graph_join(gr2) %>%
 ggraph(layout = 'lgl') + # prøv med forskellige layouts
                                  # muligheder: 'stress' 'dh' 'drl' 'fr' 'gem' 'graphopt' 'kk' 'lgl' 
                                  # 'mds''randomly' m.fl.
-    scale_edge_colour_manual(values = c("speaking" = "black", "silent" = "red")) + # bestem farver manuelt
+    scale_edge_colour_manual(values = c("speaking" = "blue", "silent" = "red")) + # bestem farver manuelt
     
     geom_edge_fan(aes(start_cap = label_rect(node1.speaker),
                        end_cap = label_rect(node2.speaker),
@@ -275,7 +278,7 @@ ggraph(layout = 'lgl') + # prøv med forskellige layouts
     labs(caption = paste("Netværksgraf", my_file))
 
 # Create a PNG file for the graph (`mypng.png`)
-# ggsave(here("graphs", paste(my_file, ".lgl.check_overlap.png")))
+ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".lgl.check_overlap.png")))
 
 
 ```
@@ -288,6 +291,11 @@ Den returnerer godt nok null, men den gemmer netværksgrafen som pdf.
 
 # Run "create graph function" on all json files in "test-data"
 ```{r}
-#TODO
+# Alle stykker som json filer
+json_file_list <- list.files(here("test-data"), pattern = "*.jsonl")
+# Alle stykker som netværksgrafer
+for(i in 2:length(json_file_list)) {
+  create_graph(json_file_list[i])
+}
 ```
 
