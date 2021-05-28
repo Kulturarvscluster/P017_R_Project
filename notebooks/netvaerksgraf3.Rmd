@@ -177,7 +177,7 @@ gr1 <- tbl_graph(nodes = nodes_play, edges = edges_weights, directed = FALSE, no
     geom_node_text(aes(label = speaker)) + 
     labs(caption = paste("Netværksgraf", my_file)))
 
-ggsave(here("graphs/netvaerksgraf3", paste(my_file, "no-arrows.stress.png")))
+ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".no-arrows.no-silent-characters.stress.png")))
 
 ```
 # Find the characters that are present but do not speak
@@ -243,7 +243,7 @@ ggraph(gr1, layout = 'stress') + # prøv med forskellige layouts
     labs(caption = paste("Netværksgraf", my_file))
 
 # Create a PNG file for the graph (`mypng.png`)
-# ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".stress.check_overlap.png")))
+ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".no-arrows.stress.check_overlap.png")))
 
 
 ```

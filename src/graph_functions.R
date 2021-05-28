@@ -121,6 +121,19 @@ create_graph <- function(my_file) {
       select(from,to,weight) %>% 
       filter(from < to) %>% # fjern kant i den ene retning
       distinct() -> edges_weights
+  # Graph without silent characters and without arrows
+  gr1 <- tbl_graph(nodes = nodes_play, edges = edges_weights, directed = FALSE, node_key = "speaker")
+  
+  (ggraph(gr1, layout = 'stress') + 
+      geom_edge_link(aes(start_cap = label_rect(node1.speaker),
+                         end_cap = label_rect(node2.speaker),
+                         width = weight
+      ),
+      alpha = .25) + 
+      geom_node_text(aes(label = speaker)) + 
+      labs(caption = paste("Netværksgraf", my_file)))
+  
+  ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".function.no-arrows.no-silent-characters.stress.png")))
   
   # Find the characters that are present but do not speak
   present_without_speech(play) -> present_but_silent
@@ -145,8 +158,25 @@ create_graph <- function(my_file) {
   # Add types to the edges
   edges_weights$type = "speaking"
   silent_edges_with_weights$type = "silent"
+  silent_edges_with_weights %>% bind_rows(edges_weights) -> edges_combined
+  # Graph without arrows
+  gr1 <- tbl_graph(nodes = nodes_play, edges = edges_combined, directed = TRUE, node_key = "speaker")
+  ggraph(gr1, layout = 'stress') + # prøv med forskellige layouts
+    scale_edge_colour_manual(values = c("speaking" = "black", "silent" = "red")) + # bestem farver manuelt
+    geom_edge_fan(aes(start_cap = label_rect(node1.speaker),
+                      end_cap = label_rect(node2.speaker),
+                      width = weight,
+                      colour = factor(type)),
+                  arrow = arrow(length = unit(2, 'mm'), type = "closed"), # sæt pile på
+                  alpha = .25) + 
+    #    geom_node_point(aes(fill = speaker),shape = 21,size = 5) + # overvej knuder
+    geom_node_text(aes(label = speaker), check_overlap = TRUE) + # prøv med og uden 
+    # check_overlap = TRUE, repel = TRUE
+    labs(caption = paste("Netværksgraf", my_file))
+  # Create a PNG file for the graph (`mypng.png`)
+  ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".function.no-arrows.stress.check_overlap.png")))
 
-  # Create "third" graph
+    # Create "third" graph
   gr2 <- tbl_graph(nodes = nodes_play, edges = edges_weights, directed = TRUE, node_key = "speaker")
   gr3 <- tbl_graph(nodes = nodes_play, edges = silent_edges_with_weights, directed = TRUE, node_key = "speaker")
   gr4 <- gr2 %>% 
