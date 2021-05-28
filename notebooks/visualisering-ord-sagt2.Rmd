@@ -179,6 +179,20 @@ ggsave(here("graphs/visualisering-ord-sagt2", "leonora_over_tid.pdf"), width=16,
 
 ```
 
+## Jeronimus
+```{r}
+character_plot("jeronimus")
+ggsave(here("graphs/visualisering-ord-sagt2", "jeronimus_over_tid.pdf"), width=16, height=9)
+
+```
+
+## Magdelone
+```{r}
+character_plot("magdelone")
+ggsave(here("graphs/visualisering-ord-sagt2", "magdelone_over_tid.pdf"), width=16, height=9)
+
+```
+
 # Sammenligning af karakterer
 
 Basalt set skal vi have implementeret en funktion á la `character_comparison_plot(<list of character names>, <list of character names>)`.

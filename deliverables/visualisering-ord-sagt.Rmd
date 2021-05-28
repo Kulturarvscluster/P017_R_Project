@@ -37,8 +37,8 @@ For at gøre det nemmere for os selv, starter vi med kun at se på ét skuespil 
 
 ```{r}
 #my_file <- "GertWestphaler1724_mod.jsonl" 
-my_file <- "Bondedreng_mod.jsonl" 
-# my_file <- "Mascarade_mod.jsonl"
+#my_file <- "Bondedreng_mod.jsonl" 
+my_file <- "Mascarade_mod.jsonl"
 # my_file <- "Barselstuen_mod.jsonl"
 # my_file <- "Ulysses_mod.jsonl"
 # my_file <- "uden_hoved_og_hale_mod.jsonl"
