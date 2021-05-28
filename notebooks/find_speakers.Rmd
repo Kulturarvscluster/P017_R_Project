@@ -19,9 +19,11 @@ Load the JSONL data format
 library(tidyverse)
 library(ndjson)
 library(here)
+library(fs)
+library(tidytext)
 
-barselstuen_raw <- ndjson::stream_in(here("/test-data/Barselstuen_mod_nc.jsonl")) %>% tibble()
-
+#barselstuen_raw <- ndjson::stream_in(here("/test-data/Barselstuen_mod.jsonl")) %>% tibble()
+read_plays_jsonl (here("test-data")) ->allplays
 ```
 
 # Looking at the data
@@ -48,17 +50,45 @@ Vi kan også lave et skema med speakers opdelt på akt og scene...
 ```{r}
 here()
 
-all_speakers <- barselstuen_raw %>% 
+all_speakers <- allplays %>% 
   count(speaker)
 all_speakers
 # get column names
 colnames(all_speakers)
-write.csv(all_speakers, file = here("data/output/barselstuen_all_speakers.csv"))
+write.csv(all_speakers, file = here("test-data/allspeakers.csv"))
 
-speakers_by_scene <- barselstuen_raw %>% 
+#skal kun bruges, når vi kører ét stykke ad gangen
+speakers_by_scene <- allplays %>% 
   count(act, scene, speaker)
 speakers_by_scene
-write.csv(speakers_by_scene, file = here("data/output/barselstuen_speakers_by_scene.csv"))
+write.csv(speakers_by_scene, file = here("test-data/speakers_by_scene.csv"))
+```
+Next we load and run the excel sheet
+```{r}
+(variants <- read_excel(here("Rolleliste.xlsx")) %>% 
+  unnest_tokens(variant, Alias, token = "regex", pattern = ", ") %>% 
+    mutate(
+      Karakter = tolower(Karakter),
+      variant = tolower(variant)
+    ))
+# "sammenlæg navnevarianter" (se "use-excel-for-name-variants.Rmd")
+# Husk at bruge Filnavn
+(allplays %>% 
+  mutate(speaker = tolower(speaker)) %>% 
+  left_join(variants, by = c("speaker"="variant")) %>% 
+  mutate(speaker = if_else(!is.na(Karakter), Karakter, speaker)) %>%
+      filter(!is.na(speaker), !(speaker=="")) %>%
+distinct -> allplays)
+
+all_speakers <- allplays %>% 
+  count(speaker)
+all_speakers
+# get column names
+colnames(all_speakers)
+write.csv(all_speakers, file = here("test-data/allspeakers uden navnevarianter.csv"))
+
+
+
 ```
 
 Der er godt nok mange! Og der er også nogle mærkværdigheder. Spørgsmålet er om de kommer fra TEI-filen eller fra oversættelsen?
