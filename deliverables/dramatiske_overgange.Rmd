@@ -25,7 +25,7 @@ library(here)
 source(here("src", "p017-functions.R"))
 
 my_dir <-"test-data"
-my_play <- "Hexerie_mod_nc.jsonl"
+my_play <- "Plutus_mod.jsonl"
 read_play_jsonl(here(my_dir, my_play)) -> play
 play #se den tbl, der nu er last ind i play
 
@@ -57,7 +57,7 @@ Det virker.
 Vi skal lige huske at gemme resultatet:
 OBS: husk at ændre filnavn!
 ```{r}
-write.csv(first_sentence, file = here("test-data/first_sentence.csv"))
+write.csv(first_sentence, file = here("graphs/Første og sidste sætning sagt/first_sentence_Plutus.csv"))
 ```
 
 
@@ -81,7 +81,7 @@ last_sentence <- play %>%
   # Fjern gruppe index for det er ikke relevant længere
  select(- group_row_num )
 
-write.csv(last_sentence, file = here("test-data/last_sentence.csv"))
+write.csv(last_sentence, file = here("graphs/Første og sidste sætning sagt/last_sentence_Plutus.csv"))
 ```
 
 
