@@ -5,7 +5,7 @@ author: pmd
 ---
 Stykkerne er i TEI format. Dette format har ikke en standard indlæsningsmetod til R. Derfor transformerer vi TEI filerne over i et format der bedre passer til R. Vi har her valgt JSONL, men kunne have valgt andre formater. I JSONL formatet er hver linie i sig selv en stump valid JSON, mens filen som et hele ikke er valid JSON. Dette gør, at hver linie kan læses uafhængigt af hele filen.
 
-For at gøre dette nemt, har vi skrevet to små R funktioner. En der transformerer alle TEI filer i en mappe og en der indlæser alle JSONL filer i en mappe til R. TEI filer er identificeret ved at deres filnanv ender med ".page".
+For at gøre dette nemt, har vi skrevet to små R funktioner. En der transformerer alle TEI filer i en mappe og en der indlæser alle JSONL filer i en mappe til R. TEI filer er identificeret ved at deres filnavn ender med ".page".
 
 Denne notebook illustrerer brugen af disse to funktioner.
 
@@ -61,34 +61,94 @@ Lad os kort se på fx hvor mange rækker, vi har i hvert af de indlæste skuespi
 Rækker er her ikke så meningsgivende, da det både kan være replikker og regibemærkninger.
 Lad os derfor også prøve at finde antal replikker og antal regibemærkninger!
 
+Og antal sagte ord!
+
 ```{r}
 # Tæl antal rækker
 # Hvis vi bruger titel til at identificere de forskellige komedier, 
 # vil vi komme til at slå de to udgaver af "Den vægelsindede" sammen,
 # og de to udgaver af "Mester Gert Westphaler". 
 # Det undgår vi ved at bruge fuld titel (docTitle) eller ved også at bruge årstal (year).
-plays %>% 
-  count(docTitle, name = "# rækker")
+(plays %>% 
+  count(docTitle, year, name = "rækker") -> antal_rækker)
 
 # Tæl antal replikker
-plays %>%
+(plays %>%
   filter(!is.na(spoke)) %>% #filtrer replikker markeret NA ud
   filter(!(spoke == "")) %>% #filtrer tomme replikker ud
-  count(docTitle, name = "# replikker")
+  count(docTitle, year, name = "replikker") -> antal_replikker)
+
+# Tæl antal sagte ord i stykket
+(plays %>%
+  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>%
+  # remove rows that are not dialogue
+  filter(!is.na(spoke)) %>%
+  # add the number of spoken words
+  mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
+  # group the play in scene_index and speaker, ignoring the test
+  group_by(docTitle, year) %>% 
+  # sum the words spoken by each speaker
+  summarise(words = sum(n_spoken_words), docTitle, year) %>%
+  distinct() -> antal_ord)
 
 # Tæl antal regibemærkninger
 # bemærk de findes på to niveauer, så i første omgang tæller vi dem hver for sig
 # Tæl antal <stage>
-plays %>%
+(plays %>%
   filter(!is.na(stage)) %>% #filtrer stage markeret NA ud
   filter(!(stage == "")) %>% #filtrer tomme stage ud
-  count(docTitle, name = "# stage")
+  count(docTitle, year, name = "antal_stage") -> antal_stage)
+
 # Tæl antal <speaker_stage>
-plays %>%
+(plays %>%
   filter(!is.na(speaker_stage)) %>% #filtrer speaker_stage markeret NA ud
   filter(!(speaker_stage == "")) %>% #filtrer tomme speaker_stage ud
-  count(docTitle, name = "# speaker_stage")
+  count(docTitle, year, name = "antal_speaker_stage") -> antal_speaker_stage)
 ```
+# Visualisering af optællingerne
+
+```{r}
+antal_rækker %>% 
+  ggplot(aes(y = rækker, x = str_c(year, " ", str_sub(docTitle,0,16)))) + 
+  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0)) +
+    geom_bar(stat="identity") +
+    theme(legend.position="bottom") +
+    labs(
+      title = "Alle stykker",
+      subtitle = "Antal Rækker"
+    ) +
+  xlab("Stykke") +
+  ylab("Antal Rækker i JSonl Filen")
+ggsave(here("graphs/read-plays", "Optælling_af_rækker.pdf"))
+
+antal_replikker %>% 
+  ggplot(aes(y = replikker, x = str_c(year, " ", str_sub(docTitle,0,16)))) + 
+  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0)) +
+    geom_bar(stat="identity") +
+    theme(legend.position="bottom") +
+    labs(
+      title = "Alle stykker",
+      subtitle = "Antal Replikker"
+    ) +
+  xlab("Stykke") +
+  ylab("Antal Replikker i stykket")
+ggsave(here("graphs/read-plays", "Optælling_af_replikker.pdf"))
+
+antal_ord %>% 
+  ggplot(aes(y = words, x = str_c(year, " ", str_sub(docTitle,0,16)))) + 
+  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0)) +
+    geom_bar(stat="identity") +
+    theme(legend.position="bottom") +
+    labs(
+      title = "Alle stykker",
+      subtitle = "Antal Ord"
+    ) +
+  xlab("Stykke") +
+  ylab("Antal sagte ord")
+
+ggsave(here("graphs/read-plays", "Optælling_af_ord.pdf"))
+```
+
 # Indlæsning af en enkelt JSONL fil til R
 
 Der har været noget bøvl med titler på stykkerne, som sjældent er hvad vi forventer, hvis de altså overhovedet er der, derfor har vi indført en funktion, som indlæser et enkelt stykke fra JSONL filen.
@@ -96,7 +156,7 @@ Titlerne skulle fungere nu, men det er stadig rart med en funktion, som indlæse
 
 ```{r}
 #Funtionen her henter det skuespil, der er i den navngavne JSONL fil
-read_play_jsonl(here(my_dir, "Den_Vaegelsindede_1731_mod_nc.jsonl")) -> play
+read_play_jsonl(here(my_dir, "Den_Vaegelsindede_1731_mod.jsonl")) -> play
 play #se den tbl, der nu er last ind i play
 
 ```
