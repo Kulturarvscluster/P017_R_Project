@@ -82,7 +82,21 @@ plays %>%
 plays
 ```
 
-Så langt, så godt.
+
+# Tilføj generelle farvekoder for komedierne
+
+## Indlæs Excelarket
+
+```{r}
+komedietitler <- read_excel(here("Komedietitler.xlsx"))
+komedietitler
+```
+## Anvend Excelarket
+
+```{r}
+(plays %>% 
+  left_join(komedietitler, by = c("title" = "moderne titel")) -> plays)
+```
 
 # Nu tæller vi total antal ord sagt pr karakter pr stykke. Dernæst omregnet til procent af totale ord i stykket.
 
@@ -94,7 +108,7 @@ Så langt, så godt.
   filter(!is.na(spoke), speaker != "") %>%
   
   # select only the columns, that we are interested in
-  select(speaker, title, year, spoke) %>% 
+  select(speaker, title, year, spoke, farvekode) %>% 
   
   # add the number of spoken words
   mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
@@ -102,7 +116,7 @@ Så langt, så godt.
   select(-spoke) %>%
   
   # group by title and speaker
-  group_by(title, year, speaker) %>% 
+  group_by(title, year, speaker, farvekode) %>% 
 
   # Sum the words spoken by each speaker in each play
   # Lastly store the new data frame in a new reference for later use
@@ -116,7 +130,7 @@ Så langt, så godt.
    
 (my_summary %>%
   full_join(totals) %>%
-  summarise(freq = words / words_play, speaker, title, year, words, words_play) ->
+  summarise(freq = words / words_play, speaker, title, year, words, words_play, farvekode) ->
     new_summary
     )
   # Sort by freq
@@ -134,7 +148,7 @@ character_plot <- function(character_name) {
   new_summary %>% 
   filter(speaker == character_name) %>%
   arrange(year) %>%
-  ggplot(aes(fill = title, y = freq, x = title)) +
+  ggplot(aes(fill = title, y = freq, x = title)) + #, colour = farvekode
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
