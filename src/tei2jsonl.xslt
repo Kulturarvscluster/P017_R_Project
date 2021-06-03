@@ -88,6 +88,16 @@
     <xsl:variable name="year"
                   select="normalize-space(translate(/tei:TEI/tei:text/tei:front/tei:titlePage/tei:byline/text(),'&#xA;',''))"/>
 
+    <xsl:template name="furthest_name">
+        <!--Find the tei:div name attribute that is furthest from the current node. This is always the act name-->
+        "<xsl:value-of select="(ancestor-or-self::tei:div[@n]/@n)[1]"/>"
+    </xsl:template>
+
+    <xsl:template name="nearest_name">
+        <!--Find the tei:div name attribute that is nearest to the current node. This is always the scene name-->
+        "<xsl:value-of select="(ancestor-or-self::tei:div[@n]/@n)[last()]"/>"
+    </xsl:template>
+
 
     <xsl:template match="tei:publicationStmt"/>
     <!-- TODO: The title field need all parts of the titlePart -->
@@ -95,14 +105,15 @@
          and the also to remove instances of munltiple spaces, done using normalize-space()
     -->
     <xsl:template match="//tei:stage" name="stage">
+        <xsl:variable name="depth" select="."/>
         <xsl:variable name="line">
             {"type": 1,
             "docTitle": "<xsl:value-of select="$docTitle"/>",
             "year": "<xsl:value-of select="$year"/>",
             "title": "<xsl:value-of select="$firstTitle"/>",
-            "act": "<xsl:value-of select="../../@n"/>",
-            "act_number": <xsl:call-template name="act_number"/>,
-            "scene": "<xsl:value-of select="../@n"/>",
+            "act":  <xsl:call-template name="furthest_name"/>,
+            "act_number": "<xsl:call-template name="act_number"/>",
+            "scene": <xsl:call-template name="nearest_name"/>,
             "scene_number": <xsl:call-template name="scene_number"/>,
             "index": <xsl:call-template name="scene_index"/>,
 
@@ -122,9 +133,9 @@
             "docTitle": "<xsl:value-of select="$docTitle"/>",
             "year": "<xsl:value-of select="$year"/>",
             "title": "<xsl:value-of select="$firstTitle"/>",
-            "act": "<xsl:value-of select="../../../@n"/>",
+            "act":  <xsl:call-template name="furthest_name"/>,
             "act_number": <xsl:call-template name="act_number"/>,
-            "scene": "<xsl:value-of select="../../@n"/>",
+            "scene": <xsl:call-template name="nearest_name"/>,
             "scene_number": <xsl:call-template name="scene_number"/>,
             "index": <xsl:call-template name="scene_index"/>,
 
@@ -144,9 +155,9 @@
             "docTitle": "<xsl:value-of select="$docTitle"/>",
             "year": "<xsl:value-of select="$year"/>",
             "title": "<xsl:value-of select="$firstTitle"/>",
-            "act": " <xsl:value-of select="../../../../@n"/>",
+            "act":  <xsl:call-template name="furthest_name"/>,
             "act_number": <xsl:call-template name="act_number"/>,
-            "scene": "<xsl:value-of select="../../../@n"/>",
+            "scene": <xsl:call-template name="nearest_name"/>,
             "scene_number": <xsl:call-template name="scene_number"/>,
             "index": <xsl:call-template name="scene_index"/>,
 
@@ -167,9 +178,9 @@
             "docTitle": "<xsl:value-of select="$docTitle"/>",
             "year": "<xsl:value-of select="$year"/>",
             "title": "<xsl:value-of select="$firstTitle"/>",
-            "act": "<xsl:value-of select="../../../../@n"/>",
+            "act":  <xsl:call-template name="furthest_name"/>,
             "act_number": <xsl:call-template name="act_number"/>,
-            "scene": "<xsl:value-of select="../../../@n"/>",
+            "scene": <xsl:call-template name="nearest_name"/>,
             "scene_number": <xsl:call-template name="scene_number"/>,
             "index": <xsl:call-template name="scene_index"/>,
 
@@ -189,9 +200,9 @@
             "docTitle": "<xsl:value-of select="$docTitle"/>",
             "year": "<xsl:value-of select="$year"/>",
             "title": "<xsl:value-of select="$firstTitle"/>",
-            "act": "<xsl:value-of select="../../../../@n"/>",
+            "act":  <xsl:call-template name="furthest_name"/>,
             "act_number": <xsl:call-template name="act_number"/>,
-            "scene": "<xsl:value-of select="../../../@n"/>",
+            "scene": <xsl:call-template name="nearest_name"/>,
             "scene_number": <xsl:call-template name="scene_number"/>,
             "index": <xsl:call-template name="scene_index"/>,
 
@@ -211,9 +222,9 @@
             "docTitle": "<xsl:value-of select="$docTitle"/>",
             "year": "<xsl:value-of select="$year"/>",
             "title": "<xsl:value-of select="$firstTitle"/>",
-            "act": "<xsl:value-of select="../../../../@n"/>",
+            "act":  <xsl:call-template name="furthest_name"/>,
             "act_number": <xsl:call-template name="act_number"/>,
-            "scene": "<xsl:value-of select="../../../@n"/>",
+            "scene": <xsl:call-template name="nearest_name"/>,
             "scene_number": <xsl:call-template name="scene_number"/>,
             "index": <xsl:call-template name="scene_index"/>,
 
