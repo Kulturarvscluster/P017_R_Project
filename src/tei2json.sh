@@ -9,5 +9,6 @@ mkdir -p "$outputdir"
 # Run xslt on all page files
 for f in "$datadir/"*.page; do
   outputname="$(basename $f).jsonl"
-    xsltproc stripSeq.xslt "$f" | xsltproc tei2jsonl.xslt - > "$outputdir/$outputname"
+#  xsltproc stripSeq.xslt "$f" > "$outputdir/$outputname.stripped.xml"
+  xsltproc stripSeq.xslt "$f" | xsltproc tei2jsonl.xslt - > "$outputdir/$outputname"
 done
