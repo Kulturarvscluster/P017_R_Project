@@ -507,7 +507,7 @@ summary_fct2 %>%
 # Gemme en visualisering som liggende A4 PDF
 
 ```{r}
-ggsave(filename="ng3.pdf", 
+ggsave(here("graphs/pers-visualiseringer", paste(my_file, ".ng3.pdf")), 
        width = 297, 
        height = 210, 
        units = "mm")
