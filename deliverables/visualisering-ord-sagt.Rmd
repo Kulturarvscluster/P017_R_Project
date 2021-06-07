@@ -29,15 +29,15 @@ Vi laver en tabel med navnet plays.
 
 ```{r}
 here()
-#convert_TEI_to_JSONL(here("test-data"))
-#read_plays_jsonl(here("test-data")) -> plays
+convert_TEI_to_JSONL(here("test-data"))
+read_plays_jsonl(here("test-data")) -> plays
 ```
 
 For at gøre det nemmere for os selv, starter vi med kun at se på ét skuespil "my_play" (fx Barselsstuen). Vi filtrerer ikke længere efter titel. Vi indlæser direkte fra JSON-filen! Forhåbentlig er "my_file" det eneste sted vi skal ændre for at lave visualiseringen for et andet skuespil :)
 
 ```{r}
-#my_file <- "GertWestphaler1724_mod.jsonl" 
-#my_file <- "Bondedreng_mod.jsonl" 
+# my_file <- "GertWestphaler1724_mod.jsonl" 
+# my_file <- "Bondedreng_mod.jsonl" 
 # my_file <- "Mascarade_mod.jsonl"
 # my_file <- "Barselstuen_mod.jsonl"
 # my_file <- "Ulysses_mod.jsonl"
@@ -121,6 +121,7 @@ Vi bruger den som følger til at finde fx hvilket indeks den 4. scene i akt 3 ha
 
 ```{r}
 calc_scene_index(3, 4, act_length)
+calc_scene_index(2, 6, act_length)
 ```
 
 
@@ -303,6 +304,7 @@ my_summary
 ```
 ## Gentag visualisering
 
+# Vi vil gerne have en linje/visuel adskillelse mellem akterne i graferne.
 
 ```{r}
 my_summary %>% 
@@ -318,10 +320,13 @@ my_summary %>%
   xlab("Akt og scene") +
   ylab("Antal sagte ord") + 
   facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x")+
-  theme(axis.text.x=element_blank())
+  theme(axis.text.x=element_blank()) + 
+  #geom_vline(xintercept = act_number)
+  #todo geom_line(data=as.data.frame(bb),aes(x=b,y=a))
 
-ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvor_meget_siger_hvem.pdf")), width=16, height=9)
+  ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvor_meget_siger_hvem.pdf")), width=16, height=9)
 
 ```
+
 
 
