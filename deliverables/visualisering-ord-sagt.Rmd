@@ -278,6 +278,17 @@ variants
 
 ```{r}
 my_play %>% 
+  select(docTitle) %>% 
+  distinct() %>%
+  pull(1,1) -> my_title
+
+my_play %>% 
+  select(year) %>% 
+  distinct() %>%
+  pull(1,1) -> my_year
+
+
+my_play %>% 
   # add a scene index for the x-axis
   rowwise() %>% 
   mutate(scene_index = calc_scene_index(act_number, scene_number, act_length)) %>% 
@@ -306,13 +317,15 @@ my_summary
 
 # Vi vil gerne have en linje/visuel adskillelse mellem akterne i graferne.
 
+Og stykkets titel og årstal tilføjes i header før filnavn.
+
 ```{r}
 my_summary %>% 
   ggplot(aes(fill = speaker, y = words, x = scene_index)) +
     geom_bar(stat="identity", width = 50) +
     theme(legend.position="bottom") +
     labs(
-      title = my_file,
+      title = paste(my_title, my_year, my_file),
       subtitle = "Hvor meget siger hvem",
       caption = "Kilde: DSL",
       fill = "Rolle"
@@ -327,6 +340,30 @@ my_summary %>%
   ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvor_meget_siger_hvem.pdf")), width=16, height=9)
 
 ```
+#Graf over hvem siger noget hvornår
+
+Det her er simpelthen en anden måde at visualisere, hvornår karaktererne taler i stykket.
+
+```{r}
+my_summary %>% 
+  ggplot(aes(y = speaker, x = scene_index)) +
+    geom_point(show.legend = FALSE) + #aes(col=speaker, size=words), 
+    labs(
+      title = paste(my_title, my_year, my_file),
+      subtitle = "Hvem taler hvornår"
+    ) +
+  xlab("Akt og scene") +
+  ylab("Speaker") + 
+  facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x") +
+  theme(axis.text.x=element_blank()) + 
+
+  ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvem_taler_hvornaar.pdf")), width=16, height=9)
+
+```
 
 
+
+#Graf over omtale
+
+Vi vil gerne vide, hvilke karakterer, der bliver talt om, men som ikke selv er til stede. Grafen skal være magen til den eksisterende. (se vedhæft). Her skal vi nok bruge den liste, som er under udfærdigelse.
 
