@@ -51,12 +51,9 @@ plays %>%
   distinct -> plays
 ```
 
-
-
 # Visualisering
 
 Basalt set skal vi have implementeret en funktion á la `character_comparison_plot(<list of character names>, <list of character names>)`.
-
 
 ```{r}
 # count words in "spoke"
@@ -143,7 +140,6 @@ summary %>%
 
 ## Vende 90° grader
 
-
 ```{r}
 summary %>% 
   #filter(speaker %in% c("henrik","pernille","troels")) %>%
@@ -163,8 +159,6 @@ summary %>%
   theme(axis.text.x=element_blank()) +
   coord_flip()
 ```
-
-
 
 ## Et trick til at få stykkerne til at stå i årsrække
 
@@ -208,11 +202,9 @@ summary %>%
   coord_flip()
 ```
 
-
 ## diagram uden opdeling på årstal
 
-Først er vi nødt til at lave en ny faktor-erklæring for titel, da
-årstal nu skal inkluderes i denne.
+Først er vi nødt til at lave en ny faktor-erklæring for titel, da årstal nu skal inkluderes i denne.
 
 ```{r}
 summary %>%
@@ -273,12 +265,11 @@ summary_fct2 %>%
     coord_flip()
 ```
 
-## Let's Go Crazy 
+## Let's Go Crazy
 
 Herefter følger eksempler på, hvordan man benytter forskellige ggplot temaer.
 
-Først et lidt pjattet eksempel, som dog viser bredden af tematiske
-muligheder.
+Først et lidt pjattet eksempel, som dog viser bredden af tematiske muligheder.
 
 ```{r}
 library(tvthemes)
@@ -310,9 +301,7 @@ summary %>%
 
 ## Mere anvendelige eksempler
 
-I de næste eksempler, starter jeg med at lægge plottet over i
-variablen `p`. Derefter kan jeg så nemt plotte først uden fordeling på
-år og efterfølgende med fordeling på år.
+I de næste eksempler, starter jeg med at lægge plottet over i variablen `p`. Derefter kan jeg så nemt plotte først uden fordeling på år og efterfølgende med fordeling på år.
 
 ```{r}
 summary %>% 
@@ -369,7 +358,6 @@ p
 p + facet_wrap(~year, ncol=nrow(summary), switch="x")
 ```
 
-
 ## Economist
 
 ```{r}
@@ -400,8 +388,6 @@ p
 p + facet_wrap(~year, ncol=nrow(summary), switch="x")
   
 ```
-
-
 
 ## Minimal
 
@@ -503,11 +489,10 @@ summary_fct2 %>%
     coord_flip()
 ```
 
-
 # Gemme en visualisering som liggende A4 PDF
 
 ```{r}
-ggsave(here("graphs/pers-visualiseringer", paste(my_file, ".ng3.pdf")), 
+ggsave(filename="ng3.pdf", 
        width = 297, 
        height = 210, 
        units = "mm")
