@@ -382,3 +382,35 @@ my_summary %>%
 
 Vi vil gerne vide, hvilke karakterer, der bliver talt om, men som ikke selv er til stede. Grafen skal være magen til den eksisterende. (se vedhæft). Her skal vi nok bruge den liste, som er under udfærdigelse.
 
+Nu prøver jeg lige at lave en i stil med den ovenfor!
+
+Først skal vi definere omtale. Jeg tænker at vi gør det ligesom med 'ikke til stede'. Altså hvis en karakter optræder i en replik i en scene, hvor den karakter ikke selv er til stede, bliver den karakter omtalt.
+
+
+
+```{r}
+source(here("src", "omtale.R"))
+(spoken_about(my_play) %>%
+  # add a scene index for the x-axis
+  rowwise() %>% 
+  mutate(scene_index = calc_scene_index(act_number, scene_number, act_length))
+  -> spoken_about_summary) 
+
+spoken_about_summary %>% 
+  ggplot(aes(y = word, x = scene_index)) +
+    geom_point(show.legend = FALSE) + 
+    labs(
+      title = paste(my_title, my_year, my_file),
+      subtitle = "Hvem bliver omtalt"
+    ) +
+  xlab("Akt og scene") +
+  ylab("Speaker") + 
+  facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x") +
+  theme(axis.text.x=element_blank()) + 
+
+  ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvem_bliver_omtalt.pdf")), width=16, height=9)
+
+
+
+```
+
