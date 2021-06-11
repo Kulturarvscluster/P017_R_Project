@@ -1,341 +1,341 @@
-"","speaker","n"
-"1","1.",8
-"2","1. advokat",87
-"3","1. advokat/anklageren",31
-"4","1. bonde",15
-"5","1. dame",50
-"6","1. doktor",7
-"7","1. filosof",3
-"8","1. gaudieb",3
-"9","1. jøde",1
-"10","1. komediant",31
-"11","1. kvinde",16
-"12","1. mand",15
-"13","1. officer",10
-"14","1. pige",111
-"15","1. rådsherre",50
-"16","1. rådsherreinde",1
-"17","1. soldat",5
-"18","1. vagt",5
-"19","1. vært",5
-"20","2.",3
-"21","2. advokat",34
-"22","2. bonde",10
-"23","2. dame",30
-"24","2. doktor",7
-"25","2. filosof",3
-"26","2. gaudieb",4
-"27","2. jøde",11
-"28","2. komediant",14
-"29","2. kvinde",16
-"30","2. mand",2
-"31","2. musikant",1
-"32","2. officer",26
-"33","2. pige",21
-"34","2. rådsherre",4
-"35","2. soldat",5
-"36","2. vagt",2
-"37","2. vært",5
-"38","3 mænd",6
-"39","3. filosof",6
-"40","3. gaudieb",2
-"41","3. kvinde",29
-"42","3. rådsherre",1
-"43","abelone",37
-"44","abrahams",12
-"45","abrahams og sanderus",1
-"46","advokaten",29
-"47","aesculapius",14
-"48","ammen",3
-"49","anden købmand",5
-"50","anden proprietær",6
-"51","anden rådsherre",5
-"52","andreas",15
-"53","anføreren",19
-"54","anførerne",2
-"55","anklageren",2
-"56","anne kandestøbers",25
-"57","anneke",16
-"58","antonius",64
-"59","apelone",45
-"60","apicius",165
-"61","apicius (",2
-"62","apollo",6
-"63","arianke",25
-"64","arv",353
-"65","astrologus",8
-"66","asverus",2
-"67","barberen",6
-"68","baronen",86
-"69","barselskvinden",175
-"70","bellona",1
-"71","betjenten",22
-"72","bogholderen",11
-"73","bonden",229
-"74","borgeren",17
-"75","borgmesteren",9
-"76","borgmesterinden",1
-"77","bremenfeldt",10
-"78","byfogeden",9
-"79","børnene",2
-"80","chilian",216
-"81","chiromanticus",18
-"82","christine",7
-"83","christoff",96
-"84","christopher",56
-"85","claus",9
-"86","colombine",49
-"87","corfitz",221
-"88","cosmoligoreus",223
-"89","cupido",1
-"90","davus",145
-"91","de 2 komedianter",1
-"92","den bevæbnede",9
-"93","den drukne",38
-"94","den fremmede",12
-"95","den fremmede person",2
-"96","den usynlige",79
-"97","den usynliges [magdelones] broder",32
-"98","dido",24
-"99","diogenes",87
-"100","dobre podolsky",26
-"101","doktor",5
-"102","doktor bombastus",68
-"103","dommeren",167
-"104","don ranudo",166
-"105","donna maria",9
-"106","donna olympia",79
-"107","dorothea",85
-"108","dorthe",14
-"109","drengen",62
-"110","eleonora",22
-"111","elisa",18
-"112","ellen",1
-"113","else",17
-"114","elsebet",35
-"115","elvire",45
-"116","en af de fremmede",1
-"117","en anden borger",1
-"118","en anden dreng",3
-"119","en anden vært",2
-"120","en borger",1
-"121","en filosof",3
-"122","en gårdskarl",6
-"123","en karl",2
-"124","en kavaler",2
-"125","en officer med knebelsbarter",2
-"126","en person",2
-"127","en pige",66
-"128","en ridder",1
-"129","engelke",5
-"130","ephraim",25
-"131","eraste",64
-"132","erich madsen",42
-"133","erik lakaj",7
-"134","espen",105
-"135","et spøgelse",3
-"136","euclio",5
-"137","filosoffen",39
-"138","fiskeren",20
-"139","flensborgeren",20
-"140","frands",97
-"141","frantz knivsmed",11
-"142","frantz parykmager",2
-"143","fremmede",12
-"144","fruen",43
-"145","første købmand",5
-"146","første proprietær",5
-"147","første rådsherre",28
-"148","gejsten",4
-"149","gert buntmager",252
-"150","geske",89
-"151","gilbert",43
-"152","gonzalo",22
-"153","gothard",18
-"154","gottard",20
-"155","gottfried",79
-"156","greven",1
-"157","gunild",79
-"158","gunnild",19
-"159","gusman",13
-"160","gusmann",38
-"161","hadersleveren",10
-"162","hammer",8
-"163","harlekin",200
-"164","helene",57
-"165","henning",9
-"166","henrik",2068
-"167","herman von bremenfeld",202
-"168","herren",46
-"169","holophernes",6
-"170","hyacinthe",11
-"171","haagen",67
-"172","indenfor",7
-"173","ingeborg",8
-"174","iris",7
-"175","isabella",65
-"176","iversen",21
-"177","jacob",165
-"178","jean",171
-"179","jens",80
-"180","jens griffel",81
-"181","jeppe",259
-"182","jeronimus",1399
-"183","jesper oldfux",297
-"184","jochum",1
-"185","jomfruen",11
-"186","juno",8
-"187","jupiter",6
-"188","juveleren",27
-"189","jøden",98
-"190","jørgen handskemager",17
-"191","kammertjeneren",23
-"192","karen",3
-"193","karlene",1
-"194","kavaler",11
-"195","kavaleren",37
-"196","kirsten",60
-"197","knud",7
-"198","kokken",5
-"199","konen",32
-"200","korporal",2
-"201","kusken",7
-"202","kællingen",43
-"203","kæresten",4
-"204","købmanden",8
-"205","lakaj",39
-"206","lakajen",39
-"207","lakajerne",1
-"208","lars",9
-"209","laurentia",7
-"210","leander",2120
-"211","leander og oldfux",1
-"212","leanders vært",1
-"213","leerbeutel",134
-"214","leonard",371
-"215","leonora",562
-"216","leonore",146
-"217","lisbed",26
-"218","lucie",10
-"219","lucilia",35
-"220","lucretia",221
-"221","løjtnant",36
-"222","madame abrahamsens",4
-"223","madame la fleche",13
-"224","madame sanderus",4
-"225","madame ståbi",21
-"226","mademoiselle hiort",10
-"227","magdelone",418
-"228","magnus",8
-"229","manden",100
-"230","manden i portechaisen",13
-"231","marcolfus",25
-"232","marie",20
-"233","mars",1
-"234","marthe",53
-"235","menander",5
-"236","mercurius",6
-"237","mester bonifacius",23
-"238","mester gert westphaler",560
-"239","mester herman",10
-"240","mithridates",7
-"241","momus",9
-"242","montanus",217
-"243","moralisten",3
-"244","musikanten",24
-"245","niels",15
-"246","niels christensen",35
-"247","nille",72
-"248","notarius",42
-"249","novatianus",20
-"250","octavius",25
-"251","officeren",182
-"252","ohngeldt",8
-"253","oldfux",188
-"254","ovidius",98
-"255","pagen",1
-"256","pallas",3
-"257","paltsgreven",26
-"258","palæstrio",26
-"259","pandolfus",7
-"260","paris",18
-"261","peder",5
-"262","pedro",144
-"263","peer",106
-"264","peiter",11
-"265","penelope",9
-"266","penia",22
-"267","per",75
-"268","pernille",3635
-"269","petronius",267
-"270","philemon",54
-"271","philocyne",24
-"272","pierre",76
-"273","pigen",193
-"274","plutus",82
-"275","poeten",13
-"276","poeterne",11
-"277","polidorus",126
-"278","polyphemus",8
-"279","postkarlen",3
-"280","proprietær",8
-"281","præsten",5
-"282","rasmus",23
-"283","republikken",85
-"284","richart børstenbinder",4
-"285","ridefogeden",12
-"286","roland",86
-"287","rosiflengius",110
-"288","rosimunda",10
-"289","sanderus",13
-"290","schumacher",15
-"291","sekretæren",9
-"292","sganarel",340
-"293","sganarel og dorothea",2
-"294","sivert posekigger",7
-"295","skolemesteren",43
-"296","skriveren",94
-"297","skrædderen",4
-"298","skyldenborg",72
-"299","skærsliberen",4
-"300","skøgen",16
-"301","soldaten",17
-"302","sparenborg",70
-"303","spilleren",17
-"304","stine",9
-"305","studenstrup",215
-"306","svenden",8
-"307","svinene",5
-"308","terentia",127
-"309","thalia",1
-"310","theophilus",4
-"311","timotheus",28
-"312","tiresius",6
-"313","tjeneren",2
-"314","to drenge",2
-"315","to lakajer",1
-"316","to mænd",2
-"317","to soldater med en tambur",2
-"318","tobias prokurator",80
-"319","torben",73
-"320","tredje proprietær",1
-"321","troels",128
-"322","trojaneren",25
-"323","trækholdt",13
-"324","tutti",14
-"325","tvende mænd",5
-"326","tyboe",142
-"327","tyboes tale til folket:",1
-"328","tychonius",72
-"329","tyven",2
-"330","udtolkeren",28
-"331","ulysses",134
-"332","venus",4
-"333","vielgeschrey",315
-"334","von qvoten",8
-"335","vulcanus",5
-"336","vægter",5
-"337","vægterne",4
-"338","værten",336
-"339","æsculapius",1
-"340","øllegård",31
+"","speaker","plays","count"
+"1","1.","Den politiske kandestøber Komedie",8
+"2","1. advokat","Barselsstuen Komedie, Den politiske kandestøber Komedie, Den stundesløse Komedie i 3 akter, Jeppe på Bjerget eller Den forvandlede bonde",87
+"3","1. advokat/anklageren","Barselsstuen Komedie, Den politiske kandestøber Komedie, Jeppe på Bjerget eller Den forvandlede bonde",31
+"4","1. bonde","Melampe Tragikomedie",15
+"5","1. dame","Barselsstuen Komedie",50
+"6","1. doktor","Jeppe på Bjerget eller Den forvandlede bonde",7
+"7","1. filosof","Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",3
+"8","1. gaudieb","Pernilles korte frøkenstand Komedie i 3 akter",3
+"9","1. jøde","Ulysses von Ithacia eller En tysk komedie",1
+"10","1. komediant","Hekseri eller blind alarm Komedie i 5 akter",31
+"11","1. kvinde","Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",16
+"12","1. mand","Barselsstuen Komedie, Hekseri eller blind alarm Komedie i 5 akter",15
+"13","1. officer","Barselsstuen Komedie",10
+"14","1. pige","Barselsstuen Komedie, Den politiske kandestøber Komedie, Det lykkelige skibbrud Komedie i 5 akter, Hekseri eller blind alarm Komedie i 5 akter, Melampe Tragikomedie, Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",111
+"15","1. rådsherre","Den pantsatte bondedreng Komedie i 3 akter, Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",50
+"16","1. rådsherreinde","Den politiske kandestøber Komedie",1
+"17","1. soldat","Hekseri eller blind alarm Komedie i 5 akter",5
+"18","1. vagt","Hekseri eller blind alarm Komedie i 5 akter",5
+"19","1. vært","Den pantsatte bondedreng Komedie i 3 akter",5
+"20","2.","Den politiske kandestøber Komedie",3
+"21","2. advokat","Barselsstuen Komedie, Den politiske kandestøber Komedie, Jeppe på Bjerget eller Den forvandlede bonde",34
+"22","2. bonde","Melampe Tragikomedie",10
+"23","2. dame","Barselsstuen Komedie",30
+"24","2. doktor","Jeppe på Bjerget eller Den forvandlede bonde",7
+"25","2. filosof","Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",3
+"26","2. gaudieb","Pernilles korte frøkenstand Komedie i 3 akter",4
+"27","2. jøde","Ulysses von Ithacia eller En tysk komedie",11
+"28","2. komediant","Hekseri eller blind alarm Komedie i 5 akter",14
+"29","2. kvinde","Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",16
+"30","2. mand","Barselsstuen Komedie",2
+"31","2. musikant","Den vægelsindede Komedie i 3 akter",1
+"32","2. officer","Barselsstuen Komedie",26
+"33","2. pige","Det lykkelige skibbrud Komedie i 5 akter, Hekseri eller blind alarm Komedie i 5 akter",21
+"34","2. rådsherre","Den pantsatte bondedreng Komedie i 3 akter",4
+"35","2. soldat","Hekseri eller blind alarm Komedie i 5 akter",5
+"36","2. vagt","Hekseri eller blind alarm Komedie i 5 akter",2
+"37","2. vært","Den pantsatte bondedreng Komedie i 3 akter",5
+"38","3 mænd","Jeppe på Bjerget eller Den forvandlede bonde",6
+"39","3. filosof","Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",6
+"40","3. gaudieb","Pernilles korte frøkenstand Komedie i 3 akter",2
+"41","3. kvinde","Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",29
+"42","3. rådsherre","Den pantsatte bondedreng Komedie i 3 akter",1
+"43","abelone","Barselsstuen Komedie, Den vægelsindede Komedie",37
+"44","abrahams","Den politiske kandestøber Komedie",12
+"45","abrahams og sanderus","Den politiske kandestøber Komedie",1
+"46","advokaten","Den politiske kandestøber Komedie, Den stundesløse Komedie i 3 akter",29
+"47","aesculapius","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",14
+"48","ammen","Barselsstuen Komedie",3
+"49","anden købmand","Den 11. juni",5
+"50","anden proprietær","Den 11. juni",6
+"51","anden rådsherre","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",5
+"52","andreas","Det arabiske pulver Komedie",15
+"53","anføreren","Hekseri eller blind alarm Komedie i 5 akter",19
+"54","anførerne","Ulysses von Ithacia eller En tysk komedie",2
+"55","anklageren","Hekseri eller blind alarm Komedie i 5 akter",2
+"56","anne kandestøbers","Barselsstuen Komedie, Den stundesløse Komedie i 3 akter, Julestue Komedie",25
+"57","anneke","Den politiske kandestøber Komedie",16
+"58","antonius","Den politiske kandestøber Komedie, Jean de France eller Hans Frandsen Komedie",64
+"59","apelone","Hekseri eller blind alarm Komedie i 5 akter",45
+"60","apicius","Den vægelsindede Komedie, Den vægelsindede Komedie i 3 akter",165
+"61","apicius (","Den vægelsindede Komedie i 3 akter",2
+"62","apollo","Nytårsprolog til en komedie Allerunderdanigst præsenteret af den hele danske bande 1723, Uden hoved og hale Komedie",6
+"63","arianke","Barselsstuen Komedie, Den politiske kandestøber Komedie",25
+"64","arv","Den honnette ambition Komedie i 3 akter, Hekseri eller blind alarm Komedie i 5 akter, Henrik og Pernille Komedie i 3 akter, Husspøgelse eller Abracadabra Komedie i 3 akter uden aktricer, Jean de France eller Hans Frandsen Komedie, Julestue Komedie, Kilderejsen Komedie i 3 akter, Maskerade Komedie, Republikken eller Det gemene bedste Komedie i 3 akter",353
+"65","astrologus","Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",8
+"66","asverus","Ulysses von Ithacia eller En tysk komedie",2
+"67","barberen","Den stundesløse Komedie i 3 akter",6
+"68","baronen","Den honnette ambition Komedie i 3 akter, Jeppe på Bjerget eller Den forvandlede bonde",86
+"69","barselskvinden","Barselsstuen Komedie",175
+"70","bellona","Nytårsprolog til en komedie Allerunderdanigst præsenteret af den hele danske bande 1723",1
+"71","betjenten","Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter, Hekseri eller blind alarm Komedie i 5 akter",22
+"72","bogholderen","Den stundesløse Komedie i 3 akter",11
+"73","bonden","Den pantsatte bondedreng Komedie i 3 akter, Den stundesløse Komedie i 3 akter, Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter, Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter, Ulysses von Ithacia eller En tysk komedie",229
+"74","borgeren","Den politiske kandestøber Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie",17
+"75","borgmesteren","Den politiske kandestøber Komedie",9
+"76","borgmesterinden","Den politiske kandestøber Komedie",1
+"77","bremenfeldt","Republikken eller Det gemene bedste Komedie i 3 akter",10
+"78","byfogeden","Mester Gert Westphaler eller Den meget talende barber Komedie",9
+"79","børnene","Julestue Komedie",2
+"80","chilian","Ulysses von Ithacia eller En tysk komedie",216
+"81","chiromanticus","Barselsstuen Komedie",18
+"82","christine","Barselsstuen Komedie",7
+"83","christoff","Den stundesløse Komedie i 3 akter, Den vægelsindede Komedie, Diderich Menschenskræk Komedie i 1 akt, Jacob von Tyboe eller Den stortalende soldat Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie",96
+"84","christopher","Barselsstuen Komedie, Den vægelsindede Komedie i 3 akter, Julestue Komedie",56
+"85","claus","Barselsstuen Komedie",9
+"86","colombine","De usynlige Komedie i 3 akter",49
+"87","corfitz","Barselsstuen Komedie, Den stundesløse Komedie i 3 akter",221
+"88","cosmoligoreus","Philosophus i egen indbildning Komedie i 5 akter",223
+"89","cupido","Nytårsprolog til en komedie Allerunderdanigst præsenteret af den hele danske bande 1723",1
+"90","davus","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",145
+"91","de 2 komedianter","Hekseri eller blind alarm Komedie i 5 akter",1
+"92","den bevæbnede","Melampe Tragikomedie",9
+"93","den drukne","Det lykkelige skibbrud Komedie i 5 akter, Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",38
+"94","den fremmede","Den 11. juni, Mester Gert Westphaler eller Den meget talende barber Komedie",12
+"95","den fremmede person","Hekseri eller blind alarm Komedie i 5 akter",2
+"96","den usynlige","De usynlige Komedie i 3 akter",79
+"97","den usynliges [magdelones] broder","De usynlige Komedie i 3 akter",32
+"98","dido","Ulysses von Ithacia eller En tysk komedie",24
+"99","diogenes","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",87
+"100","dobre podolsky","Den honnette ambition Komedie i 3 akter",26
+"101","doktor","Jeppe på Bjerget eller Den forvandlede bonde",5
+"102","doktor bombastus","Barselsstuen Komedie, Kilderejsen Komedie i 3 akter, Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",68
+"103","dommeren","Det lykkelige skibbrud Komedie i 5 akter, Hekseri eller blind alarm Komedie i 5 akter, Jeppe på Bjerget eller Den forvandlede bonde",167
+"104","don ranudo","Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter",166
+"105","donna maria","Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter",9
+"106","donna olympia","Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter",79
+"107","dorothea","Melampe Tragikomedie",85
+"108","dorthe","Barselsstuen Komedie",14
+"109","drengen","Den 11. juni, Den pantsatte bondedreng Komedie i 3 akter, Den politiske kandestøber Komedie, Den vægelsindede Komedie, Den vægelsindede Komedie i 3 akter, Hekseri eller blind alarm Komedie i 5 akter, Jean de France eller Hans Frandsen Komedie, Maskerade Komedie",62
+"110","eleonora","Uden hoved og hale Komedie",22
+"111","elisa","Ulysses von Ithacia eller En tysk komedie",18
+"112","ellen","Barselsstuen Komedie",1
+"113","else","Barselsstuen Komedie, Julestue Komedie",17
+"114","elsebet","Den forvandlede brudgom Komedie i 1 akt uden aktører, Jean de France eller Hans Frandsen Komedie",35
+"115","elvire","Diderich Menschenskræk Komedie i 1 akt",45
+"116","en af de fremmede","Det arabiske pulver Komedie",1
+"117","en anden borger","Den politiske kandestøber Komedie",1
+"118","en anden dreng","Den politiske kandestøber Komedie, Hekseri eller blind alarm Komedie i 5 akter",3
+"119","en anden vært","Den pantsatte bondedreng Komedie i 3 akter",2
+"120","en borger","Den politiske kandestøber Komedie",1
+"121","en filosof","Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",3
+"122","en gårdskarl","Hekseri eller blind alarm Komedie i 5 akter",6
+"123","en karl","Maskerade Komedie",2
+"124","en kavaler","Melampe Tragikomedie",2
+"125","en officer med knebelsbarter","Barselsstuen Komedie",2
+"126","en person","Hekseri eller blind alarm Komedie i 5 akter",2
+"127","en pige","Barselsstuen Komedie, Den politiske kandestøber Komedie, Det lykkelige skibbrud Komedie i 5 akter, Hekseri eller blind alarm Komedie i 5 akter, Melampe Tragikomedie, Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",66
+"128","en ridder","Ulysses von Ithacia eller En tysk komedie",1
+"129","engelke","Den politiske kandestøber Komedie",5
+"130","ephraim","Husspøgelse eller Abracadabra Komedie i 3 akter uden aktricer",25
+"131","eraste","Den vægelsindede Komedie i 3 akter",64
+"132","erich madsen","Den stundesløse Komedie i 3 akter",42
+"133","erik lakaj","Jeppe på Bjerget eller Den forvandlede bonde",7
+"134","espen","Den vægelsindede Komedie, Den vægelsindede Komedie i 3 akter, Jean de France eller Hans Frandsen Komedie",105
+"135","et spøgelse","Melampe Tragikomedie",3
+"136","euclio","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",5
+"137","filosoffen","Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",39
+"138","fiskeren","Melampe Tragikomedie",20
+"139","flensborgeren","Mester Gert Westphaler eller Den meget talende barber Komedie",20
+"140","frands","Jean de France eller Hans Frandsen Komedie",97
+"141","frantz knivsmed","Den politiske kandestøber Komedie",11
+"142","frantz parykmager","Den politiske kandestøber Komedie",2
+"143","fremmede","Den 11. juni",12
+"144","fruen","Barselsstuen Komedie, Det arabiske pulver Komedie, Det lykkelige skibbrud Komedie i 5 akter, Diderich Menschenskræk Komedie i 1 akt, Hekseri eller blind alarm Komedie i 5 akter",43
+"145","første købmand","Den 11. juni",5
+"146","første proprietær","Den 11. juni",5
+"147","første rådsherre","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",28
+"148","gejsten","Melampe Tragikomedie, Uden hoved og hale Komedie",4
+"149","gert buntmager","Den politiske kandestøber Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt",252
+"150","geske","Barselsstuen Komedie, Den politiske kandestøber Komedie",89
+"151","gilbert","Mester Gert Westphaler eller Den meget talende barber Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt",43
+"152","gonzalo","Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter",22
+"153","gothard","Barselsstuen Komedie",18
+"154","gottard","Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt, Pernilles korte frøkenstand Komedie i 3 akter",20
+"155","gottfried","Det lykkelige skibbrud Komedie i 5 akter",79
+"156","greven","Den pantsatte bondedreng Komedie i 3 akter",1
+"157","gunild","Barselsstuen Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt",79
+"158","gunnild","Uden hoved og hale Komedie",19
+"159","gusman","Melampe Tragikomedie",13
+"160","gusmann","Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter",38
+"161","hadersleveren","Mester Gert Westphaler eller Den meget talende barber Komedie",10
+"162","hammer","Den danske komedies ligbegængelse Med Thaliæ afskedstale, forestillet til allersidste slutning af de danske aktører den 25. februar 1727",8
+"163","harlekin","De usynlige Komedie i 3 akter",200
+"164","helene","Den vægelsindede Komedie i 3 akter, Ulysses von Ithacia eller En tysk komedie",57
+"165","henning","Julestue Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie",9
+"166","henrik","Den 11. juni, Den danske komedies ligbegængelse Med Thaliæ afskedstale, forestillet til allersidste slutning af de danske aktører den 25. februar 1727, Den honnette ambition Komedie i 3 akter, Den politiske kandestøber Komedie, Den vægelsindede Komedie i 3 akter, Det arabiske pulver Komedie, Det lykkelige skibbrud Komedie i 5 akter, Diderich Menschenskræk Komedie i 1 akt, Hekseri eller blind alarm Komedie i 5 akter, Henrik og Pernille Komedie i 3 akter, Husspøgelse eller Abracadabra Komedie i 3 akter uden aktricer, Kilderejsen Komedie i 3 akter, Maskerade Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt, Pernilles korte frøkenstand Komedie i 3 akter, Republikken eller Det gemene bedste Komedie i 3 akter, Uden hoved og hale Komedie",2068
+"167","herman von bremenfeld","Den politiske kandestøber Komedie, Hekseri eller blind alarm Komedie i 5 akter, Republikken eller Det gemene bedste Komedie i 3 akter",202
+"168","herren","Hekseri eller blind alarm Komedie i 5 akter",46
+"169","holophernes","Ulysses von Ithacia eller En tysk komedie",6
+"170","hyacinthe","Diderich Menschenskræk Komedie i 1 akt",11
+"171","haagen","Uden hoved og hale Komedie",67
+"172","indenfor","Den 11. juni",7
+"173","ingeborg","Barselsstuen Komedie",8
+"174","iris","Ulysses von Ithacia eller En tysk komedie",7
+"175","isabella","Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter",65
+"176","iversen","Den vægelsindede Komedie",21
+"177","jacob","Den 11. juni, Erasmus Montanus eller Rasmus Berg Komedie i 5 akter, Jeppe på Bjerget eller Den forvandlede bonde",165
+"178","jean","Hekseri eller blind alarm Komedie i 5 akter, Jean de France eller Hans Frandsen Komedie",171
+"179","jens","Den stundesløse Komedie i 3 akter, Jacob von Tyboe eller Den stortalende soldat Komedie",80
+"180","jens griffel","Den stundesløse Komedie i 3 akter, Jacob von Tyboe eller Den stortalende soldat Komedie",81
+"181","jeppe","Erasmus Montanus eller Rasmus Berg Komedie i 5 akter, Jeppe på Bjerget eller Den forvandlede bonde",259
+"182","jeronimus","Barselsstuen Komedie, Den honnette ambition Komedie i 3 akter, Det lykkelige skibbrud Komedie i 5 akter, Diderich Menschenskræk Komedie i 1 akt, Erasmus Montanus eller Rasmus Berg Komedie i 5 akter, Henrik og Pernille Komedie i 3 akter, Husspøgelse eller Abracadabra Komedie i 3 akter uden aktricer, Jean de France eller Hans Frandsen Komedie, Julestue Komedie, Kilderejsen Komedie i 3 akter, Maskerade Komedie, Pernilles korte frøkenstand Komedie i 3 akter, Philosophus i egen indbildning Komedie i 5 akter",1399
+"183","jesper oldfux","Erasmus Montanus eller Rasmus Berg Komedie i 5 akter, Husspøgelse eller Abracadabra Komedie i 3 akter uden aktricer, Jacob von Tyboe eller Den stortalende soldat Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt",297
+"184","jochum","Den politiske kandestøber Komedie",1
+"185","jomfruen","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",11
+"186","juno","Ulysses von Ithacia eller En tysk komedie",8
+"187","jupiter","Uden hoved og hale Komedie",6
+"188","juveleren","Den pantsatte bondedreng Komedie i 3 akter",27
+"189","jøden","Den 11. juni, Det arabiske pulver Komedie, Diderich Menschenskræk Komedie i 1 akt",98
+"190","jørgen handskemager","Mester Gert Westphaler eller Den meget talende barber Komedie",17
+"191","kammertjeneren","Jeppe på Bjerget eller Den forvandlede bonde",23
+"192","karen","Barselsstuen Komedie",3
+"193","karlene","Den stundesløse Komedie i 3 akter",1
+"194","kavaler","Det lykkelige skibbrud Komedie i 5 akter",11
+"195","kavaleren","Den vægelsindede Komedie, Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",37
+"196","kirsten","Den forvandlede brudgom Komedie i 1 akt uden aktører",60
+"197","knud","Den 11. juni",7
+"198","kokken","Det arabiske pulver Komedie",5
+"199","konen","Barselsstuen Komedie, Den pantsatte bondedreng Komedie i 3 akter, Hekseri eller blind alarm Komedie i 5 akter, Jeppe på Bjerget eller Den forvandlede bonde, Maskerade Komedie",32
+"200","korporal","Diderich Menschenskræk Komedie i 1 akt",2
+"201","kusken","Kilderejsen Komedie i 3 akter",7
+"202","kællingen","Barselsstuen Komedie, Den politiske kandestøber Komedie, Hekseri eller blind alarm Komedie i 5 akter, Mester Gert Westphaler eller Den meget talende barber Komedie",43
+"203","kæresten","Hekseri eller blind alarm Komedie i 5 akter",4
+"204","købmanden","Den 11. juni",8
+"205","lakaj","Den honnette ambition Komedie i 3 akter, Den politiske kandestøber Komedie, Den vægelsindede Komedie, Den vægelsindede Komedie i 3 akter, Husspøgelse eller Abracadabra Komedie i 3 akter uden aktricer, Jeppe på Bjerget eller Den forvandlede bonde, Kilderejsen Komedie i 3 akter",39
+"206","lakajen","Den honnette ambition Komedie i 3 akter, Den politiske kandestøber Komedie, Den vægelsindede Komedie, Den vægelsindede Komedie i 3 akter, Husspøgelse eller Abracadabra Komedie i 3 akter uden aktricer, Jeppe på Bjerget eller Den forvandlede bonde, Kilderejsen Komedie i 3 akter",39
+"207","lakajerne","Den pantsatte bondedreng Komedie i 3 akter",1
+"208","lars","Den stundesløse Komedie i 3 akter, Hekseri eller blind alarm Komedie i 5 akter",9
+"209","laurentia","Den forvandlede brudgom Komedie i 1 akt uden aktører",7
+"210","leander","De usynlige Komedie i 3 akter, Den honnette ambition Komedie i 3 akter, Den pantsatte bondedreng Komedie i 3 akter, Den stundesløse Komedie i 3 akter, Det arabiske pulver Komedie, Det lykkelige skibbrud Komedie i 5 akter, Diderich Menschenskræk Komedie i 1 akt, Hekseri eller blind alarm Komedie i 5 akter, Henrik og Pernille Komedie i 3 akter, Husspøgelse eller Abracadabra Komedie i 3 akter uden aktricer, Julestue Komedie, Kilderejsen Komedie i 3 akter, Maskerade Komedie, Melampe Tragikomedie, Pernilles korte frøkenstand Komedie i 3 akter, Philosophus i egen indbildning Komedie i 5 akter, Republikken eller Det gemene bedste Komedie i 3 akter, Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter, Uden hoved og hale Komedie",2120
+"211","leander og oldfux","Den stundesløse Komedie i 3 akter",1
+"212","leanders vært","Julestue Komedie",1
+"213","leerbeutel","Den pantsatte bondedreng Komedie i 3 akter, Republikken eller Det gemene bedste Komedie i 3 akter",134
+"214","leonard","Den honnette ambition Komedie i 3 akter, Den stundesløse Komedie i 3 akter, Henrik og Pernille Komedie i 3 akter, Husspøgelse eller Abracadabra Komedie i 3 akter uden aktricer, Jacob von Tyboe eller Den stortalende soldat Komedie, Kilderejsen Komedie i 3 akter, Maskerade Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt, Pernilles korte frøkenstand Komedie i 3 akter",371
+"215","leonora","Den forvandlede brudgom Komedie i 1 akt uden aktører, Den stundesløse Komedie i 3 akter, Det arabiske pulver Komedie, Det lykkelige skibbrud Komedie i 5 akter, Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter, Henrik og Pernille Komedie i 3 akter, Jacob von Tyboe eller Den stortalende soldat Komedie, Julestue Komedie, Kilderejsen Komedie i 3 akter, Maskerade Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt, Philosophus i egen indbildning Komedie i 5 akter, Republikken eller Det gemene bedste Komedie i 3 akter",562
+"216","leonore","Den honnette ambition Komedie i 3 akter, Den vægelsindede Komedie i 3 akter, Pernilles korte frøkenstand Komedie i 3 akter",146
+"217","lisbed","Erasmus Montanus eller Rasmus Berg Komedie i 5 akter",26
+"218","lucie","Pernilles korte frøkenstand Komedie i 3 akter",10
+"219","lucilia","Jacob von Tyboe eller Den stortalende soldat Komedie, Melampe Tragikomedie",35
+"220","lucretia","Den 11. juni, Den vægelsindede Komedie, Den vægelsindede Komedie i 3 akter, Hekseri eller blind alarm Komedie i 5 akter",221
+"221","løjtnant","Erasmus Montanus eller Rasmus Berg Komedie i 5 akter",36
+"222","madame abrahamsens","Den politiske kandestøber Komedie",4
+"223","madame la fleche","Jean de France eller Hans Frandsen Komedie",13
+"224","madame sanderus","Den politiske kandestøber Komedie",4
+"225","madame ståbi","Den pantsatte bondedreng Komedie i 3 akter",21
+"226","mademoiselle hiort","Den danske komedies ligbegængelse Med Thaliæ afskedstale, forestillet til allersidste slutning af de danske aktører den 25. februar 1727",10
+"227","magdelone","De usynlige Komedie i 3 akter, Den honnette ambition Komedie i 3 akter, Den stundesløse Komedie i 3 akter, Det lykkelige skibbrud Komedie i 5 akter, Erasmus Montanus eller Rasmus Berg Komedie i 5 akter, Henrik og Pernille Komedie i 3 akter, Jean de France eller Hans Frandsen Komedie, Julestue Komedie, Kilderejsen Komedie i 3 akter, Maskerade Komedie, Pernilles korte frøkenstand Komedie i 3 akter",418
+"228","magnus","Jeppe på Bjerget eller Den forvandlede bonde",8
+"229","manden","Den politiske kandestøber Komedie, Den vægelsindede Komedie, Hekseri eller blind alarm Komedie i 5 akter",100
+"230","manden i portechaisen","Hekseri eller blind alarm Komedie i 5 akter",13
+"231","marcolfus","Ulysses von Ithacia eller En tysk komedie",25
+"232","marie","Julestue Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie",20
+"233","mars","Nytårsprolog til en komedie Allerunderdanigst præsenteret af den hele danske bande 1723",1
+"234","marthe","Jean de France eller Hans Frandsen Komedie, Uden hoved og hale Komedie",53
+"235","menander","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",5
+"236","mercurius","Nytårsprolog til en komedie Allerunderdanigst præsenteret af den hele danske bande 1723, Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",6
+"237","mester bonifacius","Barselsstuen Komedie",23
+"238","mester gert westphaler","Den politiske kandestøber Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt",560
+"239","mester herman","Hekseri eller blind alarm Komedie i 5 akter",10
+"240","mithridates","Ulysses von Ithacia eller En tysk komedie",7
+"241","momus","Nytårsprolog til en komedie Allerunderdanigst præsenteret af den hele danske bande 1723, Uden hoved og hale Komedie",9
+"242","montanus","Erasmus Montanus eller Rasmus Berg Komedie i 5 akter",217
+"243","moralisten","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",3
+"244","musikanten","Den pantsatte bondedreng Komedie i 3 akter, Den vægelsindede Komedie, Den vægelsindede Komedie i 3 akter",24
+"245","niels","Erasmus Montanus eller Rasmus Berg Komedie i 5 akter, Mester Gert Westphaler eller Den meget talende barber Komedie",15
+"246","niels christensen","Den 11. juni",35
+"247","nille","Erasmus Montanus eller Rasmus Berg Komedie i 5 akter, Jeppe på Bjerget eller Den forvandlede bonde",72
+"248","notarius","Den stundesløse Komedie i 3 akter, Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter, Henrik og Pernille Komedie i 3 akter, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt, Pernilles korte frøkenstand Komedie i 3 akter",42
+"249","novatianus","Republikken eller Det gemene bedste Komedie i 3 akter",20
+"250","octavius","Husspøgelse eller Abracadabra Komedie i 3 akter uden aktricer",25
+"251","officeren","Barselsstuen Komedie, Det lykkelige skibbrud Komedie i 5 akter, Diderich Menschenskræk Komedie i 1 akt, Jacob von Tyboe eller Den stortalende soldat Komedie",182
+"252","ohngeldt","Republikken eller Det gemene bedste Komedie i 3 akter",8
+"253","oldfux","Den stundesløse Komedie i 3 akter, Det arabiske pulver Komedie, Det lykkelige skibbrud Komedie i 5 akter, Melampe Tragikomedie",188
+"254","ovidius","Uden hoved og hale Komedie",98
+"255","pagen","Det lykkelige skibbrud Komedie i 5 akter",1
+"256","pallas","Ulysses von Ithacia eller En tysk komedie",3
+"257","paltsgreven","Den pantsatte bondedreng Komedie i 3 akter",26
+"258","palæstrio","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",26
+"259","pandolfus","Melampe Tragikomedie",7
+"260","paris","Ulysses von Ithacia eller En tysk komedie",18
+"261","peder","Den stundesløse Komedie i 3 akter",5
+"262","pedro","Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter, Melampe Tragikomedie",144
+"263","peer","Den vægelsindede Komedie, Jacob von Tyboe eller Den stortalende soldat Komedie",106
+"264","peiter","Den pantsatte bondedreng Komedie i 3 akter, Den politiske kandestøber Komedie",11
+"265","penelope","Ulysses von Ithacia eller En tysk komedie",9
+"266","penia","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",22
+"267","per","Erasmus Montanus eller Rasmus Berg Komedie i 5 akter, Julestue Komedie",75
+"268","pernille","Den forvandlede brudgom Komedie i 1 akt uden aktører, Den honnette ambition Komedie i 3 akter, Den pantsatte bondedreng Komedie i 3 akter, Den stundesløse Komedie i 3 akter, Den vægelsindede Komedie i 3 akter, Det arabiske pulver Komedie, Det lykkelige skibbrud Komedie i 5 akter, Henrik og Pernille Komedie i 3 akter, Jacob von Tyboe eller Den stortalende soldat Komedie, Julestue Komedie, Kilderejsen Komedie i 3 akter, Maskerade Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt, Pernilles korte frøkenstand Komedie i 3 akter, Philosophus i egen indbildning Komedie i 5 akter, Republikken eller Det gemene bedste Komedie i 3 akter, Uden hoved og hale Komedie",3635
+"269","petronius","Den vægelsindede Komedie i 3 akter, Jacob von Tyboe eller Den stortalende soldat Komedie, Philosophus i egen indbildning Komedie i 5 akter",267
+"270","philemon","Det lykkelige skibbrud Komedie i 5 akter",54
+"271","philocyne","Melampe Tragikomedie",24
+"272","pierre","Jean de France eller Hans Frandsen Komedie",76
+"273","pigen","Barselsstuen Komedie, Den 11. juni, Den politiske kandestøber Komedie, Det lykkelige skibbrud Komedie i 5 akter, Hekseri eller blind alarm Komedie i 5 akter, Melampe Tragikomedie, Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",193
+"274","plutus","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",82
+"275","poeten","Barselsstuen Komedie",13
+"276","poeterne","Det arabiske pulver Komedie",11
+"277","polidorus","Det arabiske pulver Komedie, Melampe Tragikomedie",126
+"278","polyphemus","Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",8
+"279","postkarlen","Den pantsatte bondedreng Komedie i 3 akter",3
+"280","proprietær","Den 11. juni",8
+"281","præsten","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",5
+"282","rasmus","Ulysses von Ithacia eller En tysk komedie",23
+"283","republikken","Republikken eller Det gemene bedste Komedie i 3 akter",85
+"284","richart børstenbinder","Den politiske kandestøber Komedie",4
+"285","ridefogeden","Jeppe på Bjerget eller Den forvandlede bonde",12
+"286","roland","Uden hoved og hale Komedie",86
+"287","rosiflengius","Det lykkelige skibbrud Komedie i 5 akter",110
+"288","rosimunda","Ulysses von Ithacia eller En tysk komedie",10
+"289","sanderus","Den politiske kandestøber Komedie",13
+"290","schumacher","Den danske komedies ligbegængelse Med Thaliæ afskedstale, forestillet til allersidste slutning af de danske aktører den 25. februar 1727",15
+"291","sekretæren","Jeppe på Bjerget eller Den forvandlede bonde",9
+"292","sganarel","Melampe Tragikomedie, Nytårsprolog til en komedie Allerunderdanigst præsenteret af den hele danske bande 1723, Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter, Uden hoved og hale Komedie",340
+"293","sganarel og dorothea","Melampe Tragikomedie",2
+"294","sivert posekigger","Den politiske kandestøber Komedie",7
+"295","skolemesteren","Det lykkelige skibbrud Komedie i 5 akter, Julestue Komedie, Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",43
+"296","skriveren","Det lykkelige skibbrud Komedie i 5 akter, Hekseri eller blind alarm Komedie i 5 akter, Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter, Republikken eller Det gemene bedste Komedie i 3 akter",94
+"297","skrædderen","Den honnette ambition Komedie i 3 akter, Den stundesløse Komedie i 3 akter",4
+"298","skyldenborg","Den 11. juni",72
+"299","skærsliberen","Det lykkelige skibbrud Komedie i 5 akter",4
+"300","skøgen","Det lykkelige skibbrud Komedie i 5 akter",16
+"301","soldaten","Diderich Menschenskræk Komedie i 1 akt",17
+"302","sparenborg","Den vægelsindede Komedie",70
+"303","spilleren","Jean de France eller Hans Frandsen Komedie",17
+"304","stine","Barselsstuen Komedie",9
+"305","studenstrup","Den 11. juni",215
+"306","svenden","Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt",8
+"307","svinene","Ulysses von Ithacia eller En tysk komedie",5
+"308","terentia","Den forvandlede brudgom Komedie i 1 akt uden aktører, Den vægelsindede Komedie, Hekseri eller blind alarm Komedie i 5 akter",127
+"309","thalia","Nytårsprolog til en komedie Allerunderdanigst præsenteret af den hele danske bande 1723",1
+"310","theophilus","Mester Gert Westphaler eller Den meget talende barber Komedie",4
+"311","timotheus","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",28
+"312","tiresius","Ulysses von Ithacia eller En tysk komedie",6
+"313","tjeneren","Plutus eller Proces imellem fattigdom og rigdom En heroisk komedie i 5 akter",2
+"314","to drenge","Hekseri eller blind alarm Komedie i 5 akter",2
+"315","to lakajer","Den politiske kandestøber Komedie",1
+"316","to mænd","Den 11. juni",2
+"317","to soldater med en tambur","Barselsstuen Komedie",2
+"318","tobias prokurator","Mester Gert Westphaler eller Den meget talende barber Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie i 1 akt",80
+"319","torben","Den vægelsindede Komedie",73
+"320","tredje proprietær","Den 11. juni",1
+"321","troels","Barselsstuen Komedie",128
+"322","trojaneren","Ulysses von Ithacia eller En tysk komedie",25
+"323","trækholdt","Den 11. juni",13
+"324","tutti","Den politiske kandestøber Komedie, Den stundesløse Komedie i 3 akter, Julestue Komedie, Sganarels rejse til det filosofiske land Komedie i 1 akt hvori skæmtes med de gamle filosofiske sekter",14
+"325","tvende mænd","Mester Gert Westphaler eller Den meget talende barber Komedie",5
+"326","tyboe","Jacob von Tyboe eller Den stortalende soldat Komedie",142
+"327","tyboes tale til folket:","Jacob von Tyboe eller Den stortalende soldat Komedie",1
+"328","tychonius","Jacob von Tyboe eller Den stortalende soldat Komedie",72
+"329","tyven","Hekseri eller blind alarm Komedie i 5 akter",2
+"330","udtolkeren","Don Ranudo de Colibrados eller Fattigdom og hoffærdighed Komedie i 5 akter",28
+"331","ulysses","Ulysses von Ithacia eller En tysk komedie",134
+"332","venus","Ulysses von Ithacia eller En tysk komedie",4
+"333","vielgeschrey","Den stundesløse Komedie i 3 akter",315
+"334","von qvoten","Hekseri eller blind alarm Komedie i 5 akter",8
+"335","vulcanus","Nytårsprolog til en komedie Allerunderdanigst præsenteret af den hele danske bande 1723, Uden hoved og hale Komedie",5
+"336","vægter","Den 11. juni",5
+"337","vægterne","Den 11. juni, Julestue Komedie",4
+"338","værten","Den pantsatte bondedreng Komedie i 3 akter, Den politiske kandestøber Komedie, Det arabiske pulver Komedie, Hekseri eller blind alarm Komedie i 5 akter, Jacob von Tyboe eller Den stortalende soldat Komedie, Julestue Komedie, Mester Gert Westphaler eller Den meget talende barber Komedie",336
+"339","æsculapius","Nytårsprolog til en komedie Allerunderdanigst præsenteret af den hele danske bande 1723",1
+"340","øllegård","Barselsstuen Komedie, Den vægelsindede Komedie, Ulysses von Ithacia eller En tysk komedie",31
