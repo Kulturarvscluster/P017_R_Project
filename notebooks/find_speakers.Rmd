@@ -92,7 +92,7 @@ all_speakers_with_plays <- allplays %>%
   summarise(plays = toString(unique(docTitle)), count = sum(n))
 all_speakers_with_plays
 
-write.csv(all_speakers, file = here("csv/allspeakers uden navnevarianter med stykker.csv"))
+write.csv(all_speakers_with_plays, file = here("csv/allspeakers uden navnevarianter med stykker.csv"))
 
 ```
 
