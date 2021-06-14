@@ -85,17 +85,22 @@ write.csv(all_speakers, file = here("csv/allspeakers uden navnevarianter.csv"))
 
 ```
 ##Find alle stykker, som karaktererne er med i
+
+Kan vi tilføje en kolonne, hvor antallet af stykker, karaktererne er med i, bliver talt op?
+
 ```{r}
 all_speakers_with_plays <- allplays %>% 
   count(speaker, docTitle, year) %>%
   group_by(speaker) %>%
-  summarise(plays = toString(unique(docTitle)), count = sum(n))
+  mutate(count_speaker = sum(n)) %>%
+  count(docTitle, count_speaker) %>%
+  summarise(plays = toString(unique(docTitle)), count_speaker, count_plays = sum(n)) %>%
+  unique()
 all_speakers_with_plays
 
 write.csv(all_speakers_with_plays, file = here("csv/allspeakers uden navnevarianter med stykker.csv"))
 
 ```
-
 ##Find navne på alle karakterer, som kun nævnes i regibemærkninger.
 Tæl karakterer, som kun nævnes i regibemærkninger.
 
