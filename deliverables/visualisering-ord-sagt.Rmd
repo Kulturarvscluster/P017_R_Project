@@ -101,7 +101,6 @@ my_play %>%
    pull(scenes) %>% cumsum() -> act_length
 
 act_length
-(number_of_scenes = sum(act_length))
 ```
 
 `act_length` er nu en liste, hvor element *i* angiver hvor mange scener der har været til og med akt *i*. Fx er det tredje element i listen 28, hvilket betyder, at der i akt 1 til 3 sammenlagt er 28 scener. 'number_of_scenes' er det samlede antal scener.
@@ -355,62 +354,3 @@ my_summary %>%
   ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvor_meget_siger_hvem.pdf")), width=16, height=9)
 
 ```
-#Graf over hvem siger noget hvornår
-
-Det her er simpelthen en anden måde at visualisere, hvornår karaktererne taler i stykket.
-
-```{r}
-my_summary %>% 
-  ggplot(aes(y = speaker, x = scene_index)) +
-    geom_point(show.legend = FALSE) + #aes(col=speaker, size=words), 
-    labs(
-      title = paste(my_title, my_year, my_file),
-      subtitle = "Hvem taler hvornår"
-    ) +
-  xlab("Akt og scene") +
-  ylab("Speaker") + 
-  facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x") +
-  theme(axis.text.x=element_blank()) + 
-
-  ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvem_taler_hvornaar.pdf")), width=16, height=9)
-
-```
-
-
-
-#Graf over omtale
-
-Vi vil gerne vide, hvilke karakterer, der bliver talt om, men som ikke selv er til stede. Grafen skal være magen til den eksisterende. (se vedhæft). Her skal vi nok bruge den liste, som er under udfærdigelse.
-
-Nu prøver jeg lige at lave en i stil med den ovenfor!
-
-Først skal vi definere omtale. Jeg tænker at vi gør det ligesom med 'ikke til stede'. Altså hvis en karakter optræder i en replik i en scene, hvor den karakter ikke selv er til stede, bliver den karakter omtalt.
-
-
-
-```{r}
-source(here("src", "omtale.R"))
-(spoken_about(my_play) %>%
-  # add a scene index for the x-axis
-  rowwise() %>% 
-  mutate(scene_index = calc_scene_index(act_number, scene_number, act_length))
-  -> spoken_about_summary) 
-
-spoken_about_summary %>% 
-  ggplot(aes(y = word, x = scene_index)) +
-    geom_point(show.legend = FALSE) + 
-    labs(
-      title = paste(my_title, my_year, my_file),
-      subtitle = "Hvem bliver omtalt"
-    ) +
-  xlab("Akt og scene") +
-  ylab("Speaker") + 
-  facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x") +
-  theme(axis.text.x=element_blank()) + 
-
-  ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvem_bliver_omtalt.pdf")), width=16, height=9)
-
-
-
-```
-
