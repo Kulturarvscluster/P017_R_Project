@@ -8,11 +8,9 @@ Netværk
 Opdel alle på titel, akt og scene.
 Vi vil gerne nå frem til en grafisk fremstilling af netværk.
 
-Lige nu håber jeg at Per kigger på det med at indlæse alle stykkerne.
-Her ser jeg på et ad gangen.
-
-# Read a play into R
-
+# Read one play and all plays into R
+Some of the following is designed for finding characteristics for one play.
+Some of the following is designed for finding characteristics across all plays.
 Load the JSONL data format
 
 ```{r}
@@ -38,8 +36,6 @@ Vi kan også gemme jsonl filen som csv direkte:
 
 ```
 
-
-
 ##Find navne på alle karakterer med replikker.
 Tæl alle navngivne karakterer med replikker.
 
@@ -55,13 +51,13 @@ all_speakers <- allplays %>%
 all_speakers
 # get column names
 colnames(all_speakers)
-write.csv(all_speakers, file = here("test-data/output/allspeakers.csv"))
+write.csv(all_speakers, file = here("csv/allspeakers.csv"))
 
 #skal kun bruges, når vi kører ét stykke ad gangen
 speakers_by_scene <- allplays %>% 
   count(act, scene, speaker)
 speakers_by_scene
-write.csv(speakers_by_scene, file = here("test-data/output/speakers_by_scene.csv"))
+write.csv(speakers_by_scene, file = here("csv/speakers_by_scene.csv"))
 ```
 Next we load and run the excel sheet
 ```{r}
@@ -85,14 +81,26 @@ all_speakers <- allplays %>%
 all_speakers
 # get column names
 colnames(all_speakers)
-write.csv(all_speakers, file = here("test-data/output/allspeakers uden navnevarianter.csv"))
-
-
+write.csv(all_speakers, file = here("csv/allspeakers uden navnevarianter.csv"))
 
 ```
+##Find alle stykker, som karaktererne er med i
 
-Der er godt nok mange! Og der er også nogle mærkværdigheder. Spørgsmålet er om de kommer fra TEI-filen eller fra oversættelsen?
+Kan vi tilføje en kolonne, hvor antallet af stykker, karaktererne er med i, bliver talt op?
 
+```{r}
+all_speakers_with_plays <- allplays %>% 
+  count(speaker, docTitle, year) %>%
+  group_by(speaker) %>%
+  mutate(count_speaker = sum(n)) %>%
+  count(docTitle, count_speaker) %>%
+  summarise(plays = toString(unique(docTitle)), count_speaker, count_plays = sum(n)) %>%
+  unique()
+all_speakers_with_plays
+
+write.csv(all_speakers_with_plays, file = here("csv/allspeakers uden navnevarianter med stykker.csv"))
+
+```
 ##Find navne på alle karakterer, som kun nævnes i regibemærkninger.
 Tæl karakterer, som kun nævnes i regibemærkninger.
 

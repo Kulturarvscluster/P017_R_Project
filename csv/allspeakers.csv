@@ -1,0 +1,446 @@
+"","speaker","n"
+"1","",147
+"2",".",1
+"3","1.",8
+"4","1. advokat",30
+"5","1. aktør",1
+"6","1. bonde",15
+"7","1. borger",1
+"8","1. dame",28
+"9","1. doktor",7
+"10","1. filosof",3
+"11","1. gaudieb",3
+"12","1. jøde",1
+"13","1. komediant",29
+"14","1. kone",19
+"15","1. kvinde",16
+"16","1. lakaj",1
+"17","1. madame",2
+"18","1. mand",15
+"19","1. officer",10
+"20","1. pige",47
+"21","1. rådsherre",29
+"22","1. rådsherreinde",1
+"23","1. soldat",5
+"24","1. vært",5
+"25","1. vagt",5
+"26","1.komediant",1
+"27","2 Vægter",2
+"28","2.",3
+"29","2. advokat",33
+"30","2. Advokat",1
+"31","2. bonde",10
+"32","2. dame",22
+"33","2. doktor",7
+"34","2. filosof",3
+"35","2. gaudieb",4
+"36","2. jøde",11
+"37","2. komediant",14
+"38","2. kone",6
+"39","2. kvinde",16
+"40","2. madame",2
+"41","2. mand",2
+"42","2. musikant",1
+"43","2. officer",24
+"44","2. pige",20
+"45","2. rådsherre",4
+"46","2. soldat",5
+"47","2. vært",5
+"48","2. vagt",2
+"49","2.pige",1
+"50","3 mænd",6
+"51","3. filosof",6
+"52","3. gaudieb",2
+"53","3. kvinde",29
+"54","3. rådsherre",1
+"55","Abelone",37
+"56","Abrahams",11
+"57","Abrahams og Sanderus",1
+"58","Abrahams.",1
+"59","Advokat",25
+"60","Advokaten",4
+"61","Aesculapius",14
+"62","Æsculapius",1
+"63","Ammen",3
+"64","Anden købmand",3
+"65","Anden proprietær",4
+"66","Anden rådsherre",5
+"67","Andreas",15
+"68","Anføreren",19
+"69","Anførerne",2
+"70","Anklageren",2
+"71","Anklageren (1. advokat)",1
+"72","Anne",23
+"73","Anne Kandestøbers",2
+"74","Anneke",16
+"75","Antonius",64
+"76","Apelone",45
+"77","Apicius",165
+"78","Apicius (",2
+"79","Apollo",6
+"80","Arbaces",11
+"81","Arbaces sagte.",1
+"82","Arbaces.",103
+"83","Arianke",25
+"84","Artabanus",25
+"85","Artabanus og Semira.",1
+"86","Artabanus.",72
+"87","Artaxerxes",1
+"88","Artaxerxes alleene.",2
+"89","Artaxerxes.",92
+"90","Arv",353
+"91","Astrologus",8
+"92","Asverus",2
+"93","Barberen",6
+"94","Baronen",86
+"95","Barselskonen",7
+"96","Barselskvinden",167
+"97","Barselsqvinde",1
+"98","Bellona",1
+"99","Betjenten",19
+"100","Bogholderen",11
+"101","Bonden",109
+"102","Borgeren",16
+"103","Borgmesteren",9
+"104","Borgmesterinden",1
+"105","Børnene",2
+"106","Bremenfeld",65
+"107","Bremenfeldt",10
+"108","Byfogeden",9
+"109","Chilan",3
+"110","Chilian",213
+"111","Chiromanticus",18
+"112","Chorus",3
+"113","Christine",6
+"114","Christoff",41
+"115","Christoffer",55
+"116","Christopher",56
+"117","Claus",9
+"118","Cogmoligoreus",2
+"119","Colombine",49
+"120","Corfitz",221
+"121","Cosmoligoreus",221
+"122","Cristine",1
+"123","Cupido",1
+"124","Davus",145
+"125","De 2 komedianter",1
+"126","De tvende mænd",2
+"127","Den 1. advokat",2
+"128","Den 1. kone",1
+"129","Den 2. officer",2
+"130","Den anden købmand",2
+"131","Den anden proprietær",2
+"132","Den bevæbnede",9
+"133","Den drukne",38
+"134","Den første proprietær",1
+"135","Den fremmede",10
+"136","Den Fremmede",2
+"137","Den fremmede person",2
+"138","Den rette Niels Christensen",1
+"139","Den usynlige",79
+"140","Den usynliges broder",32
+"141","Dido",24
+"142","Diogenes",87
+"143","Dobre Podolsky",26
+"144","Doktor",5
+"145","Doktor Bombastus",6
+"146","Doktoren",62
+"147","Dommeren",167
+"148","Don Ranudo",164
+"149","Donna Maria",9
+"150","Donna Olympia",77
+"151","Dorothea",85
+"152","Dorthe",14
+"153","Drengen",24
+"154","Eleonora",22
+"155","Elisa",18
+"156","Ellen",1
+"157","Else",17
+"158","Elsebet",35
+"159","Elvire",45
+"160","En af de fremmede",1
+"161","En anden borger",1
+"162","En anden dreng",2
+"163","En anden Dreng",1
+"164","En anden pige",2
+"165","En anden vært",2
+"166","En betjent",3
+"167","En bonde",2
+"168","En Borger",1
+"169","En dreng",6
+"170","En Dreng",1
+"171","En filosof",3
+"172","En gårdskarl",6
+"173","En karl",2
+"174","En kavaler",2
+"175","En lakaj",1
+"176","En mand",5
+"177","En officer med knebelsbarter",2
+"178","En person",2
+"179","En pige",7
+"180","En Pige",2
+"181","En postkarl",1
+"182","En ridder",1
+"183","En skrædder",1
+"184","En Spiller",1
+"185","Engelke",5
+"186","Ephraim",25
+"187","Eraste",61
+"188","Eraste (alene)",3
+"189","Erich",1
+"190","Erich Madsen",41
+"191","Erik",6
+"192","Erik Lakaj",1
+"193","Espen",105
+"194","Et spøgelse",3
+"195","Euclio",5
+"196","Faderen",9
+"197","Filosoffen",39
+"198","Fiskeren",20
+"199","Flensborgeren",20
+"200","Første købmand",5
+"201","Første proprietær",4
+"202","Første rådsherre",28
+"203","Frands",97
+"204","Frantz",8
+"205","Frantz Knivsmed",3
+"206","Frantz Parykmager",2
+"207","Fremmede",12
+"208","Fruen",43
+"209","Fruens mand",1
+"210","Gejsten",4
+"211","Gert",243
+"212","Gert Bundtmager",1
+"213","Gert Buntmager",8
+"214","Gert Westphaler",9
+"215","Geske",89
+"216","Gilbert",43
+"217","Gonzalo",22
+"218","Gothard",18
+"219","Gottard",20
+"220","Gottfried",79
+"221","Greven",1
+"222","Gunild",79
+"223","Gunnild",19
+"224","Gusman",13
+"225","Gusmann",38
+"226","Haagen",67
+"227","Hadersleveren",10
+"228","Hammer",8
+"229","Harlekin",200
+"230","Helene",57
+"231","Henning",9
+"232","Henrik",2068
+"233","Herman",126
+"234","Herman von Bremenfeld",11
+"235","Herren",45
+"236","Holophernes",6
+"237","Hyacinthe",11
+"238","Indenfor",7
+"239","Ingeborg",8
+"240","Iris",7
+"241","Isabella",65
+"242","Iversen",21
+"243","Jacob",165
+"244","Jean",171
+"245","Jens",79
+"246","Jens Griffel",2
+"247","Jens.",1
+"248","Jeppe",259
+"249","Jeronimus",1398
+"250","Jeronymus",1
+"251","Jesper",288
+"252","Jesper Oldfux",5
+"253","Jesper.",4
+"254","Jochum",1
+"255","Jøden",98
+"256","Jomfruen",11
+"257","Jørgen",14
+"258","Jørgen Handskemager",3
+"259","Juno",8
+"260","Jupiter",6
+"261","Juveleren",27
+"262","Kælling",4
+"263","Kællingen",39
+"264","Kæresten",4
+"265","Kammertjener",2
+"266","Kammertjeneren",21
+"267","Karen",3
+"268","Karlene",1
+"269","Kavaler",11
+"270","Kavaleren",37
+"271","Kirsten",60
+"272","Knud",7
+"273","Købmanden",8
+"274","Kokken",5
+"275","Konen",19
+"276","Korporal",2
+"277","Kusken",7
+"278","Lakajen",38
+"279","Lakajerne",1
+"280","Lars",9
+"281","Laurentia",7
+"282","Leander",1059
+"283","Leander og Oldfux",1
+"284","Leander på Knæ",1
+"285","Leanders vært",1
+"286","Leerbeutel",134
+"287","Lenader",1
+"288","Leonard",371
+"289","Leonora",561
+"290","Leonora.",1
+"291","Leonore",146
+"292","Lisbed",26
+"293","Løjtnant",36
+"294","Lucie",10
+"295","Lucilia",35
+"296","Lucretia",221
+"297","Madame Abrahamsens",4
+"298","Madame la Fleche",13
+"299","Madame Sanderus",4
+"300","Madame Ståbi",21
+"301","Mademoiselle Hiort",10
+"302","Magdelone",418
+"303","Magnus",8
+"304","Mandane",12
+"305","Mandane.",72
+"306","Manden",45
+"307","Manden i portechaisen",13
+"308","Marcolfus",25
+"309","Marie",20
+"310","Mars",1
+"311","Marthe",53
+"312","Menander",5
+"313","Mercurius",6
+"314","Mester Bonifacius",23
+"315","Mester Gert",31
+"316","Mester Gert Westphaler",3
+"317","Mester Herman",10
+"318","Mithridates",7
+"319","Moderen",13
+"320","Momus",9
+"321","Montanus",217
+"322","Moralisten",3
+"323","Musikant",18
+"324","Musikanten",6
+"325","Niels",15
+"326","Niels Christensen",34
+"327","Nille",72
+"328","Notarius",42
+"329","Novatianus",20
+"330","Octavius",25
+"331","Officer",66
+"332","Officeren",25
+"333","Ohngeldt",8
+"334","Oldfux",188
+"335","Øllegård",31
+"336","Olympia",2
+"337","Ovidius",98
+"338","Pagen",1
+"339","Palæstri",1
+"340","Palæstrio",25
+"341","Pallas",3
+"342","Paltsgreve",1
+"343","Paltsgreven",25
+"344","Pandolfus",7
+"345","Paris",18
+"346","Peder",5
+"347","Pedro",144
+"348","Peer",106
+"349","Peiter",11
+"350","Penelope",9
+"351","Penia",22
+"352","Per",75
+"353","Pernille",1210
+"354","Pernille (grædende)",1
+"355","Pernille.",2
+"356","Petronius",266
+"357","Petronius.",1
+"358","Philemon",54
+"359","Philocyne",24
+"360","Pierre",76
+"361","pigen",3
+"362","Pigen",61
+"363","Plutus",82
+"364","Poeten",13
+"365","Poeterne",11
+"366","Polidor",123
+"367","Polidorus",3
+"368","Polyphemus",8
+"369","Postkarlen",2
+"370","Præsten",5
+"371","proprietær",1
+"372","Proprietær",7
+"373","Rådsherre",2
+"374","Rådsherren",19
+"375","Ranudo",2
+"376","Rasmus",23
+"377","Republikken",85
+"378","Richart",2
+"379","Richart Børstenbinder",2
+"380","Ridefogeden",12
+"381","Roland",85
+"382","Roland.",1
+"383","Rosiflengius",110
+"384","Rosimunda",10
+"385","Sanderus",13
+"386","Schumacher",15
+"387","Sekretæren",9
+"388","Semira",8
+"389","Semira.",33
+"390","Sganarel",338
+"391","Sganarel (sagte)",2
+"392","Sganarel og Dorothea",2
+"393","Sivert",3
+"394","Sivert Posekigger",4
+"395","Skærsliberen",4
+"396","Skøgen",16
+"397","Skolemester",1
+"398","Skolemesteren",42
+"399","Skrædderen",3
+"400","Skriveren",94
+"401","Skyldenborg",72
+"402","Soldaten",17
+"403","Sparenborg",70
+"404","Spilleren",16
+"405","Stine",9
+"406","Studenstrup",215
+"407","Svenden",8
+"408","Svinene",5
+"409","Terentia",127
+"410","Thalia",1
+"411","Theophilus",4
+"412","Timotheus",28
+"413","Tiresius",6
+"414","tjeneren",2
+"415","To drenge",2
+"416","To lakajer",1
+"417","To Mænd",2
+"418","To soldater med en tambur",2
+"419","Tobias",73
+"420","Tobias Prokurator",7
+"421","Torben",73
+"422","Trækholdt",13
+"423","Tredje proprietær",1
+"424","Troels",127
+"425","Trojaneren",25
+"426","Trols",1
+"427","Tutti",14
+"428","Tvende mænd",3
+"429","Tyboe",141
+"430","Tyboe.",1
+"431","Tyboes tale til folket:",1
+"432","Tychonius",71
+"433","Tychonius.",1
+"434","Tyven",2
+"435","Udtolkeren",28
+"436","Ulysses",134
+"437","vægter",2
+"438","Vægter",3
+"439","Vægterne",2
+"440","Værten",168
+"441","Venus",4
+"442","Vielgeschrey",315
+"443","Von Qvoten",8
+"444","Vulcanus",5
+"445",NA,1518
