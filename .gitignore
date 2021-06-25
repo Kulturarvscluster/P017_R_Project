@@ -1,8 +1,10 @@
 .Rproj.user
 .Rhistory
+.Rapp.history
 .RData
 .Ruserdata
 .DS_Store
 .idea
 data
 test-data
+
