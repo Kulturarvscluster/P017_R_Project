@@ -126,7 +126,7 @@ summary %>%
 # Find farver
 
 ```{r}
-skuespil_titler <- plays |> select(title) |> distinct(title) |> pull(title)
+skuespil_titler <- plays %>% select(title) %>% distinct(title) %>% pull(title)
 ```
 
 Hvor mange skuespil?
