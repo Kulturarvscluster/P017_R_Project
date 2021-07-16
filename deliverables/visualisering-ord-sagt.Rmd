@@ -20,6 +20,7 @@ require(readr)  # for read_csv()
 require(purrr)  # for map(), reduce()
 
 source(here("src/p017-functions.R"))
+source(here("src/visalisering_ord_sagt_functions.R"))
 ```
 
 # Indlæs data
@@ -29,7 +30,7 @@ Vi laver en tabel med navnet plays.
 
 ```{r}
 here()
-convert_TEI_to_JSONL(here("test-data"))
+#convert_TEI_to_JSONL(here("test-data"))
 read_plays_jsonl(here("test-data")) -> plays
 ```
 
@@ -42,8 +43,8 @@ For at gøre det nemmere for os selv, starter vi med kun at se på ét skuespil 
 # my_file <- "Barselstuen_mod.jsonl"
 # my_file <- "Ulysses_mod.jsonl"
 # my_file <- "uden_hoved_og_hale_mod.jsonl"
-my_file <- "Skibbrud_mod.jsonl"
-# my_file <- "Sganarel_mod.jsonl"
+# my_file <- "Skibbrud_mod.jsonl"
+my_file <- "Sganarel_mod.jsonl"
 # my_file <- "Republiqven_mod.jsonl"
 # my_file <- "Ranudo_mod.jsonl"
 # my_file <- "Plutus_mod.jsonl"
@@ -314,10 +315,10 @@ my_summary
 ```
 ## Gentag visualisering
 
-# Vi vil gerne have en linje/visuel adskillelse mellem akterne i graferne.
+### Vi vil gerne have en linje/visuel adskillelse mellem akterne i graferne.
 Det kan jeg simpelthen ikke få til at virke!
 
-#Og stykkets titel og årstal tilføjes i header før filnavn.
+### Og stykkets titel og årstal tilføjes i header før filnavn.
 Det er til gengæld nemt. Vi paster det bare ind i title.
 
 ```{r}
@@ -329,11 +330,11 @@ Det er til gengæld nemt. Vi paster det bare ind i title.
   filter(scene_number==1) %>%
   mutate(line = scene_index + 0.5) %>%
   select(line) %>%
-  data_frame())
+  tibble())
 
 my_summary %>% 
   ggplot(aes(fill = speaker, y = words, x = scene_index)) +
-    geom_bar(stat="identity", width = 50) +
+    geom_bar(stat="identity", width = 100) +
     theme(legend.position="bottom") +
     labs(
       title = paste(my_title, my_year, my_file),
@@ -354,3 +355,17 @@ my_summary %>%
   ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvor_meget_siger_hvem.pdf")), width=16, height=9)
 
 ```
+Øv, "Det lykkelige skibbrud" er for langt! Det ser ikke pænt ud!
+
+#Brug funktion på alle stykker
+
+```{r}
+# Alle stykker som json filer
+json_file_list <- list.files(here("test-data"), pattern = "*.jsonl")
+# Alle stykker som visualiseringer af ord sagt
+for(i in 2:length(json_file_list)) {
+  print(json_file_list[i])
+  #create_visual(json_file_list[i]) #funktionen virker ikke!
+}
+```
+

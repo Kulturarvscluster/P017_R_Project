@@ -145,24 +145,32 @@ Now "new_summary" holds all the information that we need. We sorted it to see wh
 
 ```{r}
 character_plot <- function(character_name) {
-  new_summary %>% 
+  (new_summary %>% 
   filter(speaker == character_name) %>%
-  arrange(year) %>%
-  ggplot(aes(fill = title, y = freq, x = title)) + #, colour = farvekode
+    transmute(freq, title_year = paste(title,year)) %>%
+  arrange(year) -> tmp)
+  tmp %>%
+  ggplot(aes(fill = title, y = freq, x = title_year)) + #, colour = farvekode
     geom_bar(stat="identity") +
-    theme(legend.position="bottom") +
+    theme(legend.position="none") +
     labs(
       title = "Procent talte ord over år og komedier",
       subtitle = toupper(character_name),
       caption = "Kilde: DSL"
     ) +
-  xlab("year") +
+  xlab("År og komedie") +
   ylab("Procent sagte ord") +
-  facet_wrap(~year, ncol=nrow(new_summary), switch="x") +
-  theme(axis.text.x=element_blank())
+  #facet_wrap(~year, ncol=nrow(new_summary), switch="x") +
+  #theme(axis.text.x=element_blank())
+        theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust = 1, size = 6)) 
+
 }
 
 ```
+
+WORK IN PROGRESS: KOMEDIERNE SKAL ALTSÅ KUN STÅ ET STED - VED DET KORREKTE ÅR!
+HVIS JEG TAGER FACET WRAP UD STÅR DE KUN EN GANG, MEN I FORKERT RÆKKEFØLGE.
+OG VI HAR STADIG KUN DEM MED, SOM HENRIK OPTRÆDER I. VI VIL GERNE HAVE ALLE STYKKER MED.
 
 # Grafikker
 ## Henrik

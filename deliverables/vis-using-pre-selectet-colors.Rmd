@@ -135,13 +135,13 @@ Hvor mange skuespil?
 skuespil_titler %>% length()
 ```
 
-Lad os vælge 33 farver
+Lad os vælge 33 farver. Jeg har 34, så jeg retter lige!
 
 ```{r}
-skuespil_farver <- qualitative_hcl(33, palette = "Dynamic")
+skuespil_farver <- qualitative_hcl(34, palette = "Dynamic")
 ```
 
-Lad os se, hvordan de 33 farver placerer sig i et farverum
+Lad os se, hvordan de 34 farver placerer sig i et farverum
 
 ```{r}
 hclplot(skuespil_farver)
