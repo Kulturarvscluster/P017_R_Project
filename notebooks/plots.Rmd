@@ -159,7 +159,7 @@ my_play %>%
 #Husk at tælle hvor mange der er på scenen
 (my_summary %>%
   group_by(act_number, scene_number) %>%
-  summarise(total = sum(n_distinct(speaker))) -> number_on_stage) #TODO put det ind i grafen somehow!
+  mutate(total = sum(n_distinct(speaker))) -> my_summary) 
 
 #Husk at alle speakers og alle scener skal med
 (my_summary %>%
@@ -167,23 +167,23 @@ my_play %>%
     distinct() -> all_speakers_all_scenes)
 
 my_summary %>% 
-  left_join(number_on_stage) %>%
+  #left_join(number_on_stage) %>%
   full_join(all_speakers_all_scenes) %>%
   ggplot(aes(y = speaker, x = scene_index, width = 100)) +
-    geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey50", show.legend = FALSE) + 
+    geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey", show.legend = FALSE) + 
     geom_text(aes(label = "X")) +
     labs(
       title = paste(my_title, my_year, my_file),
       subtitle = "Hvem taler hvornår"
     ) +
-  xlab("Akt og scene") +
+  xlab("Akt \nScene \nAntal personer i scenen") +
   ylab("Speaker") + 
   theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) + 
   #facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x")
-  facet_grid(cols = vars(act_number, scene_number), switch="x")
+  facet_grid(cols = vars(act_number, scene_number, total), switch="x")
   #facet_wrap(~number_on_stage, ncol=number_of_scenes)
 
-  ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvem_taler_hvornaar.pdf")), width=16, height=9)
+  ggsave(here("graphs/plots", paste(my_file, ".hvem_taler_hvornaar.pdf")), width=16, height=9)
   
 
 ```
@@ -210,8 +210,10 @@ source(here("src", "omtale.R"))
     mutate(boolean_omtalt = TRUE)
   -> spoken_about_summary) 
 
+#TODO Husk at alle speakers og alle scener skal med
+
 spoken_about_summary %>% 
-  full_join(all_speakers_all_scenes, by = c("act_number", "scene_number", "scene_index","word" = "speaker")) %>%
+  #full_join(all_speakers_all_scenes, by = c("act_number", "scene_number", "scene_index","word" = "speaker")) %>%
   ggplot(aes(y = word, x = scene_index)) +
     geom_point(boolean_omtalt = TRUE, show.legend = FALSE) + #TODO virker ikke!!!
     labs(
@@ -223,11 +225,11 @@ spoken_about_summary %>%
   facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x") +
   theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) 
 
-  ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvem_bliver_omtalt.pdf")), width=16, height=9)
+  ggsave(here("graphs/plots", paste(my_file, ".hvem_bliver_omtalt.pdf")), width=16, height=9)
 
 
-spoken_about_summary %>% 
-  ggplot(aes(y = word, x = scene_index)) 
+#spoken_about_summary %>% 
+#  ggplot(aes(y = word, x = scene_index)) 
 
 
 
@@ -303,7 +305,7 @@ present_summary %>%
   facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x") +
   theme(axis.text.x=element_blank()) + 
 
-  ggsave(here("graphs/visualisering-ord-sagt", paste(my_file, ".hvem_er_til_stede.pdf")), width=16, height=9)
+  ggsave(here("graphs/plots", paste(my_file, ".hvem_er_til_stede.pdf")), width=16, height=9)
 
 #Spørgsmål: hvem er til stede, men taler ikke?
 source(here("src", "present_without_speech.R"))
