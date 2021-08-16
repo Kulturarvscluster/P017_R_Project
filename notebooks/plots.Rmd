@@ -1,0 +1,314 @@
+---
+title: "Plots"
+author: "baj"
+---
+
+#Graf over hvem siger noget hvornår
+
+Det her er simpelthen en anden måde at visualisere, hvornår karaktererne taler i stykket.
+
+## Indlæs data
+
+```{r, message=FALSE}
+library(tidyverse)
+library(tidytext)
+library(readxl)
+library(here)
+library(ndjson)
+library(xslt)
+library(fs)
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(huxtable)
+options(
+        huxtable.knit_print_df       = FALSE, 
+        huxtable.add_colnames        = TRUE,  # needed when run by testthat
+        huxtable.latex_use_fontspec  = TRUE
+      )
+
+require(readr)  # for read_csv()
+require(purrr)  # for map(), reduce()
+
+source(here("src/p017-functions.R"))
+#convert_TEI_to_JSONL(here("test-data"))
+# my_file <- "Skibbrud_mod.jsonl"
+my_file <- "Sganarel_mod.jsonl"
+my_play <- read_play_jsonl(here("test-data", my_file))
+my_play
+```
+
+## Tilføj scene indeks
+
+```{r, warning=FALSE, message=FALSE}
+my_play %>% 
+   group_by(act_number)  %>% 
+   summarise(scenes = max(scene_number)) %>% 
+   pull(scenes) %>% cumsum() -> act_length
+
+act_length
+
+calc_scene_index <- function(act_number, scene_number, act_length) {
+   ifelse(is.numeric(scene_number),
+      scene_number + ifelse(act_number==1, 0, act_length[act_number-1]),
+      NA
+   )
+}
+
+```
+
+## Omstrukturer data
+
+Det bliver måske pænere, hvis vi transformerer det til "den rigtige csv".
+
+Husk også at tælle hvor mange, der er til stede!
+
+
+```{r, rows.print=20}
+(my_play %>% 
+  # add a scene index for the x-axis
+  rowwise() %>% 
+  mutate(scene_index = calc_scene_index(act_number, scene_number, act_length)) %>% 
+  # remove rows that are not dialogue
+  filter(act != "", scene != "", speaker != "", !is.na(spoke)) %>%
+  # make a boolean to indicate spoke
+  mutate(boolean_spoke = spoke != "") %>%
+  # keep only coloumns that we need
+  select(act_number, scene_number, scene_index, speaker, boolean_spoke) %>%
+  distinct()
+  # remove NA TODO virker ikke
+  # mutate(replace_na(boolean_spoke, "")) 
+   -> my_summary)
+
+(my_summary %>%
+  # make a small scene_index, act_number, scene_number table
+  select(scene_index, act_number, scene_number) %>% 
+  distinct() %>% 
+  t() -> my_acts_and_scenes)
+class(my_acts_and_scenes)
+dim(my_acts_and_scenes)
+as.table(my_acts_and_scenes)
+as_tibble(my_acts_and_scenes)
+# flights[origin == "JFK" & month == 6L]
+my_acts_and_scenes["scene_index", ]
+my_acts_and_scenes["act_number", ]
+my_acts_and_scenes["scene_number", ]
+
+tibble(act_number = my_acts_and_scenes["act_number", ])
+
+
+(my_summary %>%
+  # select only the columns, that we are interested in
+  select(scene_index, speaker, boolean_spoke) %>% 
+  distinct() %>%
+   
+  # now pivot speakers to rows
+  pivot_wider(names_from = scene_index, values_from = boolean_spoke) -> my_speakers)
+
+#Skriv til csv
+write.csv(my_speakers, file = here("test-data/output/my_speakers.csv"))
+
+# Pretty print my_speakers
+# install.packages("DT")
+library(DT)
+datatable(my_speakers)
+
+# TODO Plot my_speakers
+#my_speakers %>%
+#  ggplot(aes(y = speaker, x = cols(), fill = TRUE) +
+#          geom_point())
+
+# TODO add act_number and scene_number again
+
+# Print?!
+options(huxtable.knit_print_df = TRUE)
+my_speakers %>% print()
+
+speak_ht <- as_hux(my_speakers)
+speak_ht %>% 
+      set_all_padding(1) %>% 
+      set_bold() %>% 
+      set_all_borders() %>%
+      #set_font_size(8) %>% 
+      #set_position("left") %>%
+      #set_width(0.9) %>%
+      #set_col_width(c(0.3, rep(1/act_length, act_length))) %>%
+      set_caption("Pots of jam for sale")
+
+#col_width(speak_ht)
+#print_screen(speak_ht)
+```
+
+
+
+
+"my_speakers" indeholder faktisk det jeg gerne vil plotte; jeg kan bare ikke finde ud af at lave plottet ud fra den tibble!
+Jeg går tilbage til at bruge "my_summary", selvom den ikke ser så pæn ud 
+
+```{r}
+my_play %>% 
+  select(docTitle) %>% 
+  distinct() %>%
+  pull(1,1) -> my_title
+
+my_play %>% 
+  select(year) %>% 
+  distinct() %>%
+  pull(1,1) -> my_year
+
+#Husk at tælle hvor mange der er på scenen
+(my_summary %>%
+  group_by(act_number, scene_number) %>%
+  mutate(total = sum(n_distinct(speaker))) -> my_summary) 
+
+#Husk at alle speakers og alle scener skal med
+(my_summary %>%
+    select(act_number, scene_number, scene_index, speaker) %>%
+    distinct() -> all_speakers_all_scenes)
+
+my_summary %>% 
+  #left_join(number_on_stage) %>%
+  full_join(all_speakers_all_scenes) %>%
+  ggplot(aes(y = speaker, x = scene_index, width = 100)) +
+    geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey", show.legend = FALSE) + 
+    geom_text(aes(label = "X")) +
+    labs(
+      title = paste(my_title, my_year, my_file),
+      subtitle = "Hvem taler hvornår"
+    ) +
+  xlab("Akt \nScene \nAntal personer i scenen") +
+  ylab("Speaker") + 
+  theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) + 
+  #facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x")
+  facet_grid(cols = vars(act_number, scene_number, total), switch="x")
+  #facet_wrap(~number_on_stage, ncol=number_of_scenes)
+
+  ggsave(here("graphs/plots", paste(my_file, ".hvem_taler_hvornaar.pdf")), width=16, height=9)
+  
+
+```
+
+#Graf over omtale
+
+Vi vil gerne vide, hvilke karakterer, der bliver talt om, men som ikke selv er til stede. Grafen skal være magen til den eksisterende. (se vedhæft). Her skal vi nok bruge den liste, som er under udfærdigelse.
+
+Nu prøver jeg lige at lave en i stil med den ovenfor!
+
+Først skal vi definere omtale. Jeg tænker at vi gør det ligesom med 'ikke til stede'. Altså hvis en karakter optræder i en replik i en scene, hvor den karakter ikke selv er til stede, bliver den karakter omtalt.
+
+Bemærk vi vil gerne have alle scener med, også selvom, der ikke er nogen, der bliver omtalt; og alle personer... Hvordan gør vi det?
+
+```{r}
+source(here("src", "omtale.R"))
+(spoken_about(my_play) %>%
+    #add empty rows and coloumns
+    
+  # add a scene index for the x-axis
+  rowwise() %>% 
+  mutate(scene_index = calc_scene_index(act_number, scene_number, act_length)) %>%
+  # add a boolean for "omtalt"
+    mutate(boolean_omtalt = TRUE)
+  -> spoken_about_summary) 
+
+#TODO Husk at alle speakers og alle scener skal med
+
+spoken_about_summary %>% 
+  #full_join(all_speakers_all_scenes, by = c("act_number", "scene_number", "scene_index","word" = "speaker")) %>%
+  ggplot(aes(y = word, x = scene_index)) +
+    geom_point(boolean_omtalt = TRUE, show.legend = FALSE) + #TODO virker ikke!!!
+    labs(
+      title = paste(my_title, my_year, my_file),
+      subtitle = "Hvem bliver omtalt"
+    ) +
+  xlab("Akt og scene") +
+  ylab("Speaker") + 
+  facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x") +
+  theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) 
+
+  ggsave(here("graphs/plots", paste(my_file, ".hvem_bliver_omtalt.pdf")), width=16, height=9)
+
+
+#spoken_about_summary %>% 
+#  ggplot(aes(y = word, x = scene_index)) 
+
+
+
+```
+#Graf over hvem der er til stede
+```{r}
+  # Find speakers
+  (my_play %>%
+    filter(!is.na(speaker)) %>% 
+    mutate(speaker = str_to_lower(speaker)) %>%
+    select(act_number, scene_number, index, speaker) %>%
+    distinct() -> speaker_tbl)
+   
+   (speaker_tbl %>% 
+      select(speaker) %>%
+      distinct() -> speakers)
+  # Find alle regi-bemærkninger. 
+  # These are the people who are directly mentioned in the stage tokens
+  (my_play %>% 
+      filter(!is.na(stage)) %>%
+      filter(!startsWith(stage, "("))  %>% 
+      unnest_tokens(word, stage, drop=FALSE, token="regex", pattern = ", *") %>% #tokenize stage
+      select(act_number, scene_number, index, word) %>% 
+      distinct() -> explicit_stage_tokens)
+  
+  # These are the the actors who are implicitly mentioned in stage tokens
+  (my_play %>% 
+      filter(!is.na(stage)) %>%
+      filter(startsWith(stage, "("))  %>% 
+      unnest_tokens(word, stage) %>% #tokenize stage
+      select(act_number, scene_number, index, word) %>% 
+      distinct() -> implicit_stage_tokens)
+  
+  # These are the the actors who are implicitly mentioned in speaker stage tokens
+  (my_play %>% 
+      unnest_tokens(word, speaker_stage) %>% #tokenize speaker stage
+      filter(!is.na(word)) %>%
+      select(act_number, scene_number, index, word) -> speaker_stage_tokens)
+  
+  # Search for speakers in instructions
+  (explicit_stage_tokens %>%
+      semi_join(speakers, by = c("word" = "speaker")) -> explicit_speakers_in_stage)
+  
+  (implicit_stage_tokens %>%
+      semi_join(speakers, by = c("word" = "speaker")) -> implicit_speakers_in_stage)
+  
+  (speaker_stage_tokens %>%
+      semi_join(speakers, by = c("word" = "speaker")) -> speakers_in_speaker_stage)
+  
+  
+  (explicit_speakers_in_stage %>%
+      full_join(implicit_speakers_in_stage) %>% 
+      full_join(speakers_in_speaker_stage) -> all_speakers_in_stage)
+
+(my_summary %>%
+    select(act_number, scene_number, index, speaker) %>%
+    # join with speakers in 'speaker'
+    full_join(all_speakers_in_stage, by = c("act_number", "scene_number", "index","speaker" = "word")) %>%
+  # add a scene index for the x-axis
+  rowwise() %>% 
+  mutate(scene_index = calc_scene_index(act_number, scene_number, act_length))
+  -> present_summary) #todo this doesn't work!
+
+present_summary %>% 
+  ggplot(aes(y = speaker, x = scene_index)) +
+    geom_point(show.legend = FALSE) +
+    labs(
+      title = paste(my_title, my_year, my_file),
+      subtitle = "Hvem er til stede"
+    ) +
+  xlab("Akt og scene") +
+  ylab("Speaker") + 
+  facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x") +
+  theme(axis.text.x=element_blank()) + 
+
+  ggsave(here("graphs/plots", paste(my_file, ".hvem_er_til_stede.pdf")), width=16, height=9)
+
+#Spørgsmål: hvem er til stede, men taler ikke?
+source(here("src", "present_without_speech.R"))
+(present_without_speech(my_play))
+#Ovenstående virker altså ikke...
+```

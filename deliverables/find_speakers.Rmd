@@ -32,7 +32,7 @@ read_plays_jsonl (here("test-data")) ->allplays
 Vi kan også gemme jsonl filen som csv direkte:
 
 ```{r}
- write.csv(barselstuen_raw, file = here("test-data/output/barselstuen.csv"))
+ write.csv(barselstuen_raw, file = here("output/find_speakers/barselstuen_speakers.csv"))
 
 ```
 
@@ -111,7 +111,7 @@ Til at starte med kan vi finde alle regi-bemærkninger. De findes i <stage> og <
 all_stage_instructions <- barselstuen_raw %>%
   select(stage) %>% filter(!is.na(stage))
 all_stage_instructions
-# write.csv(all_stage_instructions, file = here("test-data/output/barselstuen_all_stage_instructions.csv"))
+# write.csv(all_stage_instructions, file = here("output/barselstuen_all_stage_instructions.csv"))
 
 # <speaker-stage>
 all_speaker_stage_instructions <- barselstuen_raw %>%
@@ -121,19 +121,19 @@ all_speaker_stage_instructions
 # combine vectors
 combined_stage_vector <- c(as.vector(all_stage_instructions[['stage']]), as.vector(all_speaker_stage_instructions[['speaker_stage']]))
 combined_stage_vector
-write.csv(combined_stage_vector, here("test-data/output/barselstuen_combined_stage_instructions.csv"))
+write.csv(combined_stage_vector, here("output/barselstuen_combined_stage_instructions.csv"))
 
 # <stage> by <scene>
 stage_instructions_by_scene <- barselstuen_raw %>%
   select(act, scene, stage) %>% filter(!is.na(stage))
 stage_instructions_by_scene
-write.csv(stage_instructions_by_scene, file = here("test-data/output/barselstuen_stage_instructions_by_scene.csv"))
+write.csv(stage_instructions_by_scene, file = here("output/barselstuen_stage_instructions_by_scene.csv"))
 
 # <speaker-stage> by <scene>
 speaker_stage_instructions_by_scene <- barselstuen_raw %>%
   select(act, scene, speaker_stage) %>% filter(!is.na(speaker_stage))
 speaker_stage_instructions_by_scene
-write.csv(speaker_stage_instructions_by_scene, file = here("test-data/output/barselstuen_speaker_stage_instructions_by_scene.csv"))
+write.csv(speaker_stage_instructions_by_scene, file = here("output/barselstuen_speaker_stage_instructions_by_scene.csv"))
 
 ```
 
