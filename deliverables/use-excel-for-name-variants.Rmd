@@ -5,6 +5,8 @@ author: pmd
 date: 2021-03-01
 ---
 
+Denne notebook illustrerer, hvordan man kan bruge `Rolleliste.xlsx` til håndtering af flere varianter af samme navn. Dvs. koden her i skal ikke producere andet end viden i læserens hoved om at bruge denne koncept. I afsnittet Anvendelse i slutningen af denne notebook, er kort vist hvordan man kan bruge dette i praksis.
+
 Først indlæser vi de nødvendige R pakker
 
 ```{r}
