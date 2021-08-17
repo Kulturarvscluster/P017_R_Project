@@ -291,7 +291,7 @@ og i selve ggplot kommandoen: `scale_fill_manual(values = rolle_farver)`. Dvs. j
 
 
 ```{r}
-plays |> select(title) |> distinct(title) |> pull(title)
+plays %>% select(title) %>% distinct(title) %>% pull(title)
 ```
 
 med 33 forskellige farver
@@ -325,7 +325,7 @@ Heúrēka!
 Definer den faste palette. Jeg har arbitrært valgt "Dark 3".
 
 ```{r}
-skuespil_titler <- plays |> select(title) |> distinct(title) |> pull(title)
+skuespil_titler <- plays %>% select(title) %>% distinct(title) %>% pull(title)
 skuespil_farver <- qualitative_hcl(33, palette = "Dark 3")
 names(skuespil_farver) = skuespil_titler
 skuespil_farver
@@ -380,11 +380,11 @@ komedietitler <- read_xlsx(here("Komedietitler.xlsx"))
 ```
 
 ```{r}
-komedietitler |> glimpse()
+komedietitler %>% glimpse()
 ```
 
 ```{r}
-komedietitler |> select(farvekode) |> distinct(farvekode) |> pull(farvekode)
+komedietitler %>% select(farvekode) %>% distinct(farvekode) %>% pull(farvekode)
 ```
 
 
