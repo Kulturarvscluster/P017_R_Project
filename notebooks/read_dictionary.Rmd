@@ -13,6 +13,10 @@ library(here)
 2+2
 ```
 
+# Advarsel
+
+Kør kun denne notebook, hvis du har god tid eller en stor og stærk maskine.
+
 
 # Undersøgelse af Holbergordbogen
 
@@ -47,6 +51,7 @@ s
 str_match(s,"'[a-z1-9 ]+'")
 ```
 
+Den næste tager ret lang tid, så lad endelig være med at køre dette :-)
 
 ```{r}
 ordbog
