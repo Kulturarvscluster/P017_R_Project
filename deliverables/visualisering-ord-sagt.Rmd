@@ -221,6 +221,8 @@ Med de to funktioner, kan vi nu skrive denne kode
 Husk at disse ændringer er lavet til "Barselstuen"
 
 ```{r}
+my_summary %>% pull(scene_number) %>% max() -> number_of_scenes
+
 my_summary %>% 
   ungroup() %>% 
   
@@ -247,7 +249,7 @@ my_summary %>%
     ) +
   xlab("Akt og scene") +
   ylab("Antal sagte ord") + 
-  facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x")+
+  facet_wrap(act_number~scene_number, ncol=number_of_scenes, strip.position = "top")+
   theme(axis.text.x=element_blank())
 
 ```
@@ -322,6 +324,8 @@ Det kan jeg simpelthen ikke få til at virke!
 Det er til gengæld nemt. Vi paster det bare ind i title.
 
 ```{r}
+my_summary %>% pull(scene_number) %>% max() -> number_of_scenes
+
 (new_act <- my_summary %>%
   ungroup %>%
   arrange(scene_index) %>%
@@ -344,7 +348,7 @@ my_summary %>%
     ) +
   xlab("Akt og scene") +
   ylab("Antal sagte ord") + 
-  facet_wrap(act_number~scene_number, ncol=number_of_scenes, switch="x")+
+  facet_wrap(act_number~scene_number, ncol=number_of_scenes, strip.position = "top")+
   theme(axis.text.x=element_blank()) #+
   #scale_x_continuous(aes(scene_index, breaks = new_act))
                      
