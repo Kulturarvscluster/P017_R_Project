@@ -271,6 +271,13 @@ Herefter følger eksempler på, hvordan man benytter forskellige ggplot temaer.
 
 Først et lidt pjattet eksempel, som dog viser bredden af tematiske muligheder.
 
+Inden nedenstående `tvthemes` kan indlæses, skal det først installeres. Dette skal kun gøre én gang:
+
+```{r}
+install.packages("tvthemes")
+```
+
+
 ```{r}
 library(tvthemes)
 ```
@@ -323,16 +330,22 @@ summary %>%
 p + coord_flip()
 
 p +
-  facet_wrap(~year, ncol=nrow(summary), switch="x") +
+  facet_wrap(~year, ncol=nrow(summary), strip.position="top") +
   coord_flip()
-
 
 ```
 
 ## Viridis
 
+Install skal kun køres første gang, denne notebook gennemgås.
+
 ```{r}
-library("viridis")
+install.packages("viridis")
+```
+
+
+```{r}
+library(viridis)
 ```
 
 ```{r}
@@ -355,10 +368,17 @@ summary %>%
 
 p
 
-p + facet_wrap(~year, ncol=nrow(summary), switch="x")
+p + facet_wrap(~year, ncol=nrow(summary), strip.position="top")
 ```
 
 ## Economist
+
+Installation af `ggthemes` skal kun foretages første gang denne notebook gennemgås.
+
+```{r}
+install.packages("ggthemes")
+```
+
 
 ```{r}
 library(ggthemes)
@@ -385,7 +405,7 @@ summary %>%
 
 p
 
-p + facet_wrap(~year, ncol=nrow(summary), switch="x")
+p + facet_wrap(~year, ncol=nrow(summary), strip.position="top")
   
 ```
 
@@ -407,7 +427,7 @@ summary %>%
   xlab("Skuespil") +
   ylab("Procent sagte ord") +
   #scale_fill_brewer(palette = "Greens") +
-  facet_wrap(~year, ncol=nrow(summary), switch="x") +
+  facet_wrap(~year, ncol=nrow(summary), strip.position = "top") +
   #theme(axis.text.x=element_blank()) +
   coord_flip() +
   #theme_bw()
