@@ -20,6 +20,9 @@ library(readxl)
 library(tidytext)
 library(readr)  # for read_csv()
 library(purrr)  # for map(), reduce()
+
+# husk:
+#install.packages("colorspace")
 library(colorspace)
 
 source(here("src/p017-functions.R"))
@@ -181,7 +184,7 @@ character_plot_with_color <- function(character_name, skuespil_farver, skuespil)
     scale_y_continuous(limits = c(0,0.4), breaks = c(0,0.1,0.2,0.3,0.4)) +
     xlab("year") +
     ylab("Procent sagte ord") +
-    facet_wrap(~year, ncol=nrow(skuespil), switch="x") +
+    facet_wrap(~year, ncol=nrow(skuespil), strip.position = "top") +
     theme(axis.text.x=element_blank())
 }
 ```
