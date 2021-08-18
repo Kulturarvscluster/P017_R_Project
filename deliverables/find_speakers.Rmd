@@ -32,7 +32,7 @@ read_plays_jsonl (here("test-data")) ->allplays
 Vi kan også gemme jsonl filen som csv direkte:
 
 ```{r}
- write.csv(barselstuen_raw, file = here("output/find_speakers/barselstuen_speakers.csv"))
+ write.csv(barselstuen_raw, file = here("csv/barselstuen_speakers.csv"))
 
 ```
 
