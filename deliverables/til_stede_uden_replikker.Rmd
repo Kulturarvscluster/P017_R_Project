@@ -139,14 +139,3 @@ present_without_speech(play)
 
 Ok, funktionen ser ud til at virke, så prøver vi at putte det ind i netværksgrafen.
 
-Vi skal nu lave kanter i hver scene til dem, der taler.
-
-
-
-WORK IN PROGRESS
-
-Dernæst brug en bruttoliste over hvem der ville kunne være tilstede 
-
-Denne bruttoliste kan måske baseres på "ordbogen"
-
-Den kan måske gives fra forskerne...
