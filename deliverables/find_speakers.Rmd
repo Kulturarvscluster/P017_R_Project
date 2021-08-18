@@ -19,6 +19,7 @@ library(ndjson)
 library(here)
 library(fs)
 library(tidytext)
+library(xslt)
 
 barselstuen_raw <- ndjson::stream_in(here("test-data/Barselstuen_mod.jsonl")) %>% tibble()
 read_plays_jsonl (here("test-data")) ->allplays
