@@ -30,7 +30,7 @@ Put the name of the file to use in "my_file".
 
 # Find speakers
 ```{r}
-my_file <- "Mascarade_mod_nc.jsonl"
+my_file <- "Mascarade_mod.jsonl"
 (read_play_jsonl(here("test-data", my_file)) -> play)
 (find_speakers(play) -> distinct_speakers)
 ```
