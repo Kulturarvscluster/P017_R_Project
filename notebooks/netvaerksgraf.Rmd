@@ -80,9 +80,9 @@ We look at one play at a time.
 
 ```{r}
 my_dir <-"test-data"
-my_play <- "Hexerie_mod_nc.jsonl"
+my_play <- "Hexerie_mod.jsonl"
 read_play_jsonl(here(my_dir, my_play)) -> play
-play #se den tbl, der nu er last ind i play
+play #se den tbl, der nu er læst ind i play
 
 ## Distinct speakers in each scene in each act grouped by act and scene
 (play %>%
