@@ -21,12 +21,6 @@ library(fs)
 library(ggplot2)
 library(knitr)
 library(dplyr)
-library(huxtable)
-options(
-        huxtable.knit_print_df       = FALSE, 
-        huxtable.add_colnames        = TRUE,  # needed when run by testthat
-        huxtable.latex_use_fontspec  = TRUE
-      )
 
 require(readr)  # for read_csv()
 require(purrr)  # for map(), reduce()
@@ -35,7 +29,7 @@ source(here("src/p017-functions.R"))
 #convert_TEI_to_JSONL(here("test-data"))
 # my_file <- "Skibbrud_mod.jsonl"
 # my_file <- "Sganarel_mod.jsonl"
-# my_file <- "Barselstuen_mod.jsonl" <-bliver meget klemt!
+# my_file <- "Barselstuen_mod.jsonl" #bliver meget klemt!
 my_file <- "Mascarade_mod.jsonl"
 my_play <- read_play_jsonl(here("test-data", my_file))
 my_play
@@ -123,7 +117,7 @@ my_speakers
 #(my_speakers %>% add_row(my_acts))
 
 #Skriv til csv
-write.csv(my_speakers, file = here(paste("csv/",my_file, ".csv")))
+write.csv(my_speakers, file = here(paste("csv/","plot_who_speaks_", my_file, ".csv")))
 
 # Pretty print my_speakers
 # install.packages("DT")
