@@ -26,11 +26,13 @@ require(readr)  # for read_csv()
 require(purrr)  # for map(), reduce()
 
 source(here("src/p017-functions.R"))
+source(here("src", "present_without_speech.R"))
+
 #convert_TEI_to_JSONL(here("test-data"))
 # my_file <- "Skibbrud_mod.jsonl"
 # my_file <- "Sganarel_mod.jsonl"
-# my_file <- "Barselstuen_mod.jsonl" #bliver meget klemt!
-my_file <- "Mascarade_mod.jsonl"
+my_file <- "Barselstuen_mod.jsonl" #bliver meget klemt!
+# my_file <- "Mascarade_mod.jsonl"
 my_play <- read_play_jsonl(here("test-data", my_file))
 my_play
 ```
@@ -145,7 +147,7 @@ my_play %>%
   distinct() %>%
   pull(1,1) -> my_year
 
-#Husk at tælle hvor mange der er på scenen
+#Husk at tælle hvor mange der NU er på scenen
 (my_summary %>%
   group_by(act_number, scene_number) %>%
   mutate(total = sum(n_distinct(speaker))) -> my_summary) 
@@ -159,7 +161,7 @@ my_summary %>%
       title = paste(my_title, my_year, my_file),
       subtitle = "Hvem taler hvornår"
     ) +
-  xlab("Akt \nScene \nAntal personer i scenen") +
+  xlab("Akt \nScene \nAntal personer der taler i scenen") +
   ylab("Speaker") + 
   theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) + 
   facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total), switch="x")
@@ -169,16 +171,55 @@ my_summary %>%
 
 ```
 
+#Graf over hvem der er til stede
+Vi tilføjer til grafen ovenfor?!
+```{r}
+# Vi genindlæser lige stykket!
+my_play <- read_play_jsonl(here("test-data", my_file))
+# Til stede, men taler ikke
+present_without_speech_numbers(my_play) %>%
+  # add a scene index for the x-axis
+  rowwise() %>% 
+  mutate(scene_index = calc_scene_index(act_number, scene_number, act_length)) %>%
+  # add a boolean for "til stede"
+    mutate(boolean_spoke = "S") %>%
+  select(-index) -> present_silent 
+
+# Sæt "taler" og "til stede" sammen
+my_summary %>%
+    select(-total) %>%
+  full_join(present_silent, 
+            by = c("speaker"="word", "act_number", "scene_number", "scene_index", "boolean_spoke")) -> new_summary
+
+#Husk at tælle hvor mange der NU er på scenen
+(new_summary %>%
+  group_by(act_number, scene_number) %>%
+  mutate(total = sum(n_distinct(speaker))) -> new_summary) 
+
+new_summary %>% 
+  ggplot(aes(y = speaker, x = scene_index, width = 100)) +
+    geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey", show.legend = FALSE) + 
+    geom_text(aes(label = boolean_spoke)) +
+    labs(
+      title = paste(my_title, my_year, my_file),
+      subtitle = "Hvem er til stede"
+    ) +
+  xlab("Akt \nScene \nAntal personer i scenen") +
+  ylab("Speaker") + 
+  theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) + 
+  facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total), switch = "x")
+
+  ggsave(here("graphs/plots", paste(my_file, ".hvem_til_stede.pdf")), width=16, height=9)
+
+```
+
 #Graf over omtale
 
 Vi vil gerne vide, hvilke karakterer, der bliver talt om, men som ikke selv er til stede. Grafen skal være magen til den eksisterende. (se vedhæft). Her skal vi nok bruge den liste, som er under udfærdigelse.
 
-Nu prøver jeg lige at lave en i stil med den ovenfor!
-
 Først skal vi definere omtale. Jeg tænker at vi gør det ligesom med 'ikke til stede'. Altså hvis en karakter optræder i en replik i en scene, hvor den karakter ikke selv er til stede, bliver den karakter omtalt.
 
-Bemærk vi vil gerne have alle scener med, også selvom, der ikke er nogen, der bliver omtalt; og alle personer... Hvordan gør vi det?
-Vi kan prøve at tilføje til grafen ovenfor?!
+Vi tilføjer til grafen ovenfor?!
 
 ```{r}
 source(here("src", "omtale.R"))
@@ -191,7 +232,7 @@ source(here("src", "omtale.R"))
   select(-index)
   -> spoken_about_summary) 
 
-my_summary %>%
+new_summary %>%
     select(-total) %>%
   full_join(spoken_about_summary, by = c("speaker"="word", "act_number", "scene_number", "scene_index", "boolean_spoke")) %>% 
   ggplot(aes(y = speaker, x = scene_index, width = 100)) +
@@ -199,23 +240,35 @@ my_summary %>%
     geom_text(aes(label = boolean_spoke)) +
     labs(
       title = paste(my_title, my_year, my_file),
-      subtitle = "Hvem taler hvornår og hvem bliver omtalt"
+      subtitle = "Hvem er til stede og hvem bliver omtalt"
     ) +
   xlab("Akt \nScene") +
   ylab("Speaker") + 
   theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) + 
   facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number), switch = "x")
 
-  ggsave(here("graphs/plots", paste(my_file, ".hvem_taler_hvem_omtalt.pdf")), width=16, height=9)
+  ggsave(here("graphs/plots", paste(my_file, ".hvem_til_stede_hvem_omtalt.pdf")), width=16, height=9)
 
 ```
-#Graf over hvem der er til stede
-Vi kan prøve at tilføje til grafen ovenfor?!
+
+# Kør funktionerne på alle stykker
+Vi tester lige med et enkelt først
 ```{r}
-#TODO
-source(here("src", "present_without_speech.R"))
-(present_without_speech(my_play))
-#Hvorfor virker funktionen ikke?
+source(here("src", "plot_func.R"))
+
+my_file <- "Mascarade_mod.jsonl"
+plot_all(my_file)
+
+```
+Det virker af en eller anden grund ikke?! De stumme karakterer forsvinder i det sidste plot med omtale. Nu kører jeg den på de to første! Og så kørte jeg den igen, og nu virker den på "Maskerade", så vi prøver lige igen med alle tre :)
+```{r}
+source(here("src", "plot_func.R"))
+# Alle stykker som json filer
+json_file_list <- list.files(here("test-data"), pattern = "*.jsonl")
+# Alle stykker som plots
+for(i in 2:length(json_file_list)) {
+  plot_all(json_file_list[i])
+}
 
 ```
 
