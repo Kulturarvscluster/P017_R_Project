@@ -79,3 +79,25 @@ auto_decapitalized %>%
   setdiff(manual_decapitalized_trimmed %>% select(speaker, play))
 ```
 142 combinations that are not in manual.
+
+Try to combine the two tables
+
+```{r}
+auto_decapitalized %>% 
+  mutate(in_auto = TRUE) %>% 
+  full_join(
+    manual_decapitalized_trimmed %>%
+      mutate(in_manual = TRUE),
+    by = c("speaker","play")
+  ) %>% 
+  mutate(
+    in_auto = !is.na(in_auto),
+    in_manual = !is.na(in_manual)
+  ) %>% 
+  select(speaker, play, in_auto, in_manual, everything()) -> gender_and_mask
+```
+
+```{r}
+write_excel_csv2(gender_and_mask,here("gender-and-mask.csv"))
+```
+
