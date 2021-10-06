@@ -9,6 +9,13 @@ author: pmd
 library(tidyverse)
 library(readxl)
 library(here)
+library(fs)
+```
+
+Husk også de projektspecifikke R funtkioner
+
+```{r}
+source(here("src", "p017-functions.R"))
 ```
 
 
@@ -30,16 +37,12 @@ Det vi har brug for:
 
 
 ```{r}
+#manual_all_plays <- read_excel("/Users/tanjajessen/Desktop/R ting/allspeakers_gender_and_mask.xlsx")
 manual_all_plays <- read_excel(here("allspeakers_gender_and_mask.xlsx"))
 ```
 ```{r}
 manual_all_plays
 ```
-```{r}
-sheet %>%
-        count(`Dramaturgic function`)
-```
-
 
 # Bolettes kode
 # Sandkasse
@@ -53,6 +56,11 @@ read_csv(here("output/find_speakers/barselstuen_speakers.csv")) %>%
 ## Calculate the automatic table
 
 Oprindelig kode fra Bolette
+
+```{r}
+read_plays_jsonl (here("test-data")) -> allplays
+```
+
 
 ```{r}
 allplays %>% 
@@ -71,8 +79,8 @@ allplays %>%
         count(speaker, docTitle) %>% 
         rename(plays = docTitle)-> auto_all_plays
 auto_all_plays
+# Her er der kommet en del komedier ind i starten uden nogen speaker
 ```
-
 
 # Kombiner de to ark
 
@@ -101,19 +109,46 @@ og denne automatisk skabte tabel
 Vi skal først have `manual_all_plays` på "tidy" form, dvs. splittet plays, som er en komma adskilt liste, op i en række pr. stykke, samtidig med at vi bibeholder alle kolonner efter `count`.
 
 ```{r}
-manual_all_plays %>% 
+manual_all_plays <- manual_all_plays %>% 
         separate_rows(plays,sep = ",") %>% 
         select(-`...1`) # hvor kommer denne kolonne fra?
+manual_all_plays
 ```
 Vi kan nu — måske — flette de to tabeller
 
 ```{r}
 auto_all_plays %>% 
-        left_join(manual_all_plays, by = c("speaker", "plays"))
+        left_join(manual_all_plays, by = c("speaker", "plays")) -> joined_all_plays
+joined_all_plays
 ```
 
 ```{r}
 glimpse(.Last.value)
 ```
 
+Find fejlene. Hvorfor er der forskellig antal rækker og kolonner?
+- Der er en kolonne "count" i den ene og en kolonne "n" i den anden tabel. 
+- så 3 i den ene, 9 i den anden. to er ens, så det passer med de 10 kolonner
 
+- Er der kommet nye filer ind?
+
+Hvis man sammenligner fx hvor mange gange "Barselssuen Komedie" optræder, så er det 58 gange i auto_all_plays og kun 43 gange i manual_all_plays:
+```{r}
+(auto_all_plays %>% filter(plays == "Barselsstuen Komedie"))
+(manual_all_plays %>% filter(plays == "Barselsstuen Komedie"))
+```
+
+Hvilke rækker er kommet til?
+
+```{r}
+(speaker_auto <- auto_all_plays %>% select(speaker))
+(speaker_manual <- manual_all_plays %>% select(speaker))
+#anti_join(speaker_auto, speaker_manual)
+```
+
+Hvor mange speakers er der i auto_all_plays, hvis rækkerne uden speaker trækkes fra?
+```{r}
+nas_or_empty <- which(is.na(auto_all_plays$speaker)|auto_all_plays$speaker == "")
+length(nas_or_empty)
+```
+Hvilke optræder så i auto, men ikke i manual?
