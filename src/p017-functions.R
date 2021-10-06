@@ -26,7 +26,7 @@ convert_TEI_to_JSONL <- function(folder) {
 # a tibble, adding an index numbering each scene within each play
 read_plays_jsonl <- function(folder) {
   dir_ls(here(folder), glob = "*.jsonl") %>%
-    map_dfr(function(fn) ndjson::stream_in(fn) %>% tibble() %>% add_column(filename = basename(fn)))
+    map_dfr(function(fn) ndjson::stream_in(fn) %>% tibble() %>% mutate(speaker = stringr::str_remove(speaker, " \\(")) %>% add_column(filename = basename(fn)))
 }
 
 # This function reads the JSONL file specified as input into
@@ -37,6 +37,7 @@ read_play_jsonl <- function(file) {
     map_dfr(
       ~ndjson::stream_in(.) %>%
         tibble() %>%
+        mutate(speaker = stringr::str_remove(speaker, " \\(")) %>% 
         add_column(filename = substr(file, 
                                      start = unlist(lapply(str_locate_all(file, '/'), max))+1, 
                                      stop = str_length(file)), .before = 0)
