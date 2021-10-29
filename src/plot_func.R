@@ -100,12 +100,14 @@ plot_all <- function(my_file) {
       title = paste(my_title, my_year, my_file),
       subtitle = "Hvem taler hvornår"
     ) +
+    scale_x_discrete(position = "top") +
     xlab("Akt \nScene \nAntal personer der taler i scenen") +
     ylab("Speaker") + 
     theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) + 
-    facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total), switch="x")
+    facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total))
+    #facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total), switch="x")
   
-  ggsave(here("graphs/plots", paste(my_file, ".hvem_taler_hvornaar.pdf")), width=16, height=9)
+  ggsave(here("graphs/plots/hvem-taler-hvornaar", paste(my_file, ".hvem_taler_hvornaar.pdf")), width=16, height=9)
   
   ##Graf over hvem der er til stede
   # Vi genindlæser lige stykket!
@@ -143,7 +145,7 @@ plot_all <- function(my_file) {
     theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) + 
     facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total), switch = "x")
   
-  ggsave(here("graphs/plots", paste(my_file, ".hvem_til_stede.pdf")), width=16, height=9)
+  ggsave(here("graphs/plots/hvem-til-stede", paste(my_file, ".hvem_til_stede.pdf")), width=16, height=9)
   
   ##Graf over omtale
   source(here("src", "omtale.R"))
@@ -160,7 +162,12 @@ plot_all <- function(my_file) {
     select(-total) %>%
     full_join(spoken_about_summary, by = c("speaker"="word", "act_number", "scene_number", "scene_index", "boolean_spoke")) %>% 
     ggplot(aes(y = speaker, x = scene_index, width = 100)) +
-    geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey", show.legend = FALSE) + 
+    geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey", show.legend = TRUE) + 
+    
+    scale_fill_discrete(name = "", labels = c("Omtalt (O)", "Stum (S)", "Talende (X)")) +
+    scale_fill_manual(values = c(rgb(86/255,180/255,233/255), rgb(230/255,159/255,0), rgb(240/255,228/255,66/255))) + 
+    scale_x_discrete(position = "top") +
+    
     geom_text(aes(label = boolean_spoke)) +
     labs(
       title = paste(my_title, my_year, my_file),
@@ -168,9 +175,14 @@ plot_all <- function(my_file) {
     ) +
     xlab("Akt \nScene") +
     ylab("Speaker") + 
-    theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) + 
-    facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number), switch = "x")
+    theme(
+      axis.text.x=element_blank(),
+      line = element_blank(),
+      rect = element_blank(),
+      legend.position="bottom"
+    ) + 
+    facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number))
   
-  ggsave(here("graphs/plots", paste(my_file, ".hvem_til_stede_hvem_omtalt.pdf")), width=16, height=9)
+  ggsave(here("graphs/plots/hvem-til-stede-hvem-omtalt", paste(my_file, ".hvem_til_stede_hvem_omtalt.pdf")), width=16, height=9)
   
 }
