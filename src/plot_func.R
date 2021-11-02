@@ -107,7 +107,7 @@ plot_all <- function(my_file) {
     facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total))
     #facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total), switch="x")
   
-  ggsave(here("graphs/plots/hvem-taler-hvornaar", paste(my_file, ".hvem_taler_hvornaar.pdf")), width=16, height=9)
+  ggsave(here("graphs/plots/hvem-taler-hvornaar", paste0(my_file, ".hvem_taler_hvornaar.pdf")), width=16, height=9)
   
   ##Graf over hvem der er til stede
   # Vi genindlæser lige stykket!
@@ -138,7 +138,6 @@ plot_all <- function(my_file) {
 
     scale_fill_manual(name = "", labels = c("Stum (S)", "Talende (X)"), values = c(rgb(230/255,159/255,0), rgb(240/255,228/255,66/255))) +
     scale_x_discrete(position = "top") +
-    # TODO: legend_name og labvels slår ikke igennem
     geom_text(aes(label = boolean_spoke)) +
     labs(
       title = paste(my_title, my_year, my_file),
@@ -154,7 +153,7 @@ plot_all <- function(my_file) {
     
     facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total))
   
-  ggsave(here("graphs/plots/hvem-til-stede", paste(my_file, ".hvem_til_stede.pdf")), width=16, height=9)
+  ggsave(here("graphs/plots/hvem-til-stede", paste0(my_file, ".hvem_til_stede.pdf")), width=16, height=9)
   
   ##Graf over omtale
   source(here("src", "omtale.R"))
@@ -199,6 +198,6 @@ plot_all <- function(my_file) {
     ) + 
     facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number))
   
-  ggsave(here("graphs/plots/hvem-til-stede-hvem-omtalt", paste(my_file, ".hvem_til_stede_hvem_omtalt.pdf")), width=16, height=9)
+  ggsave(here("graphs/plots/hvem-til-stede-hvem-omtalt", paste0(my_file, ".hvem_til_stede_hvem_omtalt.pdf")), width=16, height=9)
   
 }
