@@ -94,6 +94,11 @@ plot_all <- function(my_file) {
   #Plot
   my_summary %>% 
     ggplot(aes(y = speaker, x = scene_index, width = 100)) +
+    scale_fill_manual(
+      name = "",
+      labels = c("Stum (S)", "Talende (X)"),
+      values = c(rgb(240/255,228/255,66/255))
+    ) +
     geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey", show.legend = FALSE) + 
     geom_text(aes(label = "X")) +
     labs(
