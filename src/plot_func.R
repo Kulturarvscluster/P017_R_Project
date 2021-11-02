@@ -172,11 +172,18 @@ plot_all <- function(my_file) {
     full_join(spoken_about_summary, by = c("speaker"="word", "act_number", "scene_number", "scene_index", "boolean_spoke")) %>% 
     ggplot(aes(y = speaker, x = scene_index, width = 100)) +
     geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey", show.legend = TRUE) + 
-    
-    scale_fill_discrete(name = "", labels = c("Omtalt (O)", "Stum (S)", "Talende (X)")) +
-    scale_fill_manual(values = c(rgb(86/255,180/255,233/255), rgb(230/255,159/255,0), rgb(240/255,228/255,66/255))) + 
+
+    scale_fill_manual(
+       name = "",
+       labels = c("Omtalt (O)", "Stum (S)", "Talende (X)"),
+       values = c(
+          rgb(86/255,180/255,233/255),
+          rgb(230/255,159/255,0),
+          rgb(240/255,228/255,66/255)
+       )
+    ) +
     scale_x_discrete(position = "top") +
-    
+
     geom_text(aes(label = boolean_spoke)) +
     labs(
       title = paste(my_title, my_year, my_file),
