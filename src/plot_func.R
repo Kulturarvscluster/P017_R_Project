@@ -134,7 +134,11 @@ plot_all <- function(my_file) {
   
   new_summary %>% 
     ggplot(aes(y = speaker, x = scene_index, width = 100)) +
-    geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey", show.legend = FALSE) + 
+    geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey", show.legend = TRUE) +
+
+    scale_fill_manual(name = "", labels = c("Stum (S)", "Talende (X)"), values = c(rgb(230/255,159/255,0), rgb(240/255,228/255,66/255))) +
+    scale_x_discrete(position = "top") +
+    # TODO: legend_name og labvels slår ikke igennem
     geom_text(aes(label = boolean_spoke)) +
     labs(
       title = paste(my_title, my_year, my_file),
@@ -142,8 +146,13 @@ plot_all <- function(my_file) {
     ) +
     xlab("Akt \nScene \nAntal personer i scenen") +
     ylab("Speaker") + 
-    theme(axis.text.x=element_blank(), line = element_blank(), rect = element_blank()) + 
-    facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total), switch = "x")
+    theme(
+      axis.text.x=element_blank(),
+      line = element_blank(),
+      rect = element_blank(),
+      legend.position = "bottom") + 
+    
+    facet_grid(cols = vars("act_number" = act_number, "scene_number" = scene_number, "total" = total))
   
   ggsave(here("graphs/plots/hvem-til-stede", paste(my_file, ".hvem_til_stede.pdf")), width=16, height=9)
   
