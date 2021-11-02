@@ -163,11 +163,11 @@ plot_all <- function(my_file) {
       mutate(scene_index = calc_scene_index(act_number, scene_number, act_length)) %>%
       # add a boolean for "omtalt"
       mutate(boolean_spoke = "O") %>%
-      select(-index)
-    -> spoken_about_summary) 
+      mutate(total = 0) %>%
+      select(-index) -> spoken_about_summary) 
   
   new_summary %>%
-    select(-total) %>%
+    #select(-total) %>%
     full_join(spoken_about_summary, by = c("speaker"="word", "act_number", "scene_number", "scene_index", "boolean_spoke")) %>% 
     ggplot(aes(y = speaker, x = scene_index, width = 100)) +
     geom_tile(aes(fill = boolean_spoke, colour = speaker), colour = "grey", show.legend = TRUE) + 
