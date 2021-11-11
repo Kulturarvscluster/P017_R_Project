@@ -141,11 +141,14 @@ summary %>%
 ## Vende 90° grader
 
 ```{r}
+# order the play titles
+summary |> select(title)  |> distinct(title) |> arrange(desc(title)) |> pull(title) -> play_order
+
 summary %>% 
   #filter(speaker %in% c("henrik","pernille","troels")) %>%
   filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
-  arrange(year) %>%
-  ggplot(aes(fill = speaker, y = freq, x = title)) +
+  arrange(title) %>%
+  ggplot(aes(fill = speaker, y = freq, x = factor(title, level = play_order))) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
@@ -277,7 +280,6 @@ Inden nedenstående `tvthemes` kan indlæses, skal det først installeres. Dette
 install.packages("tvthemes")
 ```
 
-
 ```{r}
 library(tvthemes)
 ```
@@ -343,7 +345,6 @@ Install skal kun køres første gang, denne notebook gennemgås.
 install.packages("viridis")
 ```
 
-
 ```{r}
 library(viridis)
 ```
@@ -378,7 +379,6 @@ Installation af `ggthemes` skal kun foretages første gang denne notebook gennem
 ```{r}
 install.packages("ggthemes")
 ```
-
 
 ```{r}
 library(ggthemes)
