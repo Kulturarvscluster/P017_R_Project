@@ -217,7 +217,7 @@ summary %>%
     mutate(title_fct2 = str_c(title," ", year)) -> summary_with_yeartitle
 
 summary_with_yeartitle %>%
-    arrange(year) %>% 
+    arrange(desc(year)) %>% 
     distinct(title_fct2) %>% 
     pull(title_fct2) -> factor_levels_2
 
