@@ -319,7 +319,7 @@ summary %>%
   #filter(speaker %in% c("henrik","pernille","troels")) %>%
   filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
   arrange(year) %>%
-  ggplot(aes(fill = speaker, y = 100*freq, x = title)) +
+  ggplot(aes(fill = speaker, y = 100*freq, x = factor(title, factor_levels_sort_title))) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
