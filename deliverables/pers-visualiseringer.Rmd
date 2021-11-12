@@ -141,14 +141,11 @@ summary %>%
 ## Vende 90° grader
 
 ```{r}
-# order the play titles
-summary |> select(title)  |> distinct(title) |> arrange(desc(title)) |> pull(title) -> play_order
-
 summary %>% 
   #filter(speaker %in% c("henrik","pernille","troels")) %>%
   filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
   arrange(title) %>%
-  ggplot(aes(fill = speaker, y = freq, x = factor(title, level = play_order))) +
+  ggplot(aes(fill = speaker, y = freq, x = title)) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
@@ -171,11 +168,12 @@ Dette kan vi udnytte til sortering af titel. Jeg laver først en liste med alle 
 
 ```{r}
 summary %>% 
-    filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>% 
-    ##mutate(title = str_c(title, " ", year)) %>% 
-    arrange(year) %>%
-    distinct(title) %>% 
-    pull(title) -> factor_levels
+  filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>% 
+  ##mutate(title = str_c(title, " ", year)) %>% 
+  arrange(year) %>%
+  distinct(title) %>% 
+  arrange(desc(title)) %>% 
+  pull(title) -> factor_levels
 
 factor_levels
 
