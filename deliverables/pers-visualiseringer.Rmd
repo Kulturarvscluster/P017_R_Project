@@ -138,14 +138,37 @@ summary %>%
   theme(axis.text.x=element_blank())
 ```
 
-## Vende 90° grader
+## Sortering efter år og/eller title
+
+Indenfor statistik arbejder man med noget, som på engelsk hedder *factor*. Jeg mener, at det på dansk hedder faktor. Det er når man har en variabel eller observation, som kan tage værdier, der ikke er sorterbare i sog selv. Fx en farve. Her kan man så selv angive værdiernes rækkefølge.
+
+Dette kan vi udnytte til sortering af titel. Jeg laver først en liste med alle de anvendte titler og sorterer den efter årstallet. Derefter omformer jeg titel kolonnen til en faktorvariabel og angiver der den rækkefølge som jeg fik fra sorteringen efter årstal.
+
+```{r}
+summary %>% 
+  filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>% 
+  arrange(desc(year)) %>% # sortere lodret akse stigende efter årstal
+  distinct(title) %>% 
+  pull(title) -> factor_levels_sort_year
+
+summary %>% 
+  filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>% 
+  distinct(title) %>% 
+  arrange(desc(title)) %>%  # Sortere lodret akse efter titel
+  pull(title) -> factor_levels_sort_title
+
+#summary$title_fct <- factor(summary$title, factor_levels)
+```
+
+
+## Sorter efter titel
 
 ```{r}
 summary %>% 
   #filter(speaker %in% c("henrik","pernille","troels")) %>%
   filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
   arrange(title) %>%
-  ggplot(aes(fill = speaker, y = freq, x = title)) +
+  ggplot(aes(fill = speaker, y = freq, x = factor(title, factor_levels_sort_title))) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
@@ -157,30 +180,11 @@ summary %>%
   ylab("Procent sagte ord") +
   facet_wrap(~year, ncol=nrow(summary), switch="x") +
   theme(axis.text.x=element_blank()) +
-  coord_flip()
+  coord_flip() # flip the plot 90°
 ```
 
-## Et trick til at få stykkerne til at stå i årsrække
+## Sorter efter år
 
-Indenfor statistik arbejder man med noget, som på engelsk hedder *factor*. Jeg mener, at det på dansk hedder faktor. Det er når man har en variabel eller observation, som kan tage værdier, der ikke er sorterbare i sog selv. Fx en farve. Her kan man så selv angive værdiernes rækkefølge.
-
-Dette kan vi udnytte til sortering af titel. Jeg laver først en liste med alle de anvendte titler og sorterer den efter årstallet. Derefter omformer jeg titel kolonnen til en faktorvariabel og angiver der den rækkefølge som jeg fik fra sorteringen efter årstal.
-
-```{r}
-summary %>% 
-  filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>% 
-  ##mutate(title = str_c(title, " ", year)) %>% 
-  arrange(year) %>%
-  distinct(title) %>% 
-  arrange(desc(title)) %>% 
-  pull(title) -> factor_levels
-
-factor_levels
-
-summary$title_fct <- factor(summary$title, factor_levels)
-```
-
-Herefter sorterer titlerne sig fint
 
 ```{r}
 summary %>% 
@@ -188,7 +192,7 @@ summary %>%
   filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
   #arrange(year) %>%
   #mutate(title = str_c(title," ",year)) %>% 
-  ggplot(aes(fill = speaker, y = 100*freq, x = title_fct)) +
+  ggplot(aes(fill = speaker, y = 100*freq, x = factor(title, factor_levels_sort_year))) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
