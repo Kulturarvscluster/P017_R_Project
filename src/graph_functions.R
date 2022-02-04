@@ -79,6 +79,17 @@ create_graph <- function(my_file) {
       )
   # read the json file
   read_play_jsonl(here("test-data", my_file)) -> play
+  # Find title and year
+  my_play %>% 
+    select(docTitle) %>% 
+    distinct() %>%
+    pull(1,1) -> my_title
+  
+  my_play %>% 
+    select(year) %>% 
+    distinct() %>%
+    pull(1,1) -> my_year
+  
   # "sammenlæg navnevarianter"
   (play %>% 
       mutate(speaker = tolower(speaker)) %>% 
@@ -131,7 +142,7 @@ create_graph <- function(my_file) {
       ),
       alpha = .25) + 
       geom_node_text(aes(label = speaker)) + 
-      labs(caption = paste("Netværksgraf", my_file)))
+      labs(caption = paste("Netværksgraf", my_title, my_year)))
   
   ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".function.no-arrows.no-silent-characters.stress.png")))
   
@@ -167,12 +178,12 @@ create_graph <- function(my_file) {
                       end_cap = label_rect(node2.speaker),
                       width = weight,
                       colour = factor(type)),
-                  arrow = arrow(length = unit(2, 'mm'), type = "closed"), # sæt pile på
+                  # arrow = arrow(length = unit(2, 'mm'), type = "closed"), # sæt pile på
                   alpha = .25) + 
     #    geom_node_point(aes(fill = speaker),shape = 21,size = 5) + # overvej knuder
     geom_node_text(aes(label = speaker), check_overlap = TRUE) + # prøv med og uden 
     # check_overlap = TRUE, repel = TRUE
-    labs(caption = paste("Netværksgraf", my_file))
+    labs(caption = paste("Netværksgraf", my_title, my_year))
   # Create a PNG file for the graph (`mypng.png`)
   ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".function.no-arrows.stress.check_overlap.png")))
 
@@ -193,12 +204,12 @@ create_graph <- function(my_file) {
                       end_cap = label_rect(node2.speaker),
                       width = weight,
                       colour = factor(type)),
-                  arrow = arrow(length = unit(2, 'mm'), type = "closed"), # sæt pile på
+                  # arrow = arrow(length = unit(2, 'mm'), type = "closed"), # sæt pile på
                   alpha = .25) + 
     #    geom_node_point(aes(fill = speaker),shape = 21,size = 5) + # overvej knuder
     geom_node_text(aes(label = speaker), check_overlap = TRUE) + # prøv med og uden 
     # check_overlap = TRUE, repel = TRUE
-    labs(caption = paste("Netværksgraf", my_file))
+    labs(caption = paste("Netværksgraf", my_title, my_year))
   
   # Create a PNG file for the graph (`mypng.png`)
   ggsave(here("graphs/netvaerksgraf3", paste(my_file, ".function.lgl.check_overlap.png")))
