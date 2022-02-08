@@ -96,20 +96,38 @@ summary
 ```{r test}
   summary %>% 
   #filter(speaker %in% c("henrik","pernille","troels")) %>%
-filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
-  arrange(year) %>%
-  ggplot(aes(fill = speaker, y = freq, x = title)) +
+  filter(speaker %in%   c("henrik", "jeronimus", "leander")) -> tmp
+  #arrange(year) %>%
+
+  #2 muligheder
+
+  #add year to title
+  tmp %>% mutate(title = paste(year," ",title)) %>%
+  ggplot(aes(fill = speaker, y = freq, x = forcats::fct_reorder(title, year))) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
       title = "Fordeling af talte ord over år mellem få gennemgående karakterer",
-      #subtitle = toupper("TEST"),
       caption = "Kilde: DSL"
     ) +
   xlab("year") +
   ylab("Procent sagte ord") +
-  facet_wrap(~year, ncol=nrow(summary), switch="x") +
-  theme(axis.text.x=element_blank())
+  theme(axis.text.x=element_text(angle = -90, hjust = 0))
+
+  #use year as facet
+  tmp %>%
+  ggplot(aes(fill = speaker, y = freq, x = forcats::fct_reorder(title, year))) +
+    geom_bar(stat="identity") +
+    theme(legend.position="bottom") +
+    labs(
+      title = "Fordeling af talte ord over år mellem få gennemgående karakterer",
+      caption = "Kilde: DSL"
+    ) +
+  xlab("year") +
+  ylab("Procent sagte ord") +
+  facet_wrap(~year, scales = 'free_x', ncol=nrow(summary), switch="x") +
+  theme(axis.text.x=element_text(angle = -90, hjust = 0))
+
 ```
 
 ## Sammenligning af grupper af karakterer

@@ -39,12 +39,12 @@ For at gøre det nemmere for os selv, starter vi med kun at se på ét skuespil 
 ```{r}
 # my_file <- "GertWestphaler1724_mod.jsonl" 
 # my_file <- "Bondedreng_mod.jsonl" 
-# my_file <- "Mascarade_mod.jsonl"
+my_file <- "Mascarade_mod.jsonl"
 # my_file <- "Barselstuen_mod.jsonl"
 # my_file <- "Ulysses_mod.jsonl"
 # my_file <- "uden_hoved_og_hale_mod.jsonl"
 # my_file <- "Skibbrud_mod.jsonl"
-my_file <- "Sganarel_mod.jsonl"
+# my_file <- "Sganarel_mod.jsonl"
 # my_file <- "Republiqven_mod.jsonl"
 # my_file <- "Ranudo_mod.jsonl"
 # my_file <- "Plutus_mod.jsonl"
@@ -56,7 +56,6 @@ my_file <- "Sganarel_mod.jsonl"
 # my_file <- "Kilde-Reysen_mod.jsonl"
 # my_file <- "Kandst_mod.jsonl" todo udfordring med 1. og 2. <w>rådsherreinde</w>
 # my_file <- "Juele-Stue_mod.jsonl"
-# todo den her virker heller ikke: my_file <- "JJ_Bet_1723_mod.jsonl"
 # my_file <- "Jeppe_mod.jsonl"
 # my_file <- "Jean_de_France_mod.jsonl"
 # my_file <- "Jacob_von_Tyboe_mod.jsonl"
@@ -142,11 +141,15 @@ my_play %>%
   # add a scene index for the x-axis
   rowwise() %>% 
   mutate(scene_index = calc_scene_index(act_number, scene_number, act_length)) %>% 
+  
+  # add an act_number:scene_number row
+  mutate(act_scene = paste(act_number,":",str_pad(scene_number, 2, pad = "0"))) %>%
+  
   # remove rows that are not dialogue
   filter(act != "", scene != "", !is.na(spoke)) %>%
   
   # select only the columns, that we are interested in
-  select(scene_index, act_number, scene_number, speaker, spoke) %>% 
+  select(scene_index, act_scene, act_number, scene_number, speaker, spoke) %>% 
   
   # add the number of spoken words
   mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
@@ -154,7 +157,7 @@ my_play %>%
   select(-spoke) %>%
   
   # group the play in scene_index and speaker, ignoring the test
-  group_by(scene_index, act_number, scene_number, speaker) %>% 
+  group_by(scene_index, act_scene, act_number, scene_number, speaker) %>% 
 
   # Ensure that each speaker only appears once in each scene, i.e. sum the words spoken by each speaker
   # Lastly store the new data frame in a new reference for later use
@@ -249,7 +252,7 @@ my_summary %>%
     ) +
   xlab("Akt og scene") +
   ylab("Antal sagte ord") + 
-  facet_wrap(act_number~scene_number, ncol=number_of_scenes, strip.position = "top")+
+  facet_wrap(~act_scene, ncol=number_of_scenes, strip.position = "top")+
   theme(axis.text.x=element_blank())
 
 ```
@@ -294,11 +297,15 @@ my_play %>%
   # add a scene index for the x-axis
   rowwise() %>% 
   mutate(scene_index = calc_scene_index(act_number, scene_number, act_length)) %>% 
+
+  # add an act_number:scene_number row
+  mutate(act_scene = paste(act_number,":",str_pad(scene_number, 2, pad = "0"))) %>%
+  
   # remove rows that are not dialogue
   filter(act != "", scene != "", !is.na(spoke)) %>%
   
   # select only the columns, that we are interested in
-  select(scene_index, act_number, scene_number, speaker, spoke) %>% 
+  select(scene_index, act_scene, act_number, scene_number, speaker, spoke) %>% 
   
   # add the number of spoken words
   mutate(n_spoken_words = str_count(spoke, '\\w+')) %>% 
@@ -306,7 +313,7 @@ my_play %>%
   select(-spoke) %>%
   
   # group the play in scene_index and speaker, ignoring the test
-  group_by(scene_index, act_number, scene_number, speaker) %>% 
+  group_by(scene_index, act_scene, act_number, scene_number, speaker) %>% 
 
   # Ensure that each speaker only appears once in each scene, i.e. sum the words spoken by each speaker
   # Lastly store the new data frame in a new reference for later use
@@ -338,7 +345,7 @@ my_summary %>% pull(scene_number) %>% max() -> number_of_scenes
 
 my_summary %>% 
   ggplot(aes(fill = speaker, y = words, x = scene_index)) +
-    geom_bar(stat="identity", width = 100) +
+    geom_bar(stat="identity") + #, width = ?
     theme(legend.position="bottom") +
     labs(
       title = paste(my_title, my_year, my_file),
@@ -348,7 +355,7 @@ my_summary %>%
     ) +
   xlab("Akt og scene") +
   ylab("Antal sagte ord") + 
-  facet_wrap(act_number~scene_number, ncol=number_of_scenes, strip.position = "top")+
+  facet_wrap(~act_scene, ncol=number_of_scenes, strip.position = "top")+
   theme(axis.text.x=element_blank()) #+
   #scale_x_continuous(aes(scene_index, breaks = new_act))
                      
