@@ -103,7 +103,7 @@ summary
 
   #add year to title
   tmp %>% mutate(title = paste(year," ",title)) %>%
-  ggplot(aes(fill = speaker, y = freq, x = forcats::fct_reorder(title, year))) +
+  ggplot(aes(fill = speaker, y = freq, x = title)) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
@@ -114,9 +114,11 @@ summary
   ylab("Procent sagte ord") +
   theme(axis.text.x=element_text(angle = -60, hjust = 0))
 
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_v1.pdf"), width=16, height=9)
+
   #use year as facet
   tmp %>%
-  ggplot(aes(fill = speaker, y = freq, x = forcats::fct_reorder(title, year))) +
+  ggplot(aes(fill = speaker, y = freq, x = title)) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
@@ -127,6 +129,8 @@ summary
   ylab("Procent sagte ord") +
   facet_wrap(~year, scales = 'free_x', ncol=nrow(summary), switch="x") +
   theme(axis.text.x=element_text(angle = -60, hjust = 0))
+
+    ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_v2.pdf"), width=16, height=9)
 
 ```
 
@@ -142,19 +146,40 @@ summary %>%
   #filter(speaker %in% c("henrik","pernille","leonora")) %>%
   #arrange(year) %>%
   
-  ggplot(aes(fill = gruppe, y = freq*100, x = title)) +
+  #2 muligheder
+
+  #add year to title
+  tmp2 %>% mutate(title = paste(year," ",title)) %>%
+    ggplot(aes(fill = gruppe, y = freq*100, x = title)) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
       title = "Fordeling af talte ord over år mellem få gennemgående karakterer",
-      #subtitle = toupper("TEST"),
       caption = "Kilde: DSL"
     ) +
   xlab("Årstal") +
   ylab("Procent sagte ord") +
   labs(fill='Maskepar') +
-  facet_wrap(~year, ncol=nrow(summary), switch="x") +
-  theme(axis.text.x=element_blank())
+  theme(axis.text.x=element_text(angle = -60, hjust = 0))
+        ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_grupper_v1.pdf"), width=16, height=9)
+
+  #use year as facet
+  tmp2 %>%
+    ggplot(aes(fill = gruppe, y = freq*100, x = title)) +
+    geom_bar(stat="identity") +
+    theme(legend.position="bottom") +
+    labs(
+      title = "Fordeling af talte ord over år mellem få gennemgående karakterer",
+      caption = "Kilde: DSL"
+    ) +
+  xlab("Årstal") +
+  ylab("Procent sagte ord") +
+  labs(fill='Maskepar') +
+  facet_wrap(~year, scales = 'free_x', ncol=nrow(summary), switch="x") +
+  theme(axis.text.x=element_text(angle = -60, hjust = 0))
+        ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_grupper_v2.pdf"), width=16, height=9)
+
+
 ```
 
 ## Sortering efter år og/eller title
@@ -200,6 +225,8 @@ summary %>%
   facet_wrap(~year, ncol=nrow(summary), switch="x") +
   theme(axis.text.x=element_blank()) +
   coord_flip() # flip the plot 90°
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_flip_v1.pdf"), width=16, height=9)
+
 ```
 
 ## Sorter efter år
@@ -224,6 +251,8 @@ summary %>%
   facet_wrap(~year, ncol=nrow(summary), switch="x") +
   #theme(axis.text.x=element_blank()) +
   coord_flip()
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_flip_v2.pdf"), width=16, height=9)
+
 ```
 
 ## diagram uden opdeling på årstal
@@ -264,6 +293,8 @@ summary_fct2 %>%
     xlab("Skuespil") +
     ylab("Procent sagte ord") +
     coord_flip()
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_flip_v3.pdf"), width=16, height=9)
+
 ```
 
 ```{r}
@@ -287,6 +318,8 @@ summary_fct2 %>%
     ylab("Procent sagte ord") +
       labs(fill='Maskepar') +
     coord_flip()
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_flip_grupper.pdf"), width=16, height=9)
+
 ```
 
 ## Let's Go Crazy
@@ -298,7 +331,7 @@ Først et lidt pjattet eksempel, som dog viser bredden af tematiske muligheder.
 Inden nedenstående `tvthemes` kan indlæses, skal det først installeres. Dette skal kun gøre én gang:
 
 ```{r}
-install.packages("tvthemes")
+#install.packages("tvthemes")
 ```
 
 ```{r}
@@ -309,12 +342,12 @@ library(tvthemes)
 summary %>% 
   #filter(speaker %in% c("henrik","pernille","troels")) %>%
   filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
-  arrange(year) %>%
-  ggplot(aes(fill = speaker, y = 100*freq, x = title)) +
+  #arrange(year) %>%
+  ggplot(aes(fill = speaker, y = 100*freq, x = fct_rev(title))) +
     geom_bar(stat="identity") +
     theme_simpsons(
-      title.font = "Akbar",
-      text.font = "Akbar",
+      #title.font = "Akbar",
+      #text.font = "Akbar",
       axis.text.size = 8) +
     theme(legend.position="bottom") +
     labs(
@@ -327,6 +360,8 @@ summary %>%
   #facet_wrap(~year, ncol=nrow(summary), switch="x") +
   #theme(axis.text.x=element_blank()) +
   coord_flip()
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_tema_simpsons.pdf"), width=16, height=9)
+
 ```
 
 ## Mere anvendelige eksempler
@@ -348,13 +383,11 @@ summary %>%
     ) +
   xlab("Skuespil") +
   ylab("Procent sagte ord") +
-  scale_fill_brewer(palette = "Greens") -> p # VÆLG GRØN PALETTE
+  scale_fill_brewer(type = "seq", palette = "Greens") -> p # VÆLG GRØN PALETTE
 
-p + coord_flip()
-
-p +
-  facet_wrap(~year, ncol=nrow(summary), strip.position="top") +
-  coord_flip()
+p + coord_flip() +
+  facet_wrap(~year, ncol=nrow(summary), strip.position="top") 
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_greens.pdf"), width=16, height=9)
 
 ```
 
@@ -363,7 +396,7 @@ p +
 Install skal kun køres første gang, denne notebook gennemgås.
 
 ```{r}
-install.packages("viridis")
+#install.packages("viridis")
 ```
 
 ```{r}
@@ -375,7 +408,7 @@ summary %>%
   #filter(speaker %in% c("henrik","pernille","troels")) %>%
   filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
   arrange(year) %>%
-  ggplot(aes(fill = speaker, y = 100*freq, x = title)) +
+  ggplot(aes(fill = speaker, y = 100*freq, x = factor(title, factor_levels_sort_year))) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
@@ -389,8 +422,11 @@ summary %>%
   coord_flip() -> p
 
 p
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_viridis_v1.pdf"), width=16, height=9)
 
 p + facet_wrap(~year, ncol=nrow(summary), strip.position="top")
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_viridis_v2.pdf"), width=16, height=9)
+
 ```
 
 ## Economist
@@ -398,7 +434,7 @@ p + facet_wrap(~year, ncol=nrow(summary), strip.position="top")
 Installation af `ggthemes` skal kun foretages første gang denne notebook gennemgås.
 
 ```{r}
-install.packages("ggthemes")
+#install.packages("ggthemes")
 ```
 
 ```{r}
@@ -410,7 +446,7 @@ summary %>%
   #filter(speaker %in% c("henrik","pernille","troels")) %>%
   filter(speaker %in%   c("henrik", "jeronimus", "leander")) %>%
   arrange(year) %>%
-  ggplot(aes(fill = speaker, y = 100*freq, x = title)) +
+  ggplot(aes(fill = speaker, y = 100*freq, x = factor(title, factor_levels_sort_year))) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
@@ -425,9 +461,11 @@ summary %>%
   coord_flip() -> p
 
 p
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_tema_economist_v1.pdf"), width=16, height=9)
 
 p + facet_wrap(~year, ncol=nrow(summary), strip.position="top")
-  
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_tema_economist_v2.pdf"), width=16, height=9)
+
 ```
 
 ## Minimal
@@ -453,6 +491,8 @@ summary %>%
   coord_flip() +
   #theme_bw()
   theme_minimal()
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_tema_minimal.pdf"), width=16, height=9)
+
 ```
 
 ## Gruppesammenligning igen
@@ -468,7 +508,7 @@ summary %>%
   filter(!is.na(title)) %>% 
   filter(speaker %in% c(group_1, group_2)) %>% 
   mutate(gruppe = if_else(speaker %in% group_1, group_1_name,group_2_name)) %>% 
-  ggplot(aes(fill = gruppe, y = freq*100, x = title)) +
+  ggplot(aes(fill = gruppe, y = freq*100, x = fct_rev(title))) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
     labs(
@@ -480,6 +520,8 @@ summary %>%
   ylab("Procent sagte ord") +
   labs(fill='Maskepar') +
   coord_flip()
+      ggsave(here("graphs/pers-visualiseringer", "fordeling_talte_ord_grupper_igen.pdf"), width=16, height=9)
+
 ```
 
 # Farvelægning
@@ -533,7 +575,7 @@ summary_fct2 %>%
 # Gemme en visualisering som liggende A4 PDF
 
 ```{r}
-ggsave(filename="ng3.pdf", 
+ggsave(here("graphs/pers-visualiseringer", "ng3.pdf"),
        width = 297, 
        height = 210, 
        units = "mm")
