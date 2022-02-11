@@ -112,7 +112,7 @@ summary
     ) +
   xlab("year") +
   ylab("Procent sagte ord") +
-  theme(axis.text.x=element_text(angle = -90, hjust = 0))
+  theme(axis.text.x=element_text(angle = -60, hjust = 0))
 
   #use year as facet
   tmp %>%
@@ -126,7 +126,7 @@ summary
   xlab("year") +
   ylab("Procent sagte ord") +
   facet_wrap(~year, scales = 'free_x', ncol=nrow(summary), switch="x") +
-  theme(axis.text.x=element_text(angle = -90, hjust = 0))
+  theme(axis.text.x=element_text(angle = -60, hjust = 0))
 
 ```
 
@@ -138,9 +138,10 @@ group_2 <- c("pernille", "leonora", "magdelone")
 
 summary %>% 
   filter(speaker %in% c(group_1, group_2)) %>% 
-  mutate(gruppe = if_else(speaker %in% group_1, "Henrik, Jeronimus og Leander","Pernille, Leonora og Magdelone")) %>% 
+  mutate(gruppe = if_else(speaker %in% group_1, "Henrik, Jeronimus og Leander","Pernille, Leonora og Magdelone")) -> tmp2
   #filter(speaker %in% c("henrik","pernille","leonora")) %>%
-  arrange(year) %>%
+  #arrange(year) %>%
+  
   ggplot(aes(fill = gruppe, y = freq*100, x = title)) +
     geom_bar(stat="identity") +
     theme(legend.position="bottom") +
