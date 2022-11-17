@@ -43,4 +43,4 @@ The following R package are assumed as being installed in most of the scripts an
  * fs
  * xslt
  
-They can all be installed with `install.packages("<package name>")
+They can all be installed with `install.packages("<package name>").
